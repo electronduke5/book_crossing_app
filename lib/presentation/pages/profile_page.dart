@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
-  final double _horizontalPadding = 25.0;
-
+  final double _horizontalPadding = 0.0;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -135,79 +134,90 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget profileCard(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Stack(
-        children: [
-          Positioned(
-            child: SizedBox(
-              height: 220,
-              width: double.infinity,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: 50.0,
-                  left: _horizontalPadding,
-                  right: _horizontalPadding,
-                ),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25),
-                    ),
-                  ),
-                  margin: EdgeInsets.zero,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Гришин Павел',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'Почта: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text('g.pav5@mail.ru'),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Align(
+    return Stack(
+      children: [
+        Align(
             alignment: Alignment.topCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).cardColor,
+            child: Image.asset('assets/images/wallpaper.jpg')),
+        Padding(
+          padding: const EdgeInsets.only(top: 60.0),
+          child: profileWidget(context),
+        ),
+      ],
+    );
+  }
+
+  Stack profileWidget(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          child: SizedBox(
+            height: 220,
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: 50.0,
+                left: _horizontalPadding,
+                right: _horizontalPadding,
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                // child: CircleAvatar(
-                //   minRadius: 2,
-                //   maxRadius: 60,
-                //   child: Text(
-                //     'Г П',
-                //     style:
-                //         TextStyle(fontWeight: FontWeight.normal, fontSize: 36),
-                //   ),
-                // ),
-                child: CircleAvatar(
-                  minRadius: 2,
-                  maxRadius: 60,
-                  backgroundImage: AssetImage('assets/images/11.jpg'),
+              child: Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(25),
+                  ),
+                ),
+                margin: EdgeInsets.zero,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Гришин Павел',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          'Почта: ',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text('g.pav5@mail.ru'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Theme.of(context).cardColor,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              // child: CircleAvatar(
+              //   minRadius: 2,
+              //   maxRadius: 60,
+              //   child: Text(
+              //     'Г П',
+              //     style:
+              //         TextStyle(fontWeight: FontWeight.normal, fontSize: 36),
+              //   ),
+              // ),
+              child: CircleAvatar(
+                minRadius: 2,
+                maxRadius: 60,
+                backgroundImage: AssetImage('assets/images/11.jpg'),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

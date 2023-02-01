@@ -1,6 +1,7 @@
 import 'package:book_crossing_app/presentation/cubits/auth/auth_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
+import 'package:book_crossing_app/presentation/di/color_scheme.dart';
 import 'package:book_crossing_app/presentation/pages/main_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_in_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_up_page.dart';
@@ -28,42 +29,40 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: FlexThemeData.light(
-        scheme: FlexScheme.redWine,
+        //background: const Color.fromRGBO(224, 224, 224, 1),
+        scheme: FlexScheme.blueWhale,
         surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-        blendLevel: 9,
+        blendLevel: 20,
         subThemesData: const FlexSubThemesData(
           blendOnLevel: 10,
           blendOnColors: false,
           inputDecoratorIsFilled: false,
           inputDecoratorRadius: 25.0,
-          cardRadius: 16.0,
+          cardRadius: 15.0,
+
         ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
         swapLegacyOnMaterial3: true,
-        fontFamily: GoogleFonts.roboto().fontFamily,
-        // To use the playground font, add GoogleFonts package and uncomment
-        // fontFamily: GoogleFonts.notoSans().fontFamily,
+        fontFamily: GoogleFonts.notoSerif().fontFamily,
       ),
       darkTheme: FlexThemeData.dark(
-        scheme: FlexScheme.redWine,
-        //scheme: FlexScheme.redWine,
-        //scheme: FlexScheme.mandyRed,
+        scheme: FlexScheme.blueWhale,
+        //swapColors: true,
         surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-        blendLevel: 15,
+        blendLevel: 20,
         subThemesData: const FlexSubThemesData(
           blendOnLevel: 20,
           inputDecoratorIsFilled: false,
           inputDecoratorRadius: 25.0,
-          cardRadius: 16.0,
+          cardRadius: 15.0,
         ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
         swapLegacyOnMaterial3: true,
-        // To use the Playground font, add GoogleFonts package and uncomment
-        fontFamily: GoogleFonts.roboto().fontFamily,
+        fontFamily: GoogleFonts.notoSerif().fontFamily,
       ),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       routes: {
         '/sign-in': (context) => SignInPage(),
         '/sign-up': (context) => SignUpPage(),

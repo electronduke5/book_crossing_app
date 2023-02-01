@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -37,37 +39,50 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      //backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.8),
       body: SafeArea(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Card(
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            elevation: 0,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: 'Главная',
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 2.0,
+              sigmaY: 2.0,
+            ),
+            child: Opacity(
+              opacity: 0.8,
+              child: BottomNavigationBar(
+                backgroundColor: Theme.of(context).secondaryHeaderColor,
+                //selectedItemColor: Theme.of(context).colorScheme.tertiary,
+                type: BottomNavigationBarType.fixed,
+                selectedLabelStyle:
+                    const TextStyle(fontWeight: FontWeight.bold),
+                elevation: 0,
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined),
+                    label: 'Главная',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.add_circle_outline),
+                    label: 'Добавить',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.book_outlined),
+                    label: 'Книги',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person_pin_outlined),
+                    label: 'Профиль',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                onTap: _onItemTapped,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.add_circle_outline),
-                label: 'Добавить',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.book_outlined),
-                label: 'Книги',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_pin_outlined),
-                label: 'Профиль',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
+            ),
           ),
         ),
       ),
