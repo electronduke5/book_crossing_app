@@ -4,6 +4,7 @@ class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   final double _horizontalPadding = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -14,7 +15,7 @@ class ProfilePage extends StatelessWidget {
           profileCard(context),
           statsWidget(),
           reviewWidget(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text('1 запись', style: Theme.of(context).textTheme.titleSmall),
         ],
       ),
@@ -56,10 +57,7 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 15),
-                const Text(
-                  'Дж. Оруэлл - "1984"',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                bookInfoReview(context),
                 const SizedBox(height: 15),
                 Text(
                   'Книга очень тяжёлая для прочтения. Много невнятных терминов, благодаря чему интереснее читать словарик, чем саму книгу. Постоянные однотипные рассказы про войну, контроль власти и пытки людей, которые надоедают во время прочтения так, что появляется желание выбросить чтиво в дальний угол и больше не открывать. Обычно читаю книгу с 300 страницами не более чем за день, в данном случае из-за отсутствия интриги и скучного ,долгого развития сюжета она пылилась месяцами. На любителя.',
@@ -83,6 +81,38 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Row bookInfoReview(BuildContext context) {
+    return Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Книга',
+                          style: Theme.of(context).textTheme.bodySmall),
+                      const Text(
+                        '1984',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Автор',
+                          style: Theme.of(context).textTheme.bodySmall),
+                      const Text(
+                        'Дж. Оруэлл',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              );
   }
 
   Padding statsWidget() {
