@@ -173,6 +173,16 @@ class _$_User implements _User {
       this,
     );
   }
+
+  @override
+  String getFullName() {
+    return '$surname $name';
+  }
+
+  @override
+  String getInitials() {
+    return '${surname[0].toUpperCase()} ${name[0].toUpperCase()}';
+  }
 }
 
 abstract class _User implements User {

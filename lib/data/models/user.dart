@@ -15,4 +15,12 @@ class User with _$User {
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  String getFullName() {
+    return '$surname $name';
+  }
+
+  String getInitials(){
+    return '${surname[0].toUpperCase()} ${name[0].toUpperCase()}';
+  }
 }

@@ -1,4 +1,10 @@
+import 'package:book_crossing_app/presentation/cubits/models_status.dart';
+import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
+import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../data/models/user.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -85,34 +91,30 @@ class ProfilePage extends StatelessWidget {
 
   Row bookInfoReview(BuildContext context) {
     return Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Книга',
-                          style: Theme.of(context).textTheme.bodySmall),
-                      const Text(
-                        '1984',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Автор',
-                          style: Theme.of(context).textTheme.bodySmall),
-                      const Text(
-                        'Дж. Оруэлл',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ],
-              );
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Книга', style: Theme.of(context).textTheme.bodySmall),
+            const Text(
+              '1984',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
+        ),
+        const SizedBox(width: 20),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Автор', style: Theme.of(context).textTheme.bodySmall),
+            const Text(
+              'Дж. Оруэлл',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Padding statsWidget() {
@@ -177,77 +179,114 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Stack profileWidget(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          child: SizedBox(
-            height: 220,
-            width: double.infinity,
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: 50.0,
-                left: _horizontalPadding,
-                right: _horizontalPadding,
-              ),
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(25),
+  Widget profileWidget(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        print('state: ${state.status.runtimeType}');
+        switch (state.status.runtimeType) {
+          case FailedStatus<User>:
+            SnackBarInfo.show(
+              context: context,
+              message: state.status.message ?? "asd",
+              isSuccess: false,
+            );
+            break;
+          case LoadingStatus<User>:
+            return const Center(child: CircularProgressIndicator());
+          case LoadedStatus<User>:
+            return Stack(
+              children: [
+                Positioned(
+                  child: SizedBox(
+                    height: 220,
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 50.0,
+                        left: _horizontalPadding,
+                        right: _horizontalPadding,
+                      ),
+                      child: Card(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25),
+                          ),
+                        ),
+                        margin: EdgeInsets.zero,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              state.status.item!.getFullName(),
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Почта: ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(state.status.item!.email),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                margin: EdgeInsets.zero,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Гришин Павел',
-                      style: Theme.of(context).textTheme.headlineSmall,
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).cardColor,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          'Почта: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text('g.pav5@mail.ru'),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: state.status.item?.image == null
+                          ? CircleAvatar(
+                              minRadius: 2,
+                              maxRadius: 60,
+                              child: Text(
+                                state.status.item!.getInitials(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 36),
+                              ),
+                            )
+                          : CircleAvatar(
+                              minRadius: 2,
+                              maxRadius: 60,
+                              backgroundImage:
+                                  NetworkImage(state.status.item!.image!),
+                            ),
+                      // child: CircleAvatar(
+                      //   minRadius: 2,
+                      //   maxRadius: 60,
+                      //   child: Text(
+                      //     'Г П',
+                      //     style:
+                      //         TextStyle(fontWeight: FontWeight.normal, fontSize: 36),
+                      //   ),
+                      // ),
+                      // child: CircleAvatar(
+                      //   minRadius: 2,
+                      //   maxRadius: 60,
+                      //   backgroundImage: AssetImage('assets/images/11.jpg'),
+                      // ),
                     ),
-                    const SizedBox(height: 20),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).cardColor,
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              // child: CircleAvatar(
-              //   minRadius: 2,
-              //   maxRadius: 60,
-              //   child: Text(
-              //     'Г П',
-              //     style:
-              //         TextStyle(fontWeight: FontWeight.normal, fontSize: 36),
-              //   ),
-              // ),
-              child: CircleAvatar(
-                minRadius: 2,
-                maxRadius: 60,
-                backgroundImage: AssetImage('assets/images/11.jpg'),
-              ),
-            ),
-          ),
-        ),
-      ],
+              ],
+            );
+          default:
+            return const Center(child: CircularProgressIndicator());
+        }
+        return Text('asdasda');
+      },
     );
   }
 }

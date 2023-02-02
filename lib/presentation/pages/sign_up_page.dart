@@ -34,7 +34,8 @@ class SignUpPage extends StatelessWidget {
                     ),
                     margin: EdgeInsets.zero,
                     child: Padding(
-                      padding: const EdgeInsets.all(13.0),
+                      padding: const EdgeInsets.only(
+                          left: 13.0, right: 13.0, top: 7, bottom: 5),
                       child: Form(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

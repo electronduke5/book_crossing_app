@@ -45,20 +45,30 @@ mixin ApiService<T extends Object> {
     int? id,
     required Map<String, dynamic> data,
   }) async {
+    print('data: ${data}');
     final dio = Dio(
       BaseOptions(
         validateStatus: (status) => true,
       ),
     );
 
-    final response = await dio
-        .post('${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}', data: data);
-    if (response.statusCode != HttpStatus.ok) {
-      throw Exception(['Error =_-']);
-    }
-    final json = response.data;
-    print(json);
+    print('url: ${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
+    try {
+      final response = await dio.post(
+          '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
+          data: data);
 
-    return fromJson(json);
+      print(response);
+      if (response.statusCode != HttpStatus.ok) {
+        throw Exception(['Error =_-']);
+      }
+      final json = response.data;
+      print(json);
+
+      return fromJson(json);
+    } catch (error) {
+      print(error.toString());
+      throw Exception(error);
+    }
   }
 }
