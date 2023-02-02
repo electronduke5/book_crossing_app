@@ -21,6 +21,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$User {
   String get surname => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
@@ -35,7 +36,7 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String surname, String name, String email, String? image});
+  $Res call({String surname, int id, String name, String email, String? image});
 }
 
 /// @nodoc
@@ -52,6 +53,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? surname = null,
+    Object? id = null,
     Object? name = null,
     Object? email = null,
     Object? image = freezed,
@@ -61,6 +63,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.surname
           : surname // ignore: cast_nullable_to_non_nullable
               as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+      as int,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -83,7 +89,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$_UserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String surname, String name, String email, String? image});
+  $Res call({String surname, int id, String name, String email, String? image});
 }
 
 /// @nodoc
@@ -96,6 +102,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   @override
   $Res call({
     Object? surname = null,
+    Object? id = null,
     Object? name = null,
     Object? email = null,
     Object? image = freezed,
@@ -105,6 +112,11 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.surname
           : surname // ignore: cast_nullable_to_non_nullable
               as String,
+
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+      as int,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -126,12 +138,15 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 class _$_User implements _User {
   const _$_User(
       {required this.surname,
+      required this.id,
       required this.name,
       required this.email,
       this.image});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
+  @override
+  final int id;
   @override
   final String surname;
   @override
@@ -187,7 +202,8 @@ class _$_User implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String surname,
+      {required final int id,
+      required final String surname,
       required final String name,
       required final String email,
       final String? image}) = _$_User;
@@ -196,6 +212,8 @@ abstract class _User implements User {
 
   @override
   String get surname;
+  @override
+  int get id;
   @override
   String get name;
   @override

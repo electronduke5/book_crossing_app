@@ -1,11 +1,12 @@
 import 'package:book_crossing_app/data/models/user.dart';
+import 'package:book_crossing_app/data/utils/api_const_url.dart';
 
 import '../../domain/repositories/auth_repository.dart';
 import '../api_service.dart';
 
 class AuthRepositoryImpl with ApiService<User> implements AuthRepository {
   @override
-  String apiRoute = 'login';
+  String apiRoute = ApiConstUrl.loginUrl;
 
   @override
   Future<User> signIn(String email, String password) => post(

@@ -6,6 +6,7 @@ part '../../domain/models/user/user.g.dart';
 @freezed
 class User with _$User {
   const factory User({
+    required int id,
     required String surname,
     required String name,
     required String email,

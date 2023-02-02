@@ -8,12 +8,21 @@ mixin ApiService<T extends Object> {
 
   Future<List<T>> getAll({
     required T Function(Map<String, dynamic>) fromJson,
+    String? qFilter,
+    dynamic qFilterValue,
+    int? id,
   }) async {
     final dio = Dio(
       BaseOptions(
         validateStatus: (status) => true,
       ),
     );
+
+    if(qFilter != null && qFilterValue != null){
+      dio.options.queryParameters = {
+        qFilter: qFilterValue
+      };
+    }
 
     final response = await dio.get('${ApiConstUrl.baseUrl}$apiRoute');
     if (response.statusCode != HttpStatus.ok) {

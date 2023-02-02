@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/data/models/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 
 import 'book.dart';
 
@@ -15,9 +16,14 @@ class Review with _$Review {
     required String text,
     required User user,
     required Book book,
-    required List<User> likedUser,
+    List<User>? likedUser,
     required int likesCount,
+    required DateTime dateCreated,
   }) = _Review;
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
+
+  String getDate(){
+    return  DateFormat('dd.MM.yyyy').format(dateCreated);
+  }
 }

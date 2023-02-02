@@ -1,5 +1,7 @@
 import 'package:book_crossing_app/data/repositories/profile_repository_impl.dart';
+import 'package:book_crossing_app/data/repositories/review_repository_impl.dart';
 import 'package:book_crossing_app/domain/repositories/profile_repository.dart';
+import 'package:book_crossing_app/domain/repositories/review_repository.dart';
 import 'package:book_crossing_app/presentation/di/profile_holder.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,6 +19,7 @@ class AppModule {
     _provideAuthRepository();
     _providePreferencesRepository();
     _provideProfileRepository();
+    _provideReviewRepository();
 
     _provided = true;
   }
@@ -35,6 +38,14 @@ class AppModule {
 
   static ProfileRepository getProfileRepository() {
     return GetIt.instance.get<ProfileRepositoryImpl>();
+  }
+
+  void _provideReviewRepository() {
+    GetIt.instance.registerSingleton(ReviewRepositoryImpl());
+  }
+
+  static ReviewRepository getReviewRepository() {
+    return GetIt.instance.get<ReviewRepositoryImpl>();
   }
 
   void _provideAuthRepository() {

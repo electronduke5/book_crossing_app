@@ -1,9 +1,10 @@
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
-import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/models/book.dart';
+import '../../data/models/review.dart';
 import '../../data/models/user.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -11,26 +12,73 @@ class ProfilePage extends StatelessWidget {
 
   final double _horizontalPadding = 0.0;
 
+  int getLikes(List<Review> reviews) {
+    int likes = 0;
+    reviews.map((e) => likes += e.likesCount);
+    return likes;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       clipBehavior: Clip.none,
-      child: Column(
-        children: [
-          profileCard(context),
-          statsWidget(),
-          reviewWidget(context),
-          const SizedBox(height: 10),
-          Text('1 запись', style: Theme.of(context).textTheme.titleSmall),
-        ],
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          switch (state.status.runtimeType) {
+            case LoadedStatus<User>:
+              return IntrinsicHeight(
+                child: Column(
+                  children: [
+                    profileCard(context),
+                    statsWidget(
+                        countReview: state.userReviews.item!.length,
+                        countLikes: getLikes(state.userReviews.item!)),
+                    Expanded(child: reviewsListWidget(context)),
+                    const SizedBox(height: 10),
+                    Text('${state.userReviews.item!.length} запись',
+                        style: Theme.of(context).textTheme.titleSmall),
+                  ],
+                ),
+              );
+            case LoadingStatus:
+              return const Center(child: CircularProgressIndicator());
+            default:
+              print(state.userReviews.runtimeType);
+              const Center(child: CircularProgressIndicator());
+          }
+          return Text('Че то не так в profile_page.dart');
+        },
       ),
     );
   }
 
-  Padding reviewWidget(BuildContext context) {
+  Widget reviewsListWidget(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        switch (state.userReviews.runtimeType) {
+          case LoadedStatus<List<Review>>:
+            return Column(
+              children: state.userReviews.item!
+                  .map((e) => reviewWidget(context, e))
+                  .toList(),
+            );
+          case LoadingStatus<List<Review>>:
+            return const Center(child: CircularProgressIndicator());
+          default:
+            print(state.userReviews.runtimeType);
+            const Center(child: CircularProgressIndicator());
+        }
+        return const Center(child: CircularProgressIndicator());
+        // return reviewWidget(context, state.userReviews.first);
+      },
+    );
+  }
+
+  Widget reviewWidget(BuildContext context, Review review) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
+      padding:
+          EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: 5),
       child: InkWell(
         onDoubleTap: () {
           print('like! 19');
@@ -44,29 +92,40 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/11.jpg'),
-                      maxRadius: 20,
-                    ),
+                    review.user.image == null
+                        ? CircleAvatar(
+                            minRadius: 2,
+                            maxRadius: 20,
+                            child: Text(
+                              review.user.getInitials(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.normal, fontSize: 12),
+                            ),
+                          )
+                        : CircleAvatar(
+                            minRadius: 2,
+                            maxRadius: 20,
+                            backgroundImage: NetworkImage(review.user.image!),
+                          ),
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Гришин Павел',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Text(
+                          review.user.getFullName(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text('20 ноя. 2022 г.',
+                        Text(review.getDate(),
                             style: Theme.of(context).textTheme.bodySmall),
                       ],
                     ),
                   ],
                 ),
                 const SizedBox(height: 15),
-                bookInfoReview(context),
+                bookInfoReview(context, review.book),
                 const SizedBox(height: 15),
                 Text(
-                  'Книга очень тяжёлая для прочтения. Много невнятных терминов, благодаря чему интереснее читать словарик, чем саму книгу. Постоянные однотипные рассказы про войну, контроль власти и пытки людей, которые надоедают во время прочтения так, что появляется желание выбросить чтиво в дальний угол и больше не открывать. Обычно читаю книгу с 300 страницами не более чем за день, в данном случае из-за отсутствия интриги и скучного ,долгого развития сюжета она пылилась месяцами. На любителя.',
+                  review.text,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 10),
@@ -76,8 +135,8 @@ class ProfilePage extends StatelessWidget {
                       onPressed: () {
                         print('like! 60');
                       },
-                      icon: Icon(Icons.favorite_outline),
-                      label: Text('144'),
+                      icon: const Icon(Icons.favorite_outline),
+                      label: Text(review.likesCount.toString()),
                     )
                   ],
                 ),
@@ -89,16 +148,16 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Row bookInfoReview(BuildContext context) {
+  Row bookInfoReview(BuildContext context, Book book) {
     return Row(
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Книга', style: Theme.of(context).textTheme.bodySmall),
-            const Text(
-              '1984',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            Text(
+              book.title,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ],
         ),
@@ -107,9 +166,9 @@ class ProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Автор', style: Theme.of(context).textTheme.bodySmall),
-            const Text(
-              'Дж. Оруэлл',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            Text(
+              '${book.author.name} ${book.author.surname}',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ],
         ),
@@ -117,7 +176,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Padding statsWidget() {
+  Padding statsWidget({required int countReview, required countLikes}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: _horizontalPadding,
@@ -131,12 +190,12 @@ class ProfilePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                itemInStatsRow(title: 'Рецензий', value: '12'),
+                itemInStatsRow(title: 'Рецензий', value: countReview),
                 const VerticalDivider(
                   indent: 10,
                   endIndent: 10,
                 ),
-                itemInStatsRow(title: 'Лайков', value: '157'),
+                itemInStatsRow(title: 'Лайков', value: countLikes),
                 const VerticalDivider(
                   indent: 10,
                   endIndent: 10,
@@ -179,17 +238,13 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget profileWidget(BuildContext context) {
+  Widget profileWidget(BuildContext mainContext) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         print('state: ${state.status.runtimeType}');
         switch (state.status.runtimeType) {
           case FailedStatus<User>:
-            SnackBarInfo.show(
-              context: context,
-              message: state.status.message ?? "asd",
-              isSuccess: false,
-            );
+            print(state.status.message!);
             break;
           case LoadingStatus<User>:
             return const Center(child: CircularProgressIndicator());
@@ -198,7 +253,7 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Positioned(
                   child: SizedBox(
-                    height: 220,
+                    height: 210,
                     width: double.infinity,
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -263,20 +318,6 @@ class ProfilePage extends StatelessWidget {
                               backgroundImage:
                                   NetworkImage(state.status.item!.image!),
                             ),
-                      // child: CircleAvatar(
-                      //   minRadius: 2,
-                      //   maxRadius: 60,
-                      //   child: Text(
-                      //     'Г П',
-                      //     style:
-                      //         TextStyle(fontWeight: FontWeight.normal, fontSize: 36),
-                      //   ),
-                      // ),
-                      // child: CircleAvatar(
-                      //   minRadius: 2,
-                      //   maxRadius: 60,
-                      //   backgroundImage: AssetImage('assets/images/11.jpg'),
-                      // ),
                     ),
                   ),
                 ),

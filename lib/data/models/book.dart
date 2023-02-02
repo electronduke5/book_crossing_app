@@ -19,7 +19,7 @@ class Book with _$Book {
     required Genre genre,
     required User owner,
     required User reader,
-    required List<User> likedUser,
+    required List<User>? likedUser,
   }) = _Book;
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
