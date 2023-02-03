@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:book_crossing_app/presentation/cubits/auth/auth_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
@@ -95,6 +96,8 @@ class MyApp extends StatelessWidget {
                   providers: [
                     BlocProvider<ProfileCubit>(
                         create: (context) => ProfileCubit()..loadProfile()),
+                    BlocProvider<BookCubit>(
+                        create: (context) => BookCubit()..loadBooks()),
                     BlocProvider<ReviewCubit>(
                         create: (context) => ReviewCubit()..loadReviews()),
                   ],

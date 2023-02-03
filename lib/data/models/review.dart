@@ -7,6 +7,9 @@ import 'book.dart';
 part '../../domain/models/review/review.freezed.dart';
 
 part '../../domain/models/review/review.g.dart';
+// part '../../domain/models/review/review.freezed.dart';
+//
+// part '../../domain/models/review/review.g.dart';
 
 @freezed
 class Review with _$Review {
@@ -18,6 +21,7 @@ class Review with _$Review {
     required Book book,
     List<User>? likedUser,
     required int likesCount,
+    required int bookRating,
     required DateTime dateCreated,
   }) = _Review;
 

@@ -27,6 +27,7 @@ mixin _$Review {
   Book get book => throw _privateConstructorUsedError;
   List<User>? get likedUser => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
+  int get bookRating => throw _privateConstructorUsedError;
   DateTime get dateCreated => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $ReviewCopyWith<$Res> {
       Book book,
       List<User>? likedUser,
       int likesCount,
+      int bookRating,
       DateTime dateCreated});
 
   $UserCopyWith<$Res> get user;
@@ -73,6 +75,7 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
     Object? book = null,
     Object? likedUser = freezed,
     Object? likesCount = null,
+    Object? bookRating = null,
     Object? dateCreated = null,
   }) {
     return _then(_value.copyWith(
@@ -103,6 +106,10 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
       likesCount: null == likesCount
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      bookRating: null == bookRating
+          ? _value.bookRating
+          : bookRating // ignore: cast_nullable_to_non_nullable
               as int,
       dateCreated: null == dateCreated
           ? _value.dateCreated
@@ -142,6 +149,7 @@ abstract class _$$_ReviewCopyWith<$Res> implements $ReviewCopyWith<$Res> {
       Book book,
       List<User>? likedUser,
       int likesCount,
+      int bookRating,
       DateTime dateCreated});
 
   @override
@@ -167,6 +175,7 @@ class __$$_ReviewCopyWithImpl<$Res>
     Object? book = null,
     Object? likedUser = freezed,
     Object? likesCount = null,
+    Object? bookRating = null,
     Object? dateCreated = null,
   }) {
     return _then(_$_Review(
@@ -198,6 +207,10 @@ class __$$_ReviewCopyWithImpl<$Res>
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
               as int,
+      bookRating: null == bookRating
+          ? _value.bookRating
+          : bookRating // ignore: cast_nullable_to_non_nullable
+              as int,
       dateCreated: null == dateCreated
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
@@ -217,11 +230,15 @@ class _$_Review implements _Review {
       required this.book,
       final List<User>? likedUser,
       required this.likesCount,
+      required this.bookRating,
       required this.dateCreated})
       : _likedUser = likedUser;
 
   factory _$_Review.fromJson(Map<String, dynamic> json) =>
       _$$_ReviewFromJson(json);
+  String getDate(){
+    return  DateFormat('dd.MM.yyyy').format(dateCreated);
+  }
 
   @override
   final int id;
@@ -246,15 +263,13 @@ class _$_Review implements _Review {
   @override
   final int likesCount;
   @override
+  final int bookRating;
+  @override
   final DateTime dateCreated;
-
-  String getDate(){
-    return  DateFormat('dd.MM.yyyy').format(dateCreated);
-  }
 
   @override
   String toString() {
-    return 'Review(id: $id, title: $title, text: $text, user: $user, book: $book, likedUser: $likedUser, likesCount: $likesCount, dateCreated: $dateCreated)';
+    return 'Review(id: $id, title: $title, text: $text, user: $user, book: $book, likedUser: $likedUser, likesCount: $likesCount, bookRating: $bookRating, dateCreated: $dateCreated)';
   }
 
   @override
@@ -271,14 +286,25 @@ class _$_Review implements _Review {
                 .equals(other._likedUser, _likedUser) &&
             (identical(other.likesCount, likesCount) ||
                 other.likesCount == likesCount) &&
+            (identical(other.bookRating, bookRating) ||
+                other.bookRating == bookRating) &&
             (identical(other.dateCreated, dateCreated) ||
                 other.dateCreated == dateCreated));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, text, user, book,
-      const DeepCollectionEquality().hash(_likedUser), likesCount, dateCreated);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      text,
+      user,
+      book,
+      const DeepCollectionEquality().hash(_likedUser),
+      likesCount,
+      bookRating,
+      dateCreated);
 
   @JsonKey(ignore: true)
   @override
@@ -303,6 +329,7 @@ abstract class _Review implements Review {
       required final Book book,
       final List<User>? likedUser,
       required final int likesCount,
+      required final int bookRating,
       required final DateTime dateCreated}) = _$_Review;
 
   factory _Review.fromJson(Map<String, dynamic> json) = _$_Review.fromJson;
@@ -321,6 +348,8 @@ abstract class _Review implements Review {
   List<User>? get likedUser;
   @override
   int get likesCount;
+  @override
+  int get bookRating;
   @override
   DateTime get dateCreated;
   @override

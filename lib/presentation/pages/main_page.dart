@@ -1,8 +1,14 @@
 import 'dart:ui';
 
+import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
+import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../data/models/book.dart';
+import 'add_review_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -12,23 +18,27 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  late List<Book> books;
+  int _selectedIndex = 1;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    ReviewsPage(),
-    Text(
-      'Index 1: Добавить',
-      style: optionStyle,
-    ),
-    Text(
+  static final List<Widget> _widgetOptions = <Widget>[
+    const ReviewsPage(),
+    BlocBuilder<BookCubit, BookState>(builder: (context, state) {
+      return AddReviewPage(bookItems: state.booksStatus.item!);
+    }),
+    const Text(
       'Index 2: Книги',
       style: optionStyle,
     ),
-    ProfilePage(),
+    const ProfilePage(),
   ];
 
-  void _onItemTapped(int index) {
+  Future<List<Book>> getBooks() async {
+    return await AppModule.getBookRepository().getAllBooks();
+  }
+
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
