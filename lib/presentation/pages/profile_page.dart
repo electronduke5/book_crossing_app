@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,13 +42,13 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               );
-            case LoadingStatus:
+            case LoadingStatus<User>:
               return const Center(child: CircularProgressIndicator());
             default:
               print(state.userReviews.runtimeType);
               const Center(child: CircularProgressIndicator());
           }
-          return Text('Че то не так в profile_page.dart');
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -58,10 +59,12 @@ class ProfilePage extends StatelessWidget {
       builder: (context, state) {
         switch (state.userReviews.runtimeType) {
           case LoadedStatus<List<Review>>:
-            return Column(
-              children: state.userReviews.item!
-                  .map((e) => reviewWidget(context, e))
-                  .toList(),
+            return SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                children: state.userReviews.item!
+                    .map((review) => ReviewWidget(review: review)).toList(),
+              ),
             );
           case LoadingStatus<List<Review>>:
             return const Center(child: CircularProgressIndicator());
@@ -72,107 +75,6 @@ class ProfilePage extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
         // return reviewWidget(context, state.userReviews.first);
       },
-    );
-  }
-
-  Widget reviewWidget(BuildContext context, Review review) {
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: 5),
-      child: InkWell(
-        onDoubleTap: () {
-          print('like! 19');
-        },
-        child: Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    review.user.image == null
-                        ? CircleAvatar(
-                            minRadius: 2,
-                            maxRadius: 20,
-                            child: Text(
-                              review.user.getInitials(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.normal, fontSize: 12),
-                            ),
-                          )
-                        : CircleAvatar(
-                            minRadius: 2,
-                            maxRadius: 20,
-                            backgroundImage: NetworkImage(review.user.image!),
-                          ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          review.user.getFullName(),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(review.getDate(),
-                            style: Theme.of(context).textTheme.bodySmall),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                bookInfoReview(context, review.book),
-                const SizedBox(height: 15),
-                Text(
-                  review.text,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        print('like! 60');
-                      },
-                      icon: const Icon(Icons.favorite_outline),
-                      label: Text(review.likesCount.toString()),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Row bookInfoReview(BuildContext context, Book book) {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Книга', style: Theme.of(context).textTheme.bodySmall),
-            Text(
-              book.title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ],
-        ),
-        const SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Автор', style: Theme.of(context).textTheme.bodySmall),
-            Text(
-              '${book.author.name} ${book.author.surname}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ],
-        ),
-      ],
     );
   }
 

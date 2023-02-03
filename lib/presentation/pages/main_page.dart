@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
+import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -11,14 +12,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Главная',
-      style: optionStyle,
-    ),
+    ReviewsPage(),
     Text(
       'Index 1: Добавить',
       style: optionStyle,

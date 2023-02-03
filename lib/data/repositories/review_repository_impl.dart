@@ -4,7 +4,6 @@ import 'package:book_crossing_app/data/utils/api_const_url.dart';
 import 'package:book_crossing_app/domain/repositories/review_repository.dart';
 
 class ReviewRepositoryImpl with ApiService<Review> implements ReviewRepository {
-
   @override
   String apiRoute = ApiConstUrl.reviewUrl;
 
@@ -13,5 +12,10 @@ class ReviewRepositoryImpl with ApiService<Review> implements ReviewRepository {
         fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
         qFilter: 'user',
         qFilterValue: id,
+      );
+
+  @override
+  Future<List<Review>> getAllReviews() => getAll(
+        fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
       );
 }
