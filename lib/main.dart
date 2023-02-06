@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
             swapLegacyOnMaterial3: true,
             fontFamily: GoogleFonts.notoSerif().fontFamily,
           ),
-          themeMode: ThemeMode.light,
+          themeMode: ThemeMode.dark,
           routes: {
             '/sign-in': (context) => BlocProvider<AuthCubit>(
                   create: (context) => AuthCubit(),

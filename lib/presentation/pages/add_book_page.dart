@@ -17,89 +17,91 @@ class AddBookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: BlocBuilder<AuthorCubit, AuthorState>(
-          // bloc: authorCubit,
-          builder: (context, state) {
-            switch (state.getAuthorsState.runtimeType) {
-              case LoadingStatus<List<Author>>:
-                return const Center(child: CircularProgressIndicator());
-              case FailedStatus:
-                return Center(
-                    child: Text(state.getAuthorsState.message ??
-                        'Ошибка add_book_page 26'));
-              case LoadedStatus<List<Author>>:
-                List<Author> authorItems = state.getAuthorsState.item!;
-                List<DropdownMenuItem<Author>> menuItemsAuthor = authorItems
-                    .map((author) => DropdownMenuItem<Author>(
-                          value: author,
-                          child: Text(author.getInitials()),
-                        ))
-                    .toList();
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                            'Для начала нужно добавить автора новой книги:'),
-                        const SizedBox(height: 10),
-                        SearchAuthorField(
-                            authorItems: menuItemsAuthor,
-                            bookCubit: context.read<BookCubit>()),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          onChanged: (value) =>
-                              context.read<BookCubit>().titleChanged(value),
-                          validator: (value) {
-                            if (value?.trim().isNotEmpty == true) {
-                              return null;
-                            }
-                            return "Это обязательное поле";
-                          },
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            labelText: 'Название книги',
-                            prefixIcon: const Icon(Icons.book_outlined),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            hintText: 'Война и мир',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: BlocBuilder<AuthorCubit, AuthorState>(
+            // bloc: authorCubit,
+            builder: (context, state) {
+              switch (state.getAuthorsState.runtimeType) {
+                case LoadingStatus<List<Author>>:
+                  return const Center(child: CircularProgressIndicator());
+                case FailedStatus:
+                  return Center(
+                      child: Text(state.getAuthorsState.message ??
+                          'Ошибка add_book_page 26'));
+                case LoadedStatus<List<Author>>:
+                  List<Author> authorItems = state.getAuthorsState.item!;
+                  List<DropdownMenuItem<Author>> menuItemsAuthor = authorItems
+                      .map((author) => DropdownMenuItem<Author>(
+                            value: author,
+                            child: Text(author.getInitials()),
+                          ))
+                      .toList();
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                              'Для начала нужно добавить автора новой книги:'),
+                          const SizedBox(height: 10),
+                          SearchAuthorField(
+                              authorItems: menuItemsAuthor,
+                              bookCubit: context.read<BookCubit>()),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            onChanged: (value) =>
+                                context.read<BookCubit>().titleChanged(value),
+                            validator: (value) {
+                              if (value?.trim().isNotEmpty == true) {
+                                return null;
+                              }
+                              return "Это обязательное поле";
+                            },
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              labelText: 'Название книги',
+                              prefixIcon: const Icon(Icons.book_outlined),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              hintText: 'Война и мир',
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        genresDropdown(context),
-                        TextButton(
-                          onPressed: () async {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              await context
-                                  .read<BookCubit>()
-                                  .addBook()
-                                  .then((value) {
-                                if (value != null) {
-                                  Navigator.pop(context, value);
-                                }
-                              });
-                            }
-                          },
-                          child: Text("Далее"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context, null);
-                          },
-                          child: Text("Назад"),
-                        ),
-                      ],
+                          const SizedBox(height: 10),
+                          genresDropdown(context),
+                          TextButton(
+                            onPressed: () async {
+                              if (_formKey.currentState?.validate() ?? false) {
+                                await context
+                                    .read<BookCubit>()
+                                    .addBook()
+                                    .then((value) {
+                                  if (value != null) {
+                                    Navigator.pop(context, value);
+                                  }
+                                });
+                              }
+                            },
+                            child: Text("Далее"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, null);
+                            },
+                            child: Text("Назад"),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              default:
-                return const Center(child: CircularProgressIndicator());
-            }
-          },
+                  );
+                default:
+                  return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
       ),
     );
