@@ -1,10 +1,14 @@
 import 'dart:io';
 
 import 'package:book_crossing_app/presentation/cubits/auth/auth_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/author/author_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/genre/genre_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
+import 'package:book_crossing_app/presentation/pages/add_author_page.dart';
+import 'package:book_crossing_app/presentation/pages/add_book_page.dart';
 import 'package:book_crossing_app/presentation/pages/main_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_in_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_up_page.dart';
@@ -90,7 +94,25 @@ class MyApp extends StatelessWidget {
                 ),
             '/sign-up': (context) => BlocProvider<AuthCubit>(
                   create: (context) => AuthCubit(),
-                  child: SignUpPage(),
+                  child: const SignUpPage(),
+                ),
+            '/add-author': (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider<AuthorCubit>(
+                        create: (context) => AuthorCubit()..loadAuthors()),
+                  ],
+                  child: AddAuthorPage(),
+                ),
+            '/add-book': (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider<AuthorCubit>(
+                        create: (context) => AuthorCubit()..loadAuthors()),
+                    BlocProvider<GenreCubit>(
+                        create: (context) => GenreCubit()..loadGenres()),
+                    BlocProvider<BookCubit>(
+                        create: (context) => BookCubit()..loadBooks()),
+                  ],
+                  child: AddBookPage(),
                 ),
             '/main': (context) => MultiBlocProvider(
                   providers: [
@@ -101,13 +123,9 @@ class MyApp extends StatelessWidget {
                     BlocProvider<ReviewCubit>(
                         create: (context) => ReviewCubit()..loadReviews()),
                   ],
-                  child: MainPage(),
+                  child: const MainPage(),
                 ),
           },
-          // home: BlocProvider(
-          //   create: (context) => AuthCubit(),
-          //   child: SignInPage(),
-          // ),
           initialRoute: user.data == null ? '/sign-in' : '/main',
         );
       },

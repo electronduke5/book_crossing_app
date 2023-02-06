@@ -4,7 +4,6 @@ import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/book.dart';
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
 
@@ -21,35 +20,48 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      clipBehavior: Clip.none,
-      child: BlocBuilder<ProfileCubit, ProfileState>(
-        builder: (context, state) {
-          switch (state.status.runtimeType) {
-            case LoadedStatus<User>:
-              return IntrinsicHeight(
-                child: Column(
-                  children: [
-                    profileCard(context),
-                    statsWidget(
-                        countReview: state.userReviews.item!.length,
-                        countLikes: getLikes(state.userReviews.item!)),
-                    Expanded(child: reviewsListWidget(context)),
-                    const SizedBox(height: 10),
-                    Text('${state.userReviews.item!.length} запись',
-                        style: Theme.of(context).textTheme.titleSmall),
-                  ],
-                ),
-              );
-            case LoadingStatus<User>:
-              return const Center(child: CircularProgressIndicator());
-            default:
-              print(state.userReviews.runtimeType);
-              const Center(child: CircularProgressIndicator());
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+    final double deviceWidth = MediaQuery.of(context).size.height;
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        await context.read<ProfileCubit>().loadProfile();
+      },
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        clipBehavior: Clip.none,
+        child: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            switch (state.status.runtimeType) {
+              case LoadedStatus<User>:
+                return IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      profileCard(context),
+                      statsWidget(
+                          countReview: state.userReviews.item!.length,
+                          countLikes: getLikes(state.userReviews.item!)),
+                      Expanded(child: reviewsListWidget(context)),
+                      const SizedBox(height: 10),
+                      Text('${state.userReviews.item!.length} запись',
+                          style: Theme.of(context).textTheme.titleSmall),
+                    ],
+                  ),
+                );
+              case LoadingStatus<User>:
+                return SizedBox(
+                    height: deviceWidth,
+                    child: const Center(child: CircularProgressIndicator()));
+              default:
+                print(state.userReviews.runtimeType);
+                SizedBox(
+                    height: deviceWidth,
+                    child: const Center(child: CircularProgressIndicator()));
+            }
+            return SizedBox(
+                height: deviceWidth,
+                child: const Center(child: CircularProgressIndicator()));
+          },
+        ),
       ),
     );
   }
@@ -63,7 +75,8 @@ class ProfilePage extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 children: state.userReviews.item!
-                    .map((review) => ReviewWidget(review: review)).toList(),
+                    .map((review) => ReviewWidget(review: review))
+                    .toList(),
               ),
             );
           case LoadingStatus<List<Review>>:
@@ -146,7 +159,6 @@ class ProfilePage extends StatelessWidget {
         print('state: ${state.status.runtimeType}');
         switch (state.status.runtimeType) {
           case FailedStatus<User>:
-            print(state.status.message!);
             break;
           case LoadingStatus<User>:
             return const Center(child: CircularProgressIndicator());
@@ -228,7 +240,7 @@ class ProfilePage extends StatelessWidget {
           default:
             return const Center(child: CircularProgressIndicator());
         }
-        return Text('asdasda');
+        return const Text('asdasda');
       },
     );
   }

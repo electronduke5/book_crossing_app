@@ -18,6 +18,7 @@ Author _$AuthorFromJson(Map<String, dynamic> json) {
   return _Author.fromJson(json);
 }
 
+
 /// @nodoc
 mixin _$Author {
   int get id => throw _privateConstructorUsedError;
@@ -133,6 +134,16 @@ class _$_Author implements _Author {
 
   factory _$_Author.fromJson(Map<String, dynamic> json) =>
       _$$_AuthorFromJson(json);
+
+  String getFullName() => '$surname $name $patronymic';
+
+  String getSurnameName() => '$surname $name';
+
+  String getInitials() {
+    return patronymic == null
+        ? '${name[0]}. $surname'
+        : '${name[0]}. ${patronymic[0]}. $surname';
+  }
 
   @override
   final int id;

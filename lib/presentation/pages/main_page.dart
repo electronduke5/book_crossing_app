@@ -1,11 +1,9 @@
 import 'dart:ui';
 
-import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/book.dart';
 import 'add_review_page.dart';
@@ -24,9 +22,7 @@ class _MainPageState extends State<MainPage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     const ReviewsPage(),
-    BlocBuilder<BookCubit, BookState>(builder: (context, state) {
-      return AddReviewPage(bookItems: state.booksStatus.item!);
-    }),
+    AddReviewPage(),
     const Text(
       'Index 2: Книги',
       style: optionStyle,
@@ -47,7 +43,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.8),
       body: SafeArea(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

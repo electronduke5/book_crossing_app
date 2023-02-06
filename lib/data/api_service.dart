@@ -15,13 +15,12 @@ mixin ApiService<T extends Object> {
     final dio = Dio(
       BaseOptions(
         validateStatus: (status) => true,
+        headers: {"Accept": "application/json"},
       ),
     );
 
-    if(qFilter != null && qFilterValue != null){
-      dio.options.queryParameters = {
-        qFilter: qFilterValue
-      };
+    if (qFilter != null && qFilterValue != null) {
+      dio.options.queryParameters = {qFilter: qFilterValue};
     }
 
     final response = await dio.get('${ApiConstUrl.baseUrl}$apiRoute');
@@ -37,6 +36,7 @@ mixin ApiService<T extends Object> {
     final dio = Dio(
       BaseOptions(
         validateStatus: (status) => true,
+        headers: {"Accept": "application/json"},
       ),
     );
 
@@ -57,6 +57,7 @@ mixin ApiService<T extends Object> {
     print('data: ${data}');
     final dio = Dio(
       BaseOptions(
+        headers: {"Accept": "application/json"},
         validateStatus: (status) => true,
       ),
     );
@@ -64,11 +65,11 @@ mixin ApiService<T extends Object> {
     print('url: ${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
     try {
       final response = await dio.post(
-          '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
-          data: data);
-
-      print(response);
-      if (response.statusCode != HttpStatus.ok) {
+        '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
+        data: data,
+      );
+      if (response.statusCode != HttpStatus.ok &&
+          response.statusCode != HttpStatus.created) {
         throw Exception(['Error =_-']);
       }
       final json = response.data;

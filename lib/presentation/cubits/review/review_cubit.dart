@@ -22,12 +22,41 @@ class ReviewCubit extends Cubit<ReviewState> {
     }
   }
 
+  Future<void> createReview() async {
+    final repository = AppModule.getReviewRepository();
+    emit(state.copyWith(createReviewStatus: LoadingStatus<Review>()));
+    try {
+      print(state.title);
+      print(state.text);
+      print(state.book);
+      print(state.rating);
+      print(AppModule.getProfileHolder().user);
+      final review = await repository.addReview(
+        state.title,
+        state.text,
+        state.book!,
+        state.rating,
+        AppModule.getProfileHolder().user,
+      );
+      print('created review (review_cubit 36): $review');
+      emit(state.copyWith(createReviewStatus: LoadedStatus(review)));
+    } catch (exception) {
+      emit(state.copyWith(
+          createReviewStatus: FailedStatus(
+              state.createReviewStatus.message ?? exception.toString())));
+    }
+  }
+
   Future<void> titleChanged(String value) async {
     emit(state.copyWith(title: value));
   }
 
   Future<void> textChanged(String value) async {
     emit(state.copyWith(text: value));
+  }
+
+  Future<void> ratingChanged(int value) async {
+    emit(state.copyWith(rating: value));
   }
 
   Future<void> bookChanged(Book value) async {

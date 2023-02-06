@@ -1,7 +1,11 @@
+import 'package:book_crossing_app/data/repositories/auhor_repository_impl.dart';
 import 'package:book_crossing_app/data/repositories/book_repository_impl.dart';
+import 'package:book_crossing_app/data/repositories/genres_repository_impl.dart';
 import 'package:book_crossing_app/data/repositories/profile_repository_impl.dart';
 import 'package:book_crossing_app/data/repositories/review_repository_impl.dart';
+import 'package:book_crossing_app/domain/repositories/author_repository.dart';
 import 'package:book_crossing_app/domain/repositories/book_repository.dart';
+import 'package:book_crossing_app/domain/repositories/genre_repository.dart';
 import 'package:book_crossing_app/domain/repositories/profile_repository.dart';
 import 'package:book_crossing_app/domain/repositories/review_repository.dart';
 import 'package:book_crossing_app/presentation/di/profile_holder.dart';
@@ -23,6 +27,8 @@ class AppModule {
     _provideProfileRepository();
     _provideReviewRepository();
     _provideBookRepository();
+    _provideAuthorRepository();
+    _provideGenreRepository();
 
     _provided = true;
   }
@@ -41,6 +47,22 @@ class AppModule {
 
   static ProfileRepository getProfileRepository() {
     return GetIt.instance.get<ProfileRepositoryImpl>();
+  }
+
+  void _provideAuthorRepository() {
+    GetIt.instance.registerSingleton(AuthorRepositoryImpl());
+  }
+
+  static AuthorRepository getAuthorRepository() {
+    return GetIt.instance.get<AuthorRepositoryImpl>();
+  }
+
+  void _provideGenreRepository() {
+    GetIt.instance.registerSingleton(GenreRepositoryImpl());
+  }
+
+  static GenreRepository getGenreRepository() {
+    return GetIt.instance.get<GenreRepositoryImpl>();
   }
 
   void _provideReviewRepository() {
