@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/presentation/widgets/profile_image_small.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../data/models/book.dart';
 import '../../data/models/review.dart';
@@ -53,6 +54,18 @@ class ReviewWidget extends StatelessWidget {
                   review.text,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
+                const SizedBox(height: 10),
+                //const Divider(indent: 10, endIndent: 10, thickness: 0.1),
+                RatingBarIndicator(
+                  itemBuilder: (context, index) {
+                    return Icon(Icons.star,
+                        color: Theme.of(context).colorScheme.secondary);
+                  },
+                  itemSize: MediaQuery.of(context).size.width / 11,
+                  itemCount: 10,
+                  rating: review.bookRating.toDouble(),
+                ),
+                Text('Оценка: ${review.bookRating}/10'),
                 const SizedBox(height: 10),
                 Row(
                   children: [
