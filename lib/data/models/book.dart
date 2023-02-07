@@ -12,6 +12,7 @@ class Book with _$Book {
   const factory Book({
     required int id,
     required String title,
+    required int reviewsCount,
     String? description,
     String? image,
     double? rating ,

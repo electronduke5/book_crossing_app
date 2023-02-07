@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -18,7 +19,6 @@ class BookWidget extends StatelessWidget {
           log('Book widget was tapped!');
           //context.read<ReviewCubit>().loadReviews(filter: 'book', value: book.id).then((value) {
           Navigator.of(context).pushNamed('/book-review', arguments: book);
-
 
           //});
         },
@@ -66,19 +66,21 @@ class BookWidget extends StatelessWidget {
                   }
                   return const SizedBox();
                 }(),
-                Text(book.rating != 0.0
-                    ? 'Оценка книги: ${book.rating}/10'
-                    : 'Отзывов ещё нет'),
+
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        print('like! 60');
-                      },
-                      icon: const Icon(Icons.add_shopping_cart_outlined),
-                      label: Text('Добавить в закладки'),
-                    )
+                    const Icon(Icons.star_outline),
+                    Text(book.rating != 0.0
+                        ? 'Оценка книги: ${book.rating}/10'
+                        : 'Отзывов ещё нет'),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(Icons.library_books_outlined),
+                    Text('Количество ревью: ${book.reviewsCount}'),
                   ],
                 ),
               ],
