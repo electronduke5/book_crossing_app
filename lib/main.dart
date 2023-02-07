@@ -9,6 +9,7 @@ import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/add_author_page.dart';
 import 'package:book_crossing_app/presentation/pages/add_book_page.dart';
+import 'package:book_crossing_app/presentation/pages/book_reviews_page.dart';
 import 'package:book_crossing_app/presentation/pages/main_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_in_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_up_page.dart';
@@ -103,6 +104,13 @@ class MyApp extends StatelessWidget {
                   ],
                   child: AddAuthorPage(),
                 ),
+            '/book-review': (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider<ReviewCubit>(
+                    create: (context) => ReviewCubit()),
+              ],
+              child: BookReviewPage(),
+            ),
             '/add-book': (context) => MultiBlocProvider(
                   providers: [
                     BlocProvider<AuthorCubit>(

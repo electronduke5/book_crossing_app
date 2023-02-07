@@ -17,68 +17,70 @@ class ReviewWidget extends StatelessWidget {
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: horizontalPadding ?? 0, vertical: 5),
-      child: InkWell(
-        onDoubleTap: () {
-          print('like! 19');
-        },
-        child: Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    ProfileAvatarSmall(
-                      user: review.user,
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          review.user.getFullName(),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(review.getDate(),
-                            style: Theme.of(context).textTheme.bodySmall),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                bookInfoReview(context, review.book),
-                const SizedBox(height: 15),
-                Text(
-                  review.text,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 10),
-                //const Divider(indent: 10, endIndent: 10, thickness: 0.1),
-                RatingBarIndicator(
-                  itemBuilder: (context, index) {
-                    return Icon(Icons.star,
-                        color: Theme.of(context).colorScheme.secondary);
-                  },
-                  itemSize: MediaQuery.of(context).size.width / 11,
-                  itemCount: 10,
-                  rating: review.bookRating.toDouble(),
-                ),
-                Text('Оценка: ${review.bookRating}/10'),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        print('like! 60');
-                      },
-                      icon: const Icon(Icons.favorite_outline),
-                      label: Text(review.likesCount.toString()),
-                    )
-                  ],
-                ),
-              ],
+      child: Material(
+        child: InkWell(
+          onDoubleTap: () {
+            print('like! 19');
+          },
+          child: Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      ProfileAvatarSmall(
+                        user: review.user,
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            review.user.getFullName(),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(review.getDate(),
+                              style: Theme.of(context).textTheme.bodySmall),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  bookInfoReview(context, review.book),
+                  const SizedBox(height: 15),
+                  Text(
+                    review.text,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  //const Divider(indent: 10, endIndent: 10, thickness: 0.1),
+                  RatingBarIndicator(
+                    itemBuilder: (context, index) {
+                      return Icon(Icons.star,
+                          color: Theme.of(context).colorScheme.secondary);
+                    },
+                    itemSize: MediaQuery.of(context).size.width / 11,
+                    itemCount: 10,
+                    rating: review.bookRating.toDouble(),
+                  ),
+                  Text('Оценка: ${review.bookRating}/10'),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          print('like! 60');
+                        },
+                        icon: const Icon(Icons.favorite_outline),
+                        label: Text(review.likesCount.toString()),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

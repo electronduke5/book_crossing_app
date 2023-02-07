@@ -11,16 +11,20 @@ part 'review_state.dart';
 class ReviewCubit extends Cubit<ReviewState> {
   ReviewCubit() : super(ReviewState());
 
-  Future<void> loadReviews() async {
+  Future<List<Review>?> loadReviews({String? filter, dynamic value}) async {
     final repository = AppModule.getReviewRepository();
     emit(state.copyWith(reviews: LoadingStatus()));
     try {
-      final reviews = await repository.getAllReviews();
+      final reviews = await repository.getAllReviews(filter: filter, value: value);
       emit(state.copyWith(reviews: LoadedStatus(reviews)));
+      return reviews;
     } catch (exception) {
       emit(state.copyWith(reviews: FailedStatus(exception.toString())));
+      return null;
     }
   }
+
+
 
   Future<void> createReview() async {
     final repository = AppModule.getReviewRepository();

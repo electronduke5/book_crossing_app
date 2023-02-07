@@ -17,9 +17,10 @@ class ReviewRepositoryImpl with ApiService<Review> implements ReviewRepository {
       );
 
   @override
-  Future<List<Review>> getAllReviews() => getAll(
-        fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
-      );
+  Future<List<Review>> getAllReviews({String? filter, dynamic value}) => getAll(
+      fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
+      qFilter: filter,
+      qFilterValue: value);
 
   @override
   Future<Review> addReview(

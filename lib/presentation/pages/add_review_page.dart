@@ -33,6 +33,8 @@ class AddReviewPage extends StatelessWidget {
         }
       },
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        clipBehavior: Clip.none,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:book_crossing_app/data/utils/api_const_url.dart';
@@ -68,6 +69,7 @@ mixin ApiService<T extends Object> {
         '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
         data: data,
       );
+      log('response.statusCode: ${response.statusCode}');
       if (response.statusCode != HttpStatus.ok &&
           response.statusCode != HttpStatus.created) {
         throw Exception(['Error =_-']);

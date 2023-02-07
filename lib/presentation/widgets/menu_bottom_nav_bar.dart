@@ -1,58 +1,24 @@
 import 'dart:ui';
 
-import 'package:book_crossing_app/presentation/di/app_module.dart';
-import 'package:book_crossing_app/presentation/pages/profile_page.dart';
-import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/models/book.dart';
-import 'add_review_page.dart';
-import 'books_page.dart';
-
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class MenuBottomNavBar extends StatefulWidget {
+  const MenuBottomNavBar({Key? key, required this.callback}) : super(key: key);
+  final ValueSetter<int> callback;
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MenuBottomNavBar> createState() => _MenuBottomNavBarState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MenuBottomNavBarState extends State<MenuBottomNavBar> {
   int _selectedIndex = 0;
-
-  static final List<Widget> _widgetOptions = <Widget>[
-    const ReviewsPage(),
-    AddReviewPage(),
-    BooksPage(),
-    const ProfilePage(),
-  ];
-
-  Future<List<Book>> getBooks() async {
-    return await AppModule.getBookRepository().getAllBooks();
-  }
-
   void _onItemTapped(int index) async {
     setState(() {
+      widget.callback(index);
       _selectedIndex = index;
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            _widgetOptions.elementAt(_selectedIndex),
-             Align(
-              alignment: Alignment.bottomCenter,
-              child: buildBottomNavBar(context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildBottomNavBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
@@ -94,6 +60,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
       ),
-    );
-   }
+    );;
+  }
 }
