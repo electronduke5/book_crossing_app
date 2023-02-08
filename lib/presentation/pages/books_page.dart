@@ -12,6 +12,13 @@ class BooksPage extends StatelessWidget {
   BooksPage({Key? key}) : super(key: key);
 
   Book? book;
+  final _scrollController = ScrollController();
+  final _height = 80.0;
+
+  void _scrollToIndex(index) {
+    _scrollController.animateTo(_height * index,
+        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +36,11 @@ class BooksPage extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              IconButton(
+                  onPressed: () {
+                    _scrollToIndex(0);
+                  },
+                  icon: const Icon(Icons.search)),
               IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
             ],
           ),
@@ -57,6 +68,7 @@ class BooksPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               return ListView.builder(
+                controller: _scrollController,
                 clipBehavior: Clip.antiAlias,
                 physics: const BouncingScrollPhysics(),
                 itemCount: state.booksStatus.item?.length,
