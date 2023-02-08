@@ -25,24 +25,27 @@ class BooksPage extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          AppBar(
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-              child: ProfileAvatarSmall(
-                  maxRadius: 15, user: AppModule.getProfileHolder().user),
+          InkWell(
+            onTap: () {
+              _scrollToIndex(0);
+            },
+            child: AppBar(
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                child: ProfileAvatarSmall(
+                    maxRadius: 15, user: AppModule.getProfileHolder().user),
+              ),
+              title: const Text(
+                'Книги',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.search)),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
+              ],
             ),
-            title: const Text(
-              'Книги',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    _scrollToIndex(0);
-                  },
-                  icon: const Icon(Icons.search)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
-            ],
           ),
           const SizedBox(height: 5),
           Expanded(
