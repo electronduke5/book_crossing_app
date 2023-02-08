@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
+import 'package:book_crossing_app/presentation/widgets/review_title_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/search_book_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../data/models/review.dart';
+import '../widgets/review_text.dart';
 
 class AddReviewPage extends StatelessWidget {
   AddReviewPage({Key? key}) : super(key: key);
@@ -61,46 +63,9 @@ class AddReviewPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        onChanged: (value) =>
-                            context.read<ReviewCubit>().titleChanged(value),
-                        validator: (value) {
-                          if (value?.trim().isNotEmpty == true) {
-                            return null;
-                          }
-                          return "Это обязательное поле";
-                        },
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10.0),
-                          labelText: 'Заголовок',
-                          prefixIcon: const Icon(Icons.title),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          hintText: 'Заголовок статьи',
-                        ),
-                      ),
+                      const ReviewTitle(),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        onChanged: (value) =>
-                            context.read<ReviewCubit>().textChanged(value),
-                        validator: (value) {
-                          if (value?.trim().isNotEmpty == true) {
-                            return null;
-                          }
-                          return "Это обязательное поле";
-                        },
-                        maxLines: null,
-                        minLines: 2,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 10),
-                          labelText: 'Текст статьи',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          hintText: 'Это моя новая рецензия на книгу...',
-                        ),
-                      ),
+                      const ReviewText(),
                       const SizedBox(height: 10),
                       const Text(
                         'Теперь выберите книгу, на которую хотите написать рецензию:',

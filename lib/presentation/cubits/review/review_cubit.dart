@@ -44,6 +44,7 @@ class ReviewCubit extends Cubit<ReviewState> {
       );
       print('created review (review_cubit 36): $review');
       emit(state.copyWith(createReviewStatus: LoadedStatus(review)));
+      emit(state.copyWith(createReviewStatus: const IdleStatus()));
     } catch (exception) {
       emit(state.copyWith(
           createReviewStatus: FailedStatus(
