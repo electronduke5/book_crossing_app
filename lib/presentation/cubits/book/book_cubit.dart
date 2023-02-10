@@ -12,22 +12,17 @@ part 'book_state.dart';
 class BookCubit extends Cubit<BookState> {
   BookCubit() : super(BookState());
 
-  Future<void> loadBooks() async {
-    print('state: ${state.booksStatus.runtimeType}');
+  Future<List<Book>?> loadBooks() async {
     final repository = AppModule.getBookRepository();
     emit(state.copyWith(booksStatus: LoadingStatus()));
     try {
-      print('state2: ${state.booksStatus.runtimeType}');
       final List<Book> books = await repository.getAllBooks();
-      print(books);
-      print('state2.4: ${state.booksStatus.runtimeType}');
       emit(state.copyWith(booksStatus: LoadedStatus(books)));
-      print('state3: ${state.booksStatus.runtimeType}');
+      return books;
     } catch (exception) {
-      print('state Error: ${state.booksStatus.runtimeType}');
       emit(
           state.copyWith(booksStatus: FailedStatus(state.booksStatus.message)));
-      print('4: ${state.booksStatus.runtimeType}');
+      return null;
     }
   }
 

@@ -36,7 +36,7 @@ class ReviewsPage extends StatelessWidget {
                 onPressed: () async {
                   showSearch(
                     context: context,
-                    delegate: CustomSearchDelegate(allReviews),
+                    delegate: CustomSearchDelegate(reviews: allReviews),
                   );
                 },
                 icon: const Icon(Icons.search),

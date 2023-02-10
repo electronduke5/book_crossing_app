@@ -6,12 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/book.dart';
 import '../di/app_module.dart';
 import '../widgets/book_widget.dart';
+import '../widgets/custom_search_delegate.dart';
 import '../widgets/profile_image_small.dart';
 
 class BooksPage extends StatelessWidget {
   BooksPage({Key? key}) : super(key: key);
 
   Book? book;
+  List<Book> allBooks = [];
   final _scrollController = ScrollController();
   final _height = 80.0;
 
@@ -31,7 +33,8 @@ class BooksPage extends StatelessWidget {
             },
             child: AppBar(
               leading: Padding(
-                padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                padding:
+                    const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                 child: ProfileAvatarSmall(
                     maxRadius: 15, user: AppModule.getProfileHolder().user),
               ),
@@ -41,9 +44,15 @@ class BooksPage extends StatelessWidget {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showSearch(
+                        context: context,
+                        delegate: CustomSearchDelegate(books: allBooks),
+                      );
+                    },
                     icon: const Icon(Icons.search)),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
+                IconButton(
+                    onPressed: () {}, icon: const Icon(Icons.filter_list)),
               ],
             ),
           ),
@@ -59,7 +68,10 @@ class BooksPage extends StatelessWidget {
   Widget buildBooksList(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<BookCubit>().loadBooks();
+        await context
+            .read<BookCubit>()
+            .loadBooks()
+            .then((value) => allBooks = value!);
       },
       child: BlocBuilder<BookCubit, BookState>(
         builder: (context, state) {
@@ -70,6 +82,7 @@ class BooksPage extends StatelessWidget {
               if (state.booksStatus.item == null) {
                 return const Center(child: CircularProgressIndicator());
               }
+              allBooks = state.booksStatus.item!;
               return ListView.builder(
                 controller: _scrollController,
                 clipBehavior: Clip.antiAlias,
