@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/review.dart';
 import '../widgets/custom_search_delegate.dart';
+import '../widgets/popup_icon_item.dart';
 import '../widgets/profile_image_small.dart';
 
 class ReviewsPage extends StatelessWidget {
@@ -40,7 +41,32 @@ class ReviewsPage extends StatelessWidget {
                 },
                 icon: const Icon(Icons.search),
               ),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
+              PopupMenuButton<String>(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                icon: const Icon(Icons.filter_list),
+                onSelected: (value) async {
+                  allReviews = await _onSelected(
+                      context: context, allReviews: allReviews, value: value);
+                },
+                itemBuilder: (context) {
+                  return [
+                    PopupIconMenuItem(
+                        title: 'Сначала новые', icon: Icons.date_range),
+                    PopupIconMenuItem(
+                        title: 'Сначала старые', icon: Icons.date_range),
+                    PopupIconMenuItem(
+                        title: 'По кол-ву лайков',
+                        icon: Icons.favorite_outline),
+                    PopupIconMenuItem(
+                        title: 'По возрастанию оценки',
+                        icon: Icons.arrow_upward),
+                    PopupIconMenuItem(
+                        title: 'По убыванию оценки',
+                        icon: Icons.arrow_downward),
+                  ];
+                },
+              ),
             ],
           ),
           const SizedBox(height: 5),
@@ -62,15 +88,16 @@ class ReviewsPage extends StatelessWidget {
                       return Center(
                           child: Text(state.reviews.message ?? 'Failed'));
                     case LoadedStatus<List<Review>>:
-                      allReviews = state.reviews.item!;
+                      allReviews.isEmpty
+                          ? allReviews = state.reviews.item!
+                          : () {};
                       return ListView.builder(
                           //TODO: clipBehavior: Clip.none,
                           clipBehavior: Clip.antiAlias,
                           physics: const BouncingScrollPhysics(),
-                          itemCount: state.reviews.item!.length,
+                          itemCount: allReviews.length,
                           itemBuilder: (context, index) {
-                            return ReviewWidget(
-                                review: state.reviews.item![index]);
+                            return ReviewWidget(review: allReviews[index]);
                           });
                     default:
                       return const Center(child: CircularProgressIndicator());
@@ -83,4 +110,50 @@ class ReviewsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<List<Review>> _onSelected({
+  required BuildContext context,
+  required List<Review> allReviews,
+  required String value,
+}) async {
+  switch (value) {
+    case 'Сначала новые':
+      await context
+          .read<ReviewCubit>()
+          .loadReviews()
+          .then((value) => allReviews = value!);
+      allReviews.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+      break;
+
+    case 'Сначала старые':
+      await context
+          .read<ReviewCubit>()
+          .loadReviews()
+          .then((value) => allReviews = value!);
+      allReviews.sort((b, a) => b.dateCreated.compareTo(a.dateCreated));
+      break;
+    case 'По кол-ву лайков':
+      await context
+          .read<ReviewCubit>()
+          .loadReviews()
+          .then((value) => allReviews = value!);
+      allReviews.sort((a, b) => b.likesCount.compareTo(a.likesCount));
+      break;
+    case 'По возрастанию оценки':
+      await context
+          .read<ReviewCubit>()
+          .loadReviews()
+          .then((value) => allReviews = value!);
+      allReviews.sort((a, b) => a.bookRating.compareTo(b.bookRating));
+      break;
+    case 'По убыванию оценки':
+      await context
+          .read<ReviewCubit>()
+          .loadReviews()
+          .then((value) => allReviews = value!);
+      allReviews.sort((b, a) => a.bookRating.compareTo(b.bookRating));
+      break;
+  }
+  return allReviews;
 }
