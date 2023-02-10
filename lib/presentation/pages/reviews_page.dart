@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/review.dart';
+import '../widgets/custom_search_delegate.dart';
 import '../widgets/profile_image_small.dart';
 
 class ReviewsPage extends StatelessWidget {
-  const ReviewsPage({Key? key}) : super(key: key);
+  ReviewsPage({Key? key}) : super(key: key);
+
+  List<Review> allReviews = [];
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,15 @@ class ReviewsPage extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              IconButton(
+                onPressed: () async {
+                  showSearch(
+                    context: context,
+                    delegate: CustomSearchDelegate(allReviews),
+                  );
+                },
+                icon: const Icon(Icons.search),
+              ),
               IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
             ],
           ),
@@ -36,7 +47,10 @@ class ReviewsPage extends StatelessWidget {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                context.read<ReviewCubit>().loadReviews();
+                await context
+                    .read<ReviewCubit>()
+                    .loadReviews()
+                    .then((value) => allReviews = value!);
               },
               child: BlocBuilder<ReviewCubit, ReviewState>(
                 builder: (context, state) {
@@ -48,6 +62,7 @@ class ReviewsPage extends StatelessWidget {
                       return Center(
                           child: Text(state.reviews.message ?? 'Failed'));
                     case LoadedStatus<List<Review>>:
+                      allReviews = state.reviews.item!;
                       return ListView.builder(
                           //TODO: clipBehavior: Clip.none,
                           clipBehavior: Clip.antiAlias,

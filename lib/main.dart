@@ -107,6 +107,8 @@ class MyApp extends StatelessWidget {
                 ),
             '/book-review': (context) => MultiBlocProvider(
                   providers: [
+                    BlocProvider<LikeCubit>(create: (context) => LikeCubit()),
+
                     BlocProvider<ReviewCubit>(
                         create: (context) => ReviewCubit()),
                   ],
