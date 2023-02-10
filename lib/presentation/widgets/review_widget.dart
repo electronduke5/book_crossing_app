@@ -1,5 +1,4 @@
 import 'package:book_crossing_app/presentation/cubits/like/like_cubit.dart';
-import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/widgets/profile_image_small.dart';
 import 'package:flutter/material.dart';
@@ -21,82 +20,68 @@ class ReviewWidget extends StatelessWidget {
     return BlocProvider<LikeCubit>(
       create: (context) => LikeCubit(),
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: horizontalPadding ?? 0, vertical: 5),
-        child: Material(
-          child: InkWell(
-            onDoubleTap: () async {
-              print('like! 19');
-              review = (await context.read<LikeCubit>().likeBook(review))!;
-            },
-            child: Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        ProfileAvatarSmall(
-                          user: review.user,
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              review.user.getFullName(),
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(review.getDate(),
-                                style: Theme.of(context).textTheme.bodySmall),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    bookInfoReview(context, review.book),
-                    const SizedBox(height: 15),
-                    Text(
-                      review.text,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 10),
-                    //const Divider(indent: 10, endIndent: 10, thickness: 0.1),
-                    RatingBarIndicator(
-                      itemBuilder: (context, index) {
-                        return Icon(Icons.star,
-                            color: Theme.of(context).colorScheme.secondary);
-                      },
-                      itemSize: MediaQuery.of(context).size.width / 11,
-                      itemCount: 10,
-                      rating: review.bookRating.toDouble(),
-                    ),
-                    Text('Оценка: ${review.bookRating}/10'),
-                    const SizedBox(height: 10),
-                    BlocBuilder<LikeCubit, LikeState>(builder: (context, state) {
-                      switch (state.likeStatus.runtimeType) {
-                        case LoadingStatus:
-                          return const Center(child: CircularProgressIndicator());
-                        case LoadedStatus<Review>:
+        padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding ?? 0, vertical: 5),
+        child: Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Material(
+              child: BlocBuilder<LikeCubit, LikeState>(
+                builder: (context, state) => InkWell(
+                  onDoubleTap: () async {
+                    review =
+                        (await context.read<LikeCubit>().likeReview(review))!;
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          ProfileAvatarSmall(
+                            user: review.user,
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                review.user.getFullName(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(review.getDate(),
+                                  style: Theme.of(context).textTheme.bodySmall),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      bookInfoReview(context, review.book),
+                      const SizedBox(height: 15),
+                      Text(
+                        review.text,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(height: 10),
+                      RatingBarIndicator(
+                        itemBuilder: (context, index) {
+                          return Icon(Icons.star,
+                              color: Theme.of(context).colorScheme.secondary);
+                        },
+                        itemSize: MediaQuery.of(context).size.width / 11,
+                        itemCount: 10,
+                        rating: review.bookRating.toDouble(),
+                      ),
+                      Text('Оценка книги: ${review.bookRating}/10'),
+                      const SizedBox(height: 10),
+                      BlocBuilder<LikeCubit, LikeState>(
+                        builder: (context, state) {
                           return ElevatedButton.icon(
                             onPressed: () async {
                               review = (await context
                                   .read<LikeCubit>()
-                                  .likeBook(review))!;
-                            },
-                            icon: Icon(review.likedUser?.contains(
-                                        AppModule.getProfileHolder().user) ??
-                                    false
-                                ? Icons.favorite
-                                : Icons.favorite_outline),
-                            label: Text(review.likesCount.toString()),
-                          );
-                        default:
-                          return ElevatedButton.icon(
-                            onPressed: () async {
-                              await context.read<LikeCubit>().likeBook(review);
+                                  .likeReview(review))!;
                             },
                             icon: Icon(review.likedUser?.contains(
                                         AppModule.getProfileHolder().user) ??
@@ -107,9 +92,10 @@ class ReviewWidget extends StatelessWidget {
                               review.likesCount.toString(),
                             ),
                           );
-                      }
-                    }),
-                  ],
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

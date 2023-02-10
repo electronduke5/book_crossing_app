@@ -11,7 +11,7 @@ part 'like_state.dart';
 class LikeCubit extends Cubit<LikeState> {
   LikeCubit() : super(LikeState());
 
-  Future<Review?> likeBook(Review review) async {
+  Future<Review?> likeReview(Review review) async {
     final repository = AppModule.getLikeRepository();
     final User user = AppModule.getProfileHolder().user;
     emit(state.copyWith(likeStatus: LoadingStatus()));
