@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
+import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,8 +52,31 @@ class BooksPage extends StatelessWidget {
                       );
                     },
                     icon: const Icon(Icons.search)),
-                IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.filter_list)),
+                PopupMenuButton<String>(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                  onSelected: (value) async {
+                    allBooks = await _onSelected(
+                        context: context, value: value, books: allBooks);
+                  },
+                  icon: const Icon(Icons.filter_list),
+                  itemBuilder: (context) {
+                    return [
+                      PopupIconMenuItem(
+                        title: 'По количеству ревью',
+                        icon: Icons.sort,
+                      ),
+                      PopupIconMenuItem(
+                        title: 'По возрастанию рейтинга',
+                        icon: Icons.arrow_upward,
+                      ),
+                      PopupIconMenuItem(
+                        title: 'По убыванию рейтинга',
+                        icon: Icons.arrow_downward,
+                      ),
+                    ];
+                  },
+                ),
               ],
             ),
           ),
@@ -82,14 +106,14 @@ class BooksPage extends StatelessWidget {
               if (state.booksStatus.item == null) {
                 return const Center(child: CircularProgressIndicator());
               }
-              allBooks = state.booksStatus.item!;
+              allBooks.isEmpty ? allBooks = state.booksStatus.item! : () {};
               return ListView.builder(
                 controller: _scrollController,
                 clipBehavior: Clip.antiAlias,
                 physics: const BouncingScrollPhysics(),
-                itemCount: state.booksStatus.item?.length,
+                itemCount: allBooks.length,
                 itemBuilder: (context, index) {
-                  return BookWidget(book: state.booksStatus.item![index]);
+                  return BookWidget(book: allBooks[index]);
                 },
               );
             default:
@@ -98,5 +122,35 @@ class BooksPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<List<Book>> _onSelected(
+      {required BuildContext context,
+      required List<Book> books,
+      required String value}) async {
+    switch (value) {
+      case 'По количеству ревью':
+        await context
+            .read<BookCubit>()
+            .loadBooks()
+            .then((value) => allBooks = value!);
+        books.sort((b, a) => a.reviewsCount.compareTo(b.reviewsCount));
+        break;
+      case 'По возрастанию рейтинга':
+        await context
+            .read<BookCubit>()
+            .loadBooks()
+            .then((value) => allBooks = value!);
+        books.sort((a, b) => a.rating!.compareTo(b.rating!));
+        break;
+      case 'По убыванию рейтинга':
+        await context
+            .read<BookCubit>()
+            .loadBooks()
+            .then((value) => allBooks = value!);
+        books.sort((b, a) => a.rating!.compareTo(b.rating!));
+        break;
+    }
+    return books;
   }
 }
