@@ -12,8 +12,10 @@ import 'package:book_crossing_app/presentation/di/profile_holder.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../data/repositories/auth_repository_impl.dart';
+import '../../data/repositories/liked_repository_impl.dart';
 import '../../data/repositories/prefs_respository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../../domain/repositories/liked_repository.dart';
 import '../../domain/repositories/preferenses_repository.dart';
 
 class AppModule {
@@ -29,6 +31,7 @@ class AppModule {
     _provideBookRepository();
     _provideAuthorRepository();
     _provideGenreRepository();
+    _provideLikeRepository();
 
     _provided = true;
   }
@@ -39,6 +42,14 @@ class AppModule {
 
   static ProfileHolder getProfileHolder() {
     return GetIt.instance.get<ProfileHolder>();
+  }
+
+  void _provideLikeRepository() {
+    GetIt.instance.registerSingleton(LikeRepositoryImpl());
+  }
+
+  static LikeRepository getLikeRepository() {
+    return GetIt.instance.get<LikeRepositoryImpl>();
   }
 
   void _provideProfileRepository() {

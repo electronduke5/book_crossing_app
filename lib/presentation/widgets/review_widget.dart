@@ -1,15 +1,19 @@
+import 'package:book_crossing_app/presentation/cubits/like/like_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/models_status.dart';
+import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/widgets/profile_image_small.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../data/models/book.dart';
 import '../../data/models/review.dart';
 
 class ReviewWidget extends StatelessWidget {
-  const ReviewWidget({Key? key, required this.review, this.horizontalPadding})
+  ReviewWidget({Key? key, required this.review, this.horizontalPadding})
       : super(key: key);
 
-  final Review review;
+  Review review;
   final double? horizontalPadding;
 
   @override
@@ -19,8 +23,9 @@ class ReviewWidget extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: horizontalPadding ?? 0, vertical: 5),
       child: Material(
         child: InkWell(
-          onDoubleTap: () {
+          onDoubleTap: () async {
             print('like! 19');
+            review = (await context.read<LikeCubit>().likeBook(review))!;
           },
           child: Card(
             margin: EdgeInsets.zero,
@@ -68,17 +73,40 @@ class ReviewWidget extends StatelessWidget {
                   ),
                   Text('Оценка: ${review.bookRating}/10'),
                   const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          print('like! 60');
-                        },
-                        icon: const Icon(Icons.favorite_outline),
-                        label: Text(review.likesCount.toString()),
-                      )
-                    ],
-                  ),
+                  BlocBuilder<LikeCubit, LikeState>(builder: (context, state) {
+                    switch (state.likeStatus.runtimeType) {
+                      case LoadingStatus:
+                        return const Center(child: CircularProgressIndicator());
+                      case LoadedStatus<Review>:
+                        return ElevatedButton.icon(
+                          onPressed: () async {
+                            review = (await context
+                                .read<LikeCubit>()
+                                .likeBook(review))!;
+                          },
+                          icon: Icon(review.likedUser?.contains(
+                                      AppModule.getProfileHolder().user) ??
+                                  false
+                              ? Icons.favorite
+                              : Icons.favorite_outline),
+                          label: Text(review.likesCount.toString()),
+                        );
+                      default:
+                        return ElevatedButton.icon(
+                          onPressed: () async {
+                            await context.read<LikeCubit>().likeBook(review);
+                          },
+                          icon: Icon(review.likedUser?.contains(
+                                      AppModule.getProfileHolder().user) ??
+                                  false
+                              ? Icons.favorite
+                              : Icons.favorite_outline),
+                          label: Text(
+                            review.likesCount.toString(),
+                          ),
+                        );
+                    }
+                  }),
                 ],
               ),
             ),

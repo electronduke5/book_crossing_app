@@ -4,6 +4,7 @@ import 'package:book_crossing_app/presentation/cubits/auth/auth_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/author/author_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/genre/genre_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/like/like_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
@@ -105,12 +106,12 @@ class MyApp extends StatelessWidget {
                   child: AddAuthorPage(),
                 ),
             '/book-review': (context) => MultiBlocProvider(
-              providers: [
-                BlocProvider<ReviewCubit>(
-                    create: (context) => ReviewCubit()),
-              ],
-              child: BookReviewPage(),
-            ),
+                  providers: [
+                    BlocProvider<ReviewCubit>(
+                        create: (context) => ReviewCubit()),
+                  ],
+                  child: BookReviewPage(),
+                ),
             '/add-book': (context) => MultiBlocProvider(
                   providers: [
                     BlocProvider<AuthorCubit>(
@@ -124,6 +125,7 @@ class MyApp extends StatelessWidget {
                 ),
             '/main': (context) => MultiBlocProvider(
                   providers: [
+                    BlocProvider<LikeCubit>(create: (context) => LikeCubit()),
                     BlocProvider<ProfileCubit>(
                         create: (context) => ProfileCubit()..loadProfile()),
                     BlocProvider<BookCubit>(
