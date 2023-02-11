@@ -11,6 +11,7 @@ import 'books_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -22,7 +23,7 @@ class _MainPageState extends State<MainPage> {
     ReviewsPage(),
     AddReviewPage(),
     BooksPage(),
-    const ProfilePage(),
+    ProfilePage(),
   ];
 
   Future<List<Book>> getBooks() async {
@@ -42,7 +43,7 @@ class _MainPageState extends State<MainPage> {
         child: Stack(
           children: [
             _widgetOptions.elementAt(_selectedIndex),
-             Align(
+            Align(
               alignment: Alignment.bottomCenter,
               child: buildBottomNavBar(context),
             ),
@@ -95,5 +96,5 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
-   }
+  }
 }

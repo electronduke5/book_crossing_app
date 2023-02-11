@@ -29,6 +29,7 @@ mixin _$Review {
   int get likesCount => throw _privateConstructorUsedError;
   int get bookRating => throw _privateConstructorUsedError;
   DateTime get dateCreated => throw _privateConstructorUsedError;
+  bool get isArchived => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +50,8 @@ abstract class $ReviewCopyWith<$Res> {
       List<User>? likedUser,
       int likesCount,
       int bookRating,
-      DateTime dateCreated});
+      DateTime dateCreated,
+      bool isArchived});
 
   $UserCopyWith<$Res> get user;
   $BookCopyWith<$Res> get book;
@@ -77,6 +79,7 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
     Object? likesCount = null,
     Object? bookRating = null,
     Object? dateCreated = null,
+    Object? isArchived = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -115,6 +118,10 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isArchived: null == isArchived
+          ? _value.isArchived
+          : isArchived // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -150,7 +157,8 @@ abstract class _$$_ReviewCopyWith<$Res> implements $ReviewCopyWith<$Res> {
       List<User>? likedUser,
       int likesCount,
       int bookRating,
-      DateTime dateCreated});
+      DateTime dateCreated,
+      bool isArchived});
 
   @override
   $UserCopyWith<$Res> get user;
@@ -177,6 +185,7 @@ class __$$_ReviewCopyWithImpl<$Res>
     Object? likesCount = null,
     Object? bookRating = null,
     Object? dateCreated = null,
+    Object? isArchived = null,
   }) {
     return _then(_$_Review(
       id: null == id
@@ -215,6 +224,10 @@ class __$$_ReviewCopyWithImpl<$Res>
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isArchived: null == isArchived
+          ? _value.isArchived
+          : isArchived // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -231,14 +244,12 @@ class _$_Review implements _Review {
       final List<User>? likedUser,
       required this.likesCount,
       required this.bookRating,
-      required this.dateCreated})
+      required this.dateCreated,
+      required this.isArchived})
       : _likedUser = likedUser;
 
   factory _$_Review.fromJson(Map<String, dynamic> json) =>
       _$$_ReviewFromJson(json);
-  String getDate(){
-    return  DateFormat('dd.MM.yyyy').format(dateCreated);
-  }
 
   @override
   final int id;
@@ -266,10 +277,12 @@ class _$_Review implements _Review {
   final int bookRating;
   @override
   final DateTime dateCreated;
+  @override
+  final bool isArchived;
 
   @override
   String toString() {
-    return 'Review(id: $id, title: $title, text: $text, user: $user, book: $book, likedUser: $likedUser, likesCount: $likesCount, bookRating: $bookRating, dateCreated: $dateCreated)';
+    return 'Review(id: $id, title: $title, text: $text, user: $user, book: $book, likedUser: $likedUser, likesCount: $likesCount, bookRating: $bookRating, dateCreated: $dateCreated, isArchived: $isArchived)';
   }
 
   @override
@@ -289,7 +302,9 @@ class _$_Review implements _Review {
             (identical(other.bookRating, bookRating) ||
                 other.bookRating == bookRating) &&
             (identical(other.dateCreated, dateCreated) ||
-                other.dateCreated == dateCreated));
+                other.dateCreated == dateCreated) &&
+            (identical(other.isArchived, isArchived) ||
+                other.isArchived == isArchived));
   }
 
   @JsonKey(ignore: true)
@@ -304,7 +319,8 @@ class _$_Review implements _Review {
       const DeepCollectionEquality().hash(_likedUser),
       likesCount,
       bookRating,
-      dateCreated);
+      dateCreated,
+      isArchived);
 
   @JsonKey(ignore: true)
   @override
@@ -318,6 +334,11 @@ class _$_Review implements _Review {
       this,
     );
   }
+
+  @override
+  String getDate() {
+    return  DateFormat('dd.MM.yyyy').format(dateCreated);
+  }
 }
 
 abstract class _Review implements Review {
@@ -330,7 +351,8 @@ abstract class _Review implements Review {
       final List<User>? likedUser,
       required final int likesCount,
       required final int bookRating,
-      required final DateTime dateCreated}) = _$_Review;
+      required final DateTime dateCreated,
+      required final bool isArchived}) = _$_Review;
 
   factory _Review.fromJson(Map<String, dynamic> json) = _$_Review.fromJson;
 
@@ -352,6 +374,8 @@ abstract class _Review implements Review {
   int get bookRating;
   @override
   DateTime get dateCreated;
+  @override
+  bool get isArchived;
   @override
   @JsonKey(ignore: true)
   _$$_ReviewCopyWith<_$_Review> get copyWith =>

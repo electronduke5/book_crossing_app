@@ -3,26 +3,23 @@ import 'dart:io';
 
 import 'package:book_crossing_app/data/utils/api_const_url.dart';
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 
 mixin ApiService<T extends Object> {
   abstract String apiRoute;
 
   Future<List<T>> getAll({
     required T Function(Map<String, dynamic>) fromJson,
-    String? qFilter,
-    dynamic qFilterValue,
+    Map<String, dynamic>? params,
     int? id,
   }) async {
     final dio = Dio(
       BaseOptions(
         validateStatus: (status) => true,
         headers: {"Accept": "application/json"},
+        queryParameters: params,
       ),
     );
-
-    if (qFilter != null && qFilterValue != null) {
-      dio.options.queryParameters = {qFilter: qFilterValue};
-    }
 
     final response = await dio.get('${ApiConstUrl.baseUrl}$apiRoute');
     if (response.statusCode != HttpStatus.ok) {
@@ -50,9 +47,25 @@ mixin ApiService<T extends Object> {
     return jsonList.map((e) => fromJson(e));
   }
 
+  Future<void> delete(int id) async {
+    final dio = Dio(
+      BaseOptions(
+        validateStatus: (status) => true,
+        headers: {"Accept": "application/json"},
+      ),
+    );
+    Logger logger = Logger();
+    logger.i('${ApiConstUrl.baseUrl}$apiRoute/$id');
+
+    final response = await dio.delete('${ApiConstUrl.baseUrl}$apiRoute/$id');
+    if (response.statusCode != HttpStatus.noContent) {
+      throw Exception(['Error =_-']);
+    }
+  }
+
   Future<T> post({
     required T Function(Map<String, dynamic>) fromJson,
-    int? id,
+    dynamic id,
     required Map<String, dynamic> data,
   }) async {
     print('data: ${data}');

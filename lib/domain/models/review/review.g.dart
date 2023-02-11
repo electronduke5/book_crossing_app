@@ -18,6 +18,7 @@ _$_Review _$$_ReviewFromJson(Map<String, dynamic> json) => _$_Review(
       likesCount: json['likesCount'] as int,
       bookRating: json['bookRating'] as int,
       dateCreated: DateTime.parse(json['dateCreated'] as String),
+      isArchived: (json['isArchived'] as int) == 1 ? true : false,
     );
 
 Map<String, dynamic> _$$_ReviewToJson(_$_Review instance) => <String, dynamic>{
@@ -30,4 +31,5 @@ Map<String, dynamic> _$$_ReviewToJson(_$_Review instance) => <String, dynamic>{
       'likesCount': instance.likesCount,
       'bookRating': instance.bookRating,
       'dateCreated': instance.dateCreated.toIso8601String(),
+      'isArchived': instance.isArchived,
     };

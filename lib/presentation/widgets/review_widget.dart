@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/presentation/cubits/like/like_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
+import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:book_crossing_app/presentation/widgets/profile_image_small.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,12 +8,18 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../data/models/book.dart';
 import '../../data/models/review.dart';
+import '../cubits/review/review_cubit.dart';
 
 class ReviewWidget extends StatelessWidget {
-  ReviewWidget({Key? key, required this.review, this.horizontalPadding})
-      : super(key: key);
+  ReviewWidget({
+    Key? key,
+    required this.review,
+    this.horizontalPadding,
+    this.isProfileReview = false,
+  }) : super(key: key);
 
   Review review;
+  final bool isProfileReview;
   final double? horizontalPadding;
 
   @override
@@ -54,6 +61,39 @@ class ReviewWidget extends StatelessWidget {
                                   style: Theme.of(context).textTheme.bodySmall),
                             ],
                           ),
+                          const Spacer(),
+                          () {
+                            if (isProfileReview) {
+                              return PopupMenuButton(
+                                  onSelected: (value) => _onSelected(
+                                      context: context,
+                                      review: review,
+                                      value: value),
+                                  icon: const Icon(Icons.more_horiz),
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(8.0))),
+                                  itemBuilder: (context) {
+                                    return [
+                                      review.isArchived
+                                          ? PopupIconMenuItem(
+                                              title: 'Восстановить',
+                                              icon: Icons.unarchive_outlined)
+                                          : PopupIconMenuItem(
+                                              title: 'Архивировать',
+                                              icon: Icons.archive_outlined),
+                                      PopupIconMenuItem(
+                                          title: 'Удалить',
+                                          icon: Icons.delete_outline,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .error),
+                                    ];
+                                  });
+                            } else {
+                              return const SizedBox();
+                            }
+                          }()
                         ],
                       ),
                       const SizedBox(height: 15),
@@ -104,6 +144,26 @@ class ReviewWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<Review?> _onSelected(
+    {required BuildContext context,
+    required Review review,
+    required String value}) async {
+  switch (value) {
+    case 'Восстановить':
+      review = (await context.read<ReviewCubit>().unzipReview(review))!;
+      return review;
+
+    case 'Архивировать':
+      review = (await context.read<ReviewCubit>().archiveReview(review))!;
+      return review;
+
+    case 'Удалить':
+      await context.read<ReviewCubit>().deleteReview(review);
+      break;
+  }
+  return null;
 }
 
 Row bookInfoReview(BuildContext context, Book book) {

@@ -10,17 +10,16 @@ class ReviewRepositoryImpl with ApiService<Review> implements ReviewRepository {
   String apiRoute = ApiConstUrl.reviewUrl;
 
   @override
-  Future<List<Review>> getUsersReview(int id) => getAll(
+  Future<List<Review>> getUsersReview({required int id, int? isArchive}) => getAll(
         fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
-        qFilter: 'user',
-        qFilterValue: id,
+        params: {'user_id': id, 'archive': isArchive},
       );
 
   @override
   Future<List<Review>> getAllReviews({String? filter, dynamic value}) => getAll(
-      fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
-      qFilter: filter,
-      qFilterValue: value);
+        fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
+        params: {'filter': filter, 'value': value},
+      );
 
   @override
   Future<Review> addReview(
@@ -34,5 +33,27 @@ class ReviewRepositoryImpl with ApiService<Review> implements ReviewRepository {
           'user_id': user.id,
           'book_rating': rating,
         });
+  }
+
+  @override
+  Future<Review> archiveReview(int id) {
+    return post(
+        fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
+        id: 'archive/$id',
+        data: {});
+  }
+
+  @override
+  Future<Review> unzipReview(int id) {
+    return post(
+      fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
+      id: 'unzip/$id',
+      data: {},
+    );
+  }
+
+  @override
+  Future<void> deleteReview(int id) {
+    return delete(id);
   }
 }

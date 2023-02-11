@@ -1,22 +1,33 @@
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
+import 'package:book_crossing_app/presentation/di/app_module.dart';
+import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
+import '../widgets/profile_category_review.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
 
   final double _horizontalPadding = 0.0;
 
   int getLikes(List<Review> reviews) {
     int likes = 0;
-    reviews.map((e) => likes += e.likesCount);
+    Logger().i(reviews);
+    for (var element in reviews) {
+      likes += element.likesCount;
+    }
+    Logger().i(likes);
     return likes;
   }
+
+  List<Review> reviews = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +44,7 @@ class ProfilePage extends StatelessWidget {
           builder: (context, state) {
             switch (state.status.runtimeType) {
               case LoadedStatus<User>:
+                reviews = state.userReviews.item!;
                 return IntrinsicHeight(
                   child: Column(
                     children: [
@@ -40,10 +52,36 @@ class ProfilePage extends StatelessWidget {
                       statsWidget(
                           countReview: state.userReviews.item!.length,
                           countLikes: getLikes(state.userReviews.item!)),
-                      Expanded(child: reviewsListWidget(context)),
+                      ProfileCategoryReviewWidget(
+                        onFilterChanged: (value) => reviews = value,
+                      ),
+                      Expanded(
+                        child: BlocBuilder<ReviewCubit, ReviewState>(
+                          builder: (context, state) {
+                            switch (state.reviews.runtimeType) {
+                              case LoadedStatus<List<Review>>:
+                                return reviewsListWidget(context, reviews);
+                              case LoadingStatus<List<Review>>:
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              default:
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                      ),
                       const SizedBox(height: 10),
-                      Text('${state.userReviews.item!.length} запись',
-                          style: Theme.of(context).textTheme.titleSmall),
+                      BlocBuilder<ReviewCubit, ReviewState>(
+                        builder: (context, state) {
+                          if (state.reviews.runtimeType
+                              is LoadedStatus<List<Review>>) {
+                            return Text('${reviews.length} запись',
+                                style: Theme.of(context).textTheme.titleSmall);
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
                     ],
                   ),
                 );
@@ -66,32 +104,19 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget reviewsListWidget(BuildContext context) {
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        switch (state.userReviews.runtimeType) {
-          case LoadedStatus<List<Review>>:
-            return SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                children: state.userReviews.item!
-                    .map((review) => ReviewWidget(review: review))
-                    .toList(),
-              ),
-            );
-          case LoadingStatus<List<Review>>:
-            return const Center(child: CircularProgressIndicator());
-          default:
-            print(state.userReviews.runtimeType);
-            const Center(child: CircularProgressIndicator());
-        }
-        return const Center(child: CircularProgressIndicator());
-        // return reviewWidget(context, state.userReviews.first);
-      },
+  Widget reviewsListWidget(BuildContext context, List<Review> reviews) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
+        children: reviews
+            .map(
+                (review) => ReviewWidget(review: review, isProfileReview: true))
+            .toList(),
+      ),
     );
   }
 
-  Padding statsWidget({required int countReview, required countLikes}) {
+  Widget statsWidget({required int countReview, required countLikes}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: _horizontalPadding,
@@ -145,6 +170,39 @@ class ProfilePage extends StatelessWidget {
         Align(
             alignment: Alignment.topCenter,
             child: Image.asset('assets/images/wallpaper.jpg')),
+        Positioned(
+          right: 5,
+          top: 5,
+          child: PopupMenuButton(
+            icon: ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Material(
+                  color: Theme.of(context).cardColor.withOpacity(0.7),
+                  child: const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Icon(Icons.more_horiz, size: 28),
+                  )),
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            itemBuilder: (context) => [
+              PopupIconMenuItem(
+                  title: 'Редатировать профиль', icon: Icons.edit_outlined),
+              PopupIconMenuItem(
+                  title: 'Выйти', icon: Icons.exit_to_app_outlined),
+            ],
+            onSelected: (value) {
+              switch (value) {
+                case 'Редатировать профиль':
+                  break;
+                case 'Выйти':
+                  AppModule.getPreferencesRepository().removeSavedProfile();
+                  Navigator.of(context).pushNamed('/sign-in');
+                  break;
+              }
+            },
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 60.0),
           child: profileWidget(context),

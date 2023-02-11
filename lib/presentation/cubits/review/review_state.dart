@@ -3,6 +3,8 @@ part of 'review_cubit.dart';
 class ReviewState {
   final ApiStatus<List<Review>> reviews;
   final ApiStatus<Review> createReviewStatus;
+  final ApiStatus<Review> archiveStatus;
+  final ApiStatus<void> deleteStatus;
   final String title;
   final String text;
   final int rating;
@@ -12,6 +14,8 @@ class ReviewState {
   ReviewState(
       {this.createReviewStatus = const IdleStatus(),
       this.reviews = const IdleStatus(),
+      this.archiveStatus = const IdleStatus(),
+      this.deleteStatus = const IdleStatus(),
       this.title = '',
       this.text = '',
       this.rating = 0,
@@ -20,6 +24,8 @@ class ReviewState {
   ReviewState copyWith({
     ApiStatus<List<Review>>? reviews,
     ApiStatus<Review>? createReviewStatus,
+    ApiStatus<Review>? archiveStatus,
+    ApiStatus<void>? deleteStatus,
     String? title,
     String? text,
     int? rating,
@@ -28,6 +34,8 @@ class ReviewState {
       ReviewState(
           createReviewStatus: createReviewStatus ?? this.createReviewStatus,
           reviews: reviews ?? this.reviews,
+          archiveStatus: archiveStatus ?? this.archiveStatus,
+          deleteStatus: deleteStatus ?? this.deleteStatus,
           title: title ?? this.title,
           text: text ?? this.text,
           book: book ?? this.book,
