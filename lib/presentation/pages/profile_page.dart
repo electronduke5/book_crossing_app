@@ -75,14 +75,15 @@ class ProfilePage extends StatelessWidget {
                       const SizedBox(height: 10),
                       BlocBuilder<ReviewCubit, ReviewState>(
                         builder: (context, state) {
-                          if (state.reviews.runtimeType
-                              is LoadedStatus<List<Review>>) {
-                            return Text('${reviews.length} запись',
+                          if (state.reviews.runtimeType ==
+                              LoadedStatus<List<Review>>) {
+                            return Text('${reviews.length} записей',
                                 style: Theme.of(context).textTheme.titleSmall);
                           }
                           return const SizedBox.shrink();
                         },
                       ),
+                      const SizedBox(height: 65),
                     ],
                   ),
                 );
@@ -192,99 +193,7 @@ class ProfilePage extends StatelessWidget {
             onSelected: (value) {
               switch (value) {
                 case 'Редатировать профиль':
-                  showBottomSheet(
-                      context: context,
-                      builder: (context) => SafeArea(
-                            child: SizedBox(
-                              height: 300,
-                              child: BlocBuilder<ProfileCubit, ProfileState>(
-                                builder: (context, state) => Form(
-                                  key: _formKey,
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(height: 10),
-                                      const Text(
-                                        'Редактирование профиля',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      const Divider(),
-                                      const SizedBox(height: 10),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: TextFormField(
-                                          controller: nameController,
-                                          //onChanged: (value) => nameController.text = value,
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Введите имя';
-                                            }
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                            labelText: 'Имя',
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: TextFormField(
-                                          controller: surnameController,
-                                          // onChanged: (value) => context
-                                          //     .read<ProfileCubit>()
-                                          //     .surnameChanged(value),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Введите фамилию';
-                                            }
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                            labelText: 'Фамилия',
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ElevatedButton(
-                                          onPressed: () async {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              final surname =
-                                                  surnameController.value.text;
-                                              final name =
-                                                  nameController.value.text;
-                                              surnameController.clear();
-                                              nameController.clear();
-                                              SnackBarInfo.show(
-                                                  context: context,
-                                                  message: 'Данные обновлены',
-                                                  isSuccess: true);
-                                              Navigator.of(context).pop();
-                                              await context
-                                                  .read<ProfileCubit>()
-                                                  .updateProfile(surname, name);
-                                            }
-                                          },
-                                          child: const Text('Сохранить')),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ));
+                  buildEditProfileWidget(context);
                   break;
                 case 'Выйти':
                   AppModule.getPreferencesRepository().removeSavedProfile();
@@ -299,6 +208,91 @@ class ProfilePage extends StatelessWidget {
           child: profileWidget(context),
         ),
       ],
+    );
+  }
+
+  PersistentBottomSheetController<dynamic> buildEditProfileWidget(
+      BuildContext context) {
+    return showBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: SizedBox(
+          height: 300,
+          child: BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (context, state) => Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Редактирование профиля',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextFormField(
+                      controller: nameController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Введите имя';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Имя',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextFormField(
+                      controller: surnameController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Введите фамилию';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Фамилия',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          final surname = surnameController.value.text;
+                          final name = nameController.value.text;
+                          surnameController.clear();
+                          nameController.clear();
+                          SnackBarInfo.show(
+                              context: context,
+                              message: 'Данные обновлены',
+                              isSuccess: true);
+                          Navigator.of(context).pop();
+                          await context
+                              .read<ProfileCubit>()
+                              .updateProfile(surname, name);
+                        }
+                      },
+                      child: const Text('Сохранить')),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

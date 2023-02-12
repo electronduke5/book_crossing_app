@@ -2,6 +2,7 @@ import 'package:book_crossing_app/presentation/cubits/like/like_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:book_crossing_app/presentation/widgets/profile_image_small.dart';
+import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -152,15 +153,31 @@ Future<Review?> _onSelected(
     required String value}) async {
   switch (value) {
     case 'Восстановить':
-      review = (await context.read<ReviewCubit>().unzipReview(review))!;
+      await context.read<ReviewCubit>().unzipReview(review).then((value) => SnackBarInfo.show(
+        context: context,
+        message: 'Отзыв восстановлен',
+        isSuccess: true,
+      ));
       return review;
 
     case 'Архивировать':
-      review = (await context.read<ReviewCubit>().archiveReview(review))!;
+      await context.read<ReviewCubit>().archiveReview(review)
+        .then((value) => SnackBarInfo.show(
+              context: context,
+              message: 'Отзыв перемещен в архив',
+              isSuccess: true,
+            ));
       return review;
 
     case 'Удалить':
-      await context.read<ReviewCubit>().deleteReview(review);
+      await context
+          .read<ReviewCubit>()
+          .deleteReview(review)
+          .then((value) => SnackBarInfo.show(
+                context: context,
+                message: 'Отзыв успешно удален',
+                isSuccess: true,
+              ));
       break;
   }
   return null;

@@ -9,6 +9,7 @@ class ProfileRepositoryImpl with ApiService<User> implements ProfileRepository {
   @override
   Future<User> getProfile() async {
     final user = AppModule.getProfileHolder().user;
+    print('User from AppModule: ${AppModule.getProfileHolder().user}');
     return user;
   }
 

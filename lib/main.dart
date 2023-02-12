@@ -14,11 +14,11 @@ import 'package:book_crossing_app/presentation/pages/book_reviews_page.dart';
 import 'package:book_crossing_app/presentation/pages/main_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_in_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_up_page.dart';
+import 'package:book_crossing_app/presentation/pages/start_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 
 import 'domain/repositories/preferenses_repository.dart';
 
@@ -51,59 +51,12 @@ class MyApp extends StatelessWidget {
       future: _preferencesRepository.getUser(),
       builder: (context, user) {
         if (user.connectionState != ConnectionState.done) {
-          return SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                () {
-                  int datetime = DateTime.now().hour;
-                  if (datetime >= 6 && datetime < 12) {
-                    return Lottie.asset(
-                      'assets/lottie/background_day.json',
-                      fit: BoxFit.fill,
-                      height: double.infinity,
-                      width: double.infinity,
-                    );
-                  } else if (datetime >= 12 && datetime < 18) {
-                    return Lottie.asset(
-                      'assets/lottie/background.json',
-                      fit: BoxFit.fill,
-                      height: double.infinity,
-                      width: double.infinity,
-                    );
-                  } else {
-                    return Lottie.asset(
-                      'assets/lottie/background_night.json',
-                      fit: BoxFit.fill,
-                      height: double.infinity,
-                      width: double.infinity,
-                    );
-                  }
-                }(),
-                Positioned(
-                  top: 150,
-                  child: Text(
-                    'Добро пожаловать!',
-                    softWrap: true,
-                    textDirection: TextDirection.ltr,
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontFamily: GoogleFonts.notoSerif().fontFamily,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
+          return const StartPage();
         }
         return MaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           theme: FlexThemeData.light(
-            //background: const Color.fromRGBO(224, 224, 224, 1),
             scheme: FlexScheme.blueWhale,
             surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
             blendLevel: 20,
@@ -121,7 +74,6 @@ class MyApp extends StatelessWidget {
           ),
           darkTheme: FlexThemeData.dark(
             scheme: FlexScheme.blueWhale,
-            //swapColors: true,
             surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
             blendLevel: 20,
             subThemesData: const FlexSubThemesData(
@@ -143,7 +95,7 @@ class MyApp extends StatelessWidget {
                 ),
             '/sign-up': (context) => BlocProvider<AuthCubit>(
                   create: (context) => AuthCubit(),
-                  child: const SignUpPage(),
+                  child: SignUpPage(),
                 ),
             '/add-author': (context) => MultiBlocProvider(
                   providers: [

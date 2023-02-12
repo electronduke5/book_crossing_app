@@ -10,15 +10,17 @@ class ReviewRepositoryImpl with ApiService<Review> implements ReviewRepository {
   String apiRoute = ApiConstUrl.reviewUrl;
 
   @override
-  Future<List<Review>> getUsersReview({required int id, int? isArchive}) => getAll(
-        fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
-        params: {'user_id': id, 'archive': isArchive},
-      );
+  Future<List<Review>> getUsersReview({required int id, int? isArchive}) {
+    return getAll(
+      fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
+      params: {'user': id, 'archive': isArchive},
+    );
+  }
 
   @override
   Future<List<Review>> getAllReviews({String? filter, dynamic value}) => getAll(
-        fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
-        params: {'filter': filter, 'value': value},
+    fromJson: (Map<String, dynamic> json) => Review.fromJson(json),
+        params: {filter ?? '': value},
       );
 
   @override

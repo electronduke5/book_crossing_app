@@ -6,10 +6,10 @@ abstract class AuthRepository {
     String password,
   );
 
-  Future<User> signUp(
-    String surname,
-    String name,
-    String email,
-    String password,
-  );
+  Future<User> signUp({
+    required String surname,
+    required String name,
+    required String email,
+    required String password,
+  });
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 
 import '../../data/models/review.dart';
 import '../cubits/review/review_cubit.dart';
@@ -42,7 +41,6 @@ class _ProfileCategoryReviewWidgetState
                     .read<ReviewCubit>()
                     .loadUserReview()
                     .then((value) {
-                  Logger().d('NOT archived review: $value');
                   widget.onFilterChanged(value!);
                 });
               },
@@ -76,7 +74,6 @@ class _ProfileCategoryReviewWidgetState
                     .read<ReviewCubit>()
                     .loadUserReview(isArchived: 1)
                     .then((value) {
-                  Logger().i('Archived review: $value');
                   widget.onFilterChanged(value!);
                 });
               },

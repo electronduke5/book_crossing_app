@@ -87,7 +87,6 @@ class SignInPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
-                              initialValue: 'g.pav5@mail.ru',
                               onChanged: (value) =>
                                   context.read<AuthCubit>().emailChanged(value),
                               validator: (value) {
@@ -109,7 +108,7 @@ class SignInPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
-                              initialValue: 'Admin123',
+                              obscureText: true,
                               onChanged: (value) => context
                                   .read<AuthCubit>()
                                   .passwordChanged(value),

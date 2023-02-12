@@ -9,15 +9,30 @@ class AuthRepositoryImpl with ApiService<User> implements AuthRepository {
   String apiRoute = ApiConstUrl.loginUrl;
 
   @override
-  Future<User> signIn(String email, String password) => post(
-        fromJson: (Map<String, dynamic> json) => User.fromJson(json),
-        data: {'email': email, 'password': password},
-      );
+  Future<User> signIn(String email, String password) {
+    apiRoute = ApiConstUrl.loginUrl;
+    return post(
+      fromJson: (Map<String, dynamic> json) => User.fromJson(json),
+      data: {'email': email, 'password': password},
+    );
+  }
 
   @override
-  Future<User> signUp(
-      String surname, String name, String email, String password) {
-    // TODO: implement signUp
-    throw UnimplementedError();
+  Future<User> signUp({
+    required String surname,
+    required String name,
+    required String email,
+    required String password,
+  }) {
+    apiRoute = ApiConstUrl.userUrl;
+    return post(
+      fromJson: (Map<String, dynamic> json) => User.fromJson(json),
+      data: {
+        'surname': surname,
+        'name': name,
+        'email': email,
+        'password': password,
+      },
+    );
   }
 }
