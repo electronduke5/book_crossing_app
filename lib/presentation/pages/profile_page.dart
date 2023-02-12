@@ -10,6 +10,7 @@ import 'package:logger/logger.dart';
 
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
+import '../widgets/loading_widget.dart';
 import '../widgets/profile_category_review.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -62,8 +63,7 @@ class ProfilePage extends StatelessWidget {
                               case LoadedStatus<List<Review>>:
                                 return reviewsListWidget(context, reviews);
                               case LoadingStatus<List<Review>>:
-                                return const Center(
-                                    child: CircularProgressIndicator());
+                                return LoadingWidget();
                               default:
                                 return const Center(
                                     child: CircularProgressIndicator());
@@ -88,7 +88,7 @@ class ProfilePage extends StatelessWidget {
               case LoadingStatus<User>:
                 return SizedBox(
                     height: deviceWidth,
-                    child: const Center(child: CircularProgressIndicator()));
+                    child: LoadingWidget());
               default:
                 print(state.userReviews.runtimeType);
                 SizedBox(

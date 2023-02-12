@@ -118,6 +118,7 @@ class AddReviewPage extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 45),
           ],
         ),
       ),

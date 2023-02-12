@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/author.dart';
 import '../../data/models/genre.dart';
 import '../cubits/author/author_cubit.dart';
+import '../widgets/loading_widget.dart';
 import '../widgets/search_author_widget.dart';
 
 class AddBookPage extends StatelessWidget {
@@ -24,7 +25,9 @@ class AddBookPage extends StatelessWidget {
             builder: (context, state) {
               switch (state.getAuthorsState.runtimeType) {
                 case LoadingStatus<List<Author>>:
-                  return const Center(child: CircularProgressIndicator());
+                  return SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: LoadingWidget());
                 case FailedStatus:
                   return Center(
                       child: Text(state.getAuthorsState.message ??
@@ -85,13 +88,13 @@ class AddBookPage extends StatelessWidget {
                                 });
                               }
                             },
-                            child: Text("Далее"),
+                            child: const Text("Далее"),
                           ),
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context, null);
                             },
-                            child: Text("Назад"),
+                            child: const Text("Назад"),
                           ),
                         ],
                       ),
@@ -113,7 +116,12 @@ class AddBookPage extends StatelessWidget {
         print('getGenres state: ${state.getGenresStatus.runtimeType}');
         switch (state.getGenresStatus.runtimeType) {
           case LoadingStatus<List<Genre>>:
-            return const Center(child: CircularProgressIndicator());
+            return DropdownButtonFormField<String>(
+              items: [],
+              onChanged: (Object? value) {},
+              icon: const Icon(Icons.category_outlined),
+              hint: const Text('Жанр'),
+            );
           case FailedStatus:
             return Center(
                 child: Text(state.getGenresStatus.message ??
@@ -121,7 +129,7 @@ class AddBookPage extends StatelessWidget {
           case LoadedStatus<List<Genre>>:
             List<Genre> genreItems = state.getGenresStatus.item!;
 
-            Genre? _selectedItem;
+            Genre? selectedItem;
             late List<DropdownMenuItem<Genre>> menuItems = genreItems
                 .map((genre) => DropdownMenuItem<Genre>(
                       value: genre,
@@ -134,13 +142,14 @@ class AddBookPage extends StatelessWidget {
                 if (value == null) {
                   return 'Это обязательное поле';
                 }
+                return null;
               },
-              value: _selectedItem,
+              value: selectedItem,
               icon: const Icon(Icons.category_outlined),
               hint: const Text('Жанр'),
               items: menuItems,
               onChanged: (Genre? genre) {
-                _selectedItem = genre;
+                selectedItem = genre;
                 context.read<BookCubit>().genreChanged(genre!);
               },
             );

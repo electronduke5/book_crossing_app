@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
+import 'package:book_crossing_app/presentation/widgets/loading_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,7 +102,7 @@ class BooksPage extends StatelessWidget {
         builder: (context, state) {
           switch (state.booksStatus.runtimeType) {
             case LoadingStatus<List<Book>>:
-              return const Center(child: CircularProgressIndicator());
+              return LoadingWidget();
             case LoadedStatus<List<Book>>:
               if (state.booksStatus.item == null) {
                 return const Center(child: CircularProgressIndicator());

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/review.dart';
 import '../widgets/custom_search_delegate.dart';
+import '../widgets/loading_widget.dart';
 import '../widgets/popup_icon_item.dart';
 import '../widgets/profile_image_small.dart';
 
@@ -83,7 +84,7 @@ class ReviewsPage extends StatelessWidget {
                   print(state.reviews.runtimeType);
                   switch (state.reviews.runtimeType) {
                     case (LoadingStatus<List<Review>>):
-                      return const Center(child: CircularProgressIndicator());
+                      return LoadingWidget();
                     case FailedStatus<List<Review>>:
                       return Center(
                           child: Text(state.reviews.message ?? 'Failed'));
