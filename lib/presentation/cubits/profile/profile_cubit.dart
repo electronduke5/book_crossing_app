@@ -16,13 +16,32 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(state.copyWith(status: LoadingStatus()));
     try {
       final user = await repository.getProfile();
-      print('user ok: $user');
-      final userReviews = await reviewRepo.getUsersReview(id: user.id, isArchive: isArchived);
-      print('reviews ok: $userReviews');
-      emit(
-          state.copyWith(status: LoadedStatus(user), userReviews: LoadedStatus(userReviews)));
+      final userReviews =
+          await reviewRepo.getUsersReview(id: user.id, isArchive: isArchived);
+      emit(state.copyWith(
+          status: LoadedStatus(user), userReviews: LoadedStatus(userReviews)));
     } catch (exception) {
       emit(state.copyWith(status: FailedStatus(exception.toString())));
+    }
+  }
+
+  Future<User?> updateProfile(String surname, String name) async {
+    final repository = AppModule.getProfileRepository();
+    final reviewRepo = AppModule.getReviewRepository();
+    emit(state.copyWith(status: LoadingStatus()));
+    try {
+      final updatedUser =
+          await repository.updateProfile(surname: surname, name: name);
+      final userReviews = await reviewRepo.getUsersReview(id: updatedUser.id);
+      emit(state.copyWith(
+        status: LoadedStatus(updatedUser),
+        userReviews: LoadedStatus(userReviews),
+      ));
+      return updatedUser;
+    } catch (exception) {
+      emit(state.copyWith(
+          status: FailedStatus(state.status.message ?? exception.toString())));
+      return null;
     }
   }
 }

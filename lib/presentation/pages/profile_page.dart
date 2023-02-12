@@ -4,9 +4,9 @@ import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
+import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
@@ -17,14 +17,15 @@ class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
 
   final double _horizontalPadding = 0.0;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
 
   int getLikes(List<Review> reviews) {
     int likes = 0;
-    Logger().i(reviews);
     for (var element in reviews) {
       likes += element.likesCount;
     }
-    Logger().i(likes);
     return likes;
   }
 
@@ -86,11 +87,8 @@ class ProfilePage extends StatelessWidget {
                   ),
                 );
               case LoadingStatus<User>:
-                return SizedBox(
-                    height: deviceWidth,
-                    child: LoadingWidget());
+                return SizedBox(height: deviceWidth, child: LoadingWidget());
               default:
-                print(state.userReviews.runtimeType);
                 SizedBox(
                     height: deviceWidth,
                     child: const Center(child: CircularProgressIndicator()));
@@ -194,6 +192,99 @@ class ProfilePage extends StatelessWidget {
             onSelected: (value) {
               switch (value) {
                 case 'Редатировать профиль':
+                  showBottomSheet(
+                      context: context,
+                      builder: (context) => SafeArea(
+                            child: SizedBox(
+                              height: 300,
+                              child: BlocBuilder<ProfileCubit, ProfileState>(
+                                builder: (context, state) => Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      const Text(
+                                        'Редактирование профиля',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      const Divider(),
+                                      const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: TextFormField(
+                                          controller: nameController,
+                                          //onChanged: (value) => nameController.text = value,
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Введите имя';
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            labelText: 'Имя',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: TextFormField(
+                                          controller: surnameController,
+                                          // onChanged: (value) => context
+                                          //     .read<ProfileCubit>()
+                                          //     .surnameChanged(value),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Введите фамилию';
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            labelText: 'Фамилия',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      ElevatedButton(
+                                          onPressed: () async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              final surname =
+                                                  surnameController.value.text;
+                                              final name =
+                                                  nameController.value.text;
+                                              surnameController.clear();
+                                              nameController.clear();
+                                              SnackBarInfo.show(
+                                                  context: context,
+                                                  message: 'Данные обновлены',
+                                                  isSuccess: true);
+                                              Navigator.of(context).pop();
+                                              await context
+                                                  .read<ProfileCubit>()
+                                                  .updateProfile(surname, name);
+                                            }
+                                          },
+                                          child: const Text('Сохранить')),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ));
                   break;
                 case 'Выйти':
                   AppModule.getPreferencesRepository().removeSavedProfile();
@@ -214,7 +305,6 @@ class ProfilePage extends StatelessWidget {
   Widget profileWidget(BuildContext mainContext) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        print('state: ${state.status.runtimeType}');
         switch (state.status.runtimeType) {
           case FailedStatus<User>:
             break;

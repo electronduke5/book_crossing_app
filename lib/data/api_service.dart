@@ -96,4 +96,41 @@ mixin ApiService<T extends Object> {
       throw Exception(error);
     }
   }
+
+  Future<T> put({
+    required T Function(Map<String, dynamic>) fromJson,
+    dynamic id,
+    required Map<String, dynamic> data,
+  }) async {
+    print('data: ${data}');
+    data.addAll({
+      '_method': 'PUT',
+    });
+    final dio = Dio(
+      BaseOptions(
+        headers: {"Accept": "application/json"},
+        validateStatus: (status) => true,
+      ),
+    );
+
+    print('url: ${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
+    try {
+      final response = await dio.post(
+        '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
+        data: data,
+      );
+      log('response.statusCode: ${response.statusCode}');
+      if (response.statusCode != HttpStatus.ok &&
+          response.statusCode != HttpStatus.created) {
+        throw Exception(['Error =_-']);
+      }
+      final json = response.data;
+      print(json);
+
+      return fromJson(json);
+    } catch (error) {
+      print(error.toString());
+      throw Exception(error);
+    }
+  }
 }
