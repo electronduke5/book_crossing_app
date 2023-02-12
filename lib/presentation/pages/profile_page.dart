@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
+import '../cubits/theme/theme_cubit.dart';
 import '../widgets/loading_widget.dart';
 import '../widgets/profile_category_review.dart';
 
@@ -184,11 +185,19 @@ class ProfilePage extends StatelessWidget {
             ),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            itemBuilder: (context) => [
+            itemBuilder: (context) =>
+            [
               PopupIconMenuItem(
                   title: 'Редатировать профиль', icon: Icons.edit_outlined),
               PopupIconMenuItem(
                   title: 'Выйти', icon: Icons.exit_to_app_outlined),
+              PopupIconMenuItem(
+                title: 'Сменить тему',
+                icon: context.read<ThemeCubit>().getCurrentTheme ==
+                        ThemeMode.light
+                    ? Icons.dark_mode_outlined
+                    : Icons.light_mode_outlined,
+              ),
             ],
             onSelected: (value) {
               switch (value) {
@@ -198,6 +207,9 @@ class ProfilePage extends StatelessWidget {
                 case 'Выйти':
                   AppModule.getPreferencesRepository().removeSavedProfile();
                   Navigator.of(context).pushNamed('/sign-in');
+                  break;
+                case 'Сменить тему':
+                  context.read<ThemeCubit>().switchTheme();
                   break;
               }
             },
