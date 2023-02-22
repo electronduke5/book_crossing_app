@@ -24,7 +24,7 @@ class SignInPage extends StatelessWidget {
               case FailedStatus<User>:
                 SnackBarInfo.show(
                   context: context,
-                  message: state.apiStatus.message ?? 'Что-то не так..',
+                  message: state.apiStatus.message?.substring(11) ?? 'Неверный логин или пароль',
                   isSuccess: false,
                 );
                 context

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:book_crossing_app/data/utils/api_const_url.dart';
+import 'package:book_crossing_app/data/utils/http_exception.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
@@ -85,7 +86,11 @@ mixin ApiService<T extends Object> {
       log('response.statusCode: ${response.statusCode}');
       if (response.statusCode != HttpStatus.ok &&
           response.statusCode != HttpStatus.created) {
-        throw Exception(['Error =_-']);
+        Logger().e(response.statusCode);
+        Logger().e(response.statusMessage);
+        Logger().e(response.data);
+        Logger().e(response.data['message']);
+        throw Exception(response.data['message']).getMessage;
       }
       final json = response.data;
       print(json);

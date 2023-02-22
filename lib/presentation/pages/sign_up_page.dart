@@ -22,14 +22,15 @@ class SignUpPage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: SafeArea(
         child: BlocListener<AuthCubit, AuthState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             switch (state.apiStatus.runtimeType) {
               case FailedStatus<User>:
                 SnackBarInfo.show(
-                  context: context,
-                  message: state.apiStatus.message ?? 'Что-то не так..',
-                  isSuccess: false,
-                );
+                      context: context,
+                      message: state.apiStatus.message?.substring(11) ??
+                          'Что-то не так..',
+                      isSuccess: false,
+                    );
                 context
                     .read<AuthCubit>()
                     .state
