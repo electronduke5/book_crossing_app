@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.book_crossing_app">
    <application
-        android:label="book_crossing_app"
+        android:label="Bookers"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

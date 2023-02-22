@@ -52,7 +52,11 @@ dependencies:
   search_choices: ^2.2.2
   flutter_rating_bar: ^4.0.1
   logger: ^1.1.0
+  flutter_launcher_icons: ^0.11.0
   #modal_bottom_sheet: ^2.1.2
+flutter_icons:
+  image_path: 'assets/images/logo.png'
+  android: true
 
 
 dev_dependencies:
