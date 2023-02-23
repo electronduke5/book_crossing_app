@@ -1,15 +1,15 @@
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
-import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
+import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/review.dart';
 import '../widgets/custom_search_delegate.dart';
-import '../widgets/loading_widget.dart';
 import '../widgets/popup_icon_item.dart';
 import '../widgets/profile_image_small.dart';
+import '../widgets/review_widget.dart';
 
 class ReviewsPage extends StatelessWidget {
   ReviewsPage({Key? key}) : super(key: key);
@@ -94,7 +94,10 @@ class ReviewsPage extends StatelessWidget {
                   print(state.reviews.runtimeType);
                   switch (state.reviews.runtimeType) {
                     case (LoadingStatus<List<Review>>):
-                      return LoadingWidget();
+                      return ListView.builder(
+                          itemCount: 3,
+                          itemBuilder: (context, index) =>
+                              const ReviewShimmerCard());
                     case FailedStatus<List<Review>>:
                       return Center(
                           child: Text(state.reviews.message ?? 'Failed'));
@@ -111,7 +114,8 @@ class ReviewsPage extends StatelessWidget {
                                 physics: const BouncingScrollPhysics(),
                                 itemCount: allReviews.length,
                                 itemBuilder: (context, index) {
-                                  return ReviewWidget(review: allReviews[index]);
+                                  return ReviewWidget(
+                                      review: allReviews[index]);
                                 }),
                           ),
                           const SizedBox(height: 65),

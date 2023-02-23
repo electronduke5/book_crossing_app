@@ -1,5 +1,5 @@
-import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
+import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +19,14 @@ class BookReviewPage extends StatelessWidget {
   BookReviewPage({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final _scrollController = ScrollController();
+  final _height = 80.0;
+
+  void _scrollToIndex(index) {
+    _scrollController.animateTo(_height * index,
+        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +53,21 @@ class BookReviewPage extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  AppBar(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8.0, top: 8.0, bottom: 8.0),
-                      child: ProfileAvatarSmall(
-                          maxRadius: 15,
-                          user: AppModule.getProfileHolder().user),
-                    ),
-                    title: Text(
-                      '${book?.title} - ${book?.author.getInitials()}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16),
+                  InkWell(
+                    onTap: () => _scrollToIndex(0),
+                    child: AppBar(
+                      leading: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8.0, top: 8.0, bottom: 8.0),
+                        child: ProfileAvatarSmall(
+                            maxRadius: 15,
+                            user: AppModule.getProfileHolder().user),
+                      ),
+                      title: Text(
+                        '${book?.title} - ${book?.author.getInitials()}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -66,8 +77,13 @@ class BookReviewPage extends StatelessWidget {
                         print(state.reviews.runtimeType);
                         switch (state.reviews.runtimeType) {
                           case (LoadingStatus<List<Review>>):
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return ListView.builder(
+                              itemCount: book!.reviewsCount > 3
+                                  ? 3
+                                  : book.reviewsCount,
+                              itemBuilder: (context, index) =>
+                                  const ReviewShimmerCard(),
+                            );
                           case FailedStatus<List<Review>>:
                             return Center(
                                 child: Text(state.reviews.message ?? 'Failed'));
@@ -75,6 +91,7 @@ class BookReviewPage extends StatelessWidget {
                             return state.reviews.item!.isEmpty
                                 ? buildEmptyReviewCard(context, book!)
                                 : ListView.builder(
+                              controller: _scrollController,
                                     //TODO: clipBehavior: Clip.none,
                                     clipBehavior: Clip.antiAlias,
                                     physics: const BouncingScrollPhysics(),

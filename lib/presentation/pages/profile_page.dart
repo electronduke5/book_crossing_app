@@ -3,6 +3,8 @@ import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
+import 'package:book_crossing_app/presentation/widgets/profile_shimmer_card.dart';
+import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
 import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
 import '../cubits/theme/theme_cubit.dart';
-import '../widgets/loading_widget.dart';
 import '../widgets/profile_category_review.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -65,7 +66,14 @@ class ProfilePage extends StatelessWidget {
                               case LoadedStatus<List<Review>>:
                                 return reviewsListWidget(context, reviews);
                               case LoadingStatus<List<Review>>:
-                                return LoadingWidget();
+                                return SizedBox(
+                                  height: 500,
+                                  child: ListView.builder(
+                                    itemCount: 2,
+                                    itemBuilder: (context, state) =>
+                                        const ReviewShimmerCard(),
+                                  ),
+                                );
                               default:
                                 return const Center(
                                     child: CircularProgressIndicator());
@@ -89,7 +97,8 @@ class ProfilePage extends StatelessWidget {
                   ),
                 );
               case LoadingStatus<User>:
-                return SizedBox(height: deviceWidth, child: LoadingWidget());
+                return SizedBox(
+                    height: deviceWidth, child: const ProfileShimmerCard());
               default:
                 SizedBox(
                     height: deviceWidth,
