@@ -32,14 +32,20 @@ class ProfilePage extends StatelessWidget {
   }
 
   List<Review> reviews = [];
+  User? user;
 
   @override
   Widget build(BuildContext context) {
-    final double deviceWidth = MediaQuery.of(context).size.height;
+    user = ModalRoute.of(context)!.settings.arguments as User?;
+    if (user != null) {
+      context.read<ProfileCubit>().loadProfile(user: user);
+    }
+
+    final double deviceHeight = MediaQuery.of(context).size.height;
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<ProfileCubit>().loadProfile();
+        await context.read<ProfileCubit>().loadProfile(user: user);
       },
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -56,9 +62,14 @@ class ProfilePage extends StatelessWidget {
                       statsWidget(
                           countReview: state.userReviews.item!.length,
                           countLikes: getLikes(state.userReviews.item!)),
-                      ProfileCategoryReviewWidget(
-                        onFilterChanged: (value) => reviews = value,
-                      ),
+                      () {
+                        if (user == null) {
+                          return ProfileCategoryReviewWidget(
+                            onFilterChanged: (value) => reviews = value,
+                          );
+                        }
+                        return const SizedBox();
+                      }(),
                       Expanded(
                         child: BlocBuilder<ReviewCubit, ReviewState>(
                           builder: (context, state) {
@@ -98,15 +109,13 @@ class ProfilePage extends StatelessWidget {
                 );
               case LoadingStatus<User>:
                 return SizedBox(
-                    height: deviceWidth, child: const ProfileShimmerCard());
+                    height: deviceHeight, child: const ProfileShimmerCard());
               default:
-                SizedBox(
-                    height: deviceWidth,
+                print(state.status.runtimeType);
+                return SizedBox(
+                    height: deviceHeight,
                     child: const Center(child: CircularProgressIndicator()));
             }
-            return SizedBox(
-                height: deviceWidth,
-                child: const Center(child: CircularProgressIndicator()));
           },
         ),
       ),
@@ -118,8 +127,8 @@ class ProfilePage extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       child: Column(
         children: reviews
-            .map(
-                (review) => ReviewWidget(review: review, isProfileReview: true))
+            .map((review) =>
+                ReviewWidget(review: review, isProfileReview: user == null))
             .toList(),
       ),
     );
@@ -179,56 +188,61 @@ class ProfilePage extends StatelessWidget {
         Align(
             alignment: Alignment.topCenter,
             child: Image.asset('assets/images/wallpaper.jpg')),
-        Positioned(
-          right: 5,
-          top: 5,
-          child: PopupMenuButton(
-            icon: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: Material(
-                  color: Theme.of(context).cardColor.withOpacity(0.7),
-                  child: const Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Icon(Icons.more_horiz, size: 28),
-                  )),
-            ),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            itemBuilder: (context) =>
-            [
-              PopupIconMenuItem(
-                  title: 'Редатировать профиль', icon: Icons.edit_outlined),
-              PopupIconMenuItem(
-                  title: 'Выйти', icon: Icons.exit_to_app_outlined),
-              PopupIconMenuItem(
-                title: 'Сменить тему',
-                icon: context.read<ThemeCubit>().getCurrentTheme ==
-                        ThemeMode.light
-                    ? Icons.dark_mode_outlined
-                    : Icons.light_mode_outlined,
-              ),
-            ],
-            onSelected: (value) {
-              switch (value) {
-                case 'Редатировать профиль':
-                  buildEditProfileWidget(context);
-                  break;
-                case 'Выйти':
-                  AppModule.getPreferencesRepository().removeSavedProfile();
-                  Navigator.of(context).pushNamed('/sign-in');
-                  break;
-                case 'Сменить тему':
-                  context.read<ThemeCubit>().switchTheme();
-                  break;
-              }
-            },
-          ),
-        ),
+        () {
+          if (user == null) {
+            return popupProfileMenu(context);
+          }
+          return const SizedBox();
+        }(),
         Padding(
           padding: const EdgeInsets.only(top: 60.0),
           child: profileWidget(context),
         ),
       ],
+    );
+  }
+
+  Positioned popupProfileMenu(BuildContext context) {
+    return Positioned(
+      right: 5,
+      top: 5,
+      child: PopupMenuButton(
+        icon: ClipRRect(
+          borderRadius: BorderRadius.circular(25),
+          child: Material(
+              color: Theme.of(context).cardColor.withOpacity(0.7),
+              child: const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Icon(Icons.more_horiz, size: 28),
+              )),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        itemBuilder: (context) => [
+          PopupIconMenuItem(
+              title: 'Редатировать профиль', icon: Icons.edit_outlined),
+          PopupIconMenuItem(title: 'Выйти', icon: Icons.exit_to_app_outlined),
+          PopupIconMenuItem(
+            title: 'Сменить тему',
+            icon: context.read<ThemeCubit>().getCurrentTheme == ThemeMode.light
+                ? Icons.dark_mode_outlined
+                : Icons.light_mode_outlined,
+          ),
+        ],
+        onSelected: (value) {
+          switch (value) {
+            case 'Редатировать профиль':
+              buildEditProfileWidget(context);
+              break;
+            case 'Выйти':
+              AppModule.getPreferencesRepository().removeSavedProfile();
+              Navigator.of(context).pushNamed('/sign-in');
+              break;
+            case 'Сменить тему':
+              context.read<ThemeCubit>().switchTheme();
+              break;
+          }
+        },
+      ),
     );
   }
 

@@ -1,7 +1,7 @@
 import '../../data/models/user.dart';
 
 abstract class ProfileRepository {
-  Future<User> getProfile();
+  Future<User> getProfile({User? user});
 
   Future<User> updateProfile({
     required String surname,

@@ -45,7 +45,7 @@ mixin ApiService<T extends Object> {
       throw Exception(['Error =_-']);
     }
     final jsonList = response.data;
-    return jsonList.map((e) => fromJson(e));
+    return jsonList.runtimeType is List<T>? jsonList.map((e) => fromJson(e)) : fromJson(jsonList);
   }
 
   Future<void> delete(int id) async {

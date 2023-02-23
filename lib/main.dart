@@ -13,6 +13,7 @@ import 'package:book_crossing_app/presentation/pages/add_author_page.dart';
 import 'package:book_crossing_app/presentation/pages/add_book_page.dart';
 import 'package:book_crossing_app/presentation/pages/book_reviews_page.dart';
 import 'package:book_crossing_app/presentation/pages/main_page.dart';
+import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_in_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_up_page.dart';
 import 'package:book_crossing_app/presentation/pages/start_page.dart';
@@ -141,6 +142,23 @@ class _MyAppState extends State<MyApp> {
                             create: (context) => BookCubit()..loadBooks()),
                       ],
                       child: AddBookPage(),
+                    ),
+                '/profile-page': (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider<LikeCubit>(
+                            create: (context) => LikeCubit()),
+                        BlocProvider<ProfileCubit>(
+                            create: (context) => ProfileCubit()),
+                        BlocProvider<BookCubit>(
+                            create: (context) => BookCubit()..loadBooks()),
+                        BlocProvider<ReviewCubit>(
+                            create: (context) => ReviewCubit()..loadReviews()),
+                      ],
+                      child: Scaffold(
+                        body: SafeArea(
+                          child: ProfilePage(),
+                        ),
+                      ),
                     ),
                 '/main': (context) => MultiBlocProvider(
                       providers: [

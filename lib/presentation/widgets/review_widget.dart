@@ -44,58 +44,65 @@ class ReviewWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          ProfileAvatarSmall(
-                            user: review.user,
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                review.user.getFullName(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(review.getDate(),
-                                  style: Theme.of(context).textTheme.bodySmall),
-                            ],
-                          ),
-                          const Spacer(),
-                          () {
-                            if (isProfileReview) {
-                              return PopupMenuButton(
-                                  onSelected: (value) => _onSelected(
-                                      context: context,
-                                      review: review,
-                                      value: value),
-                                  icon: const Icon(Icons.more_horiz),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(8.0))),
-                                  itemBuilder: (context) {
-                                    return [
-                                      review.isArchived
-                                          ? PopupIconMenuItem(
-                                              title: 'Восстановить',
-                                              icon: Icons.unarchive_outlined)
-                                          : PopupIconMenuItem(
-                                              title: 'Архивировать',
-                                              icon: Icons.archive_outlined),
-                                      PopupIconMenuItem(
-                                          title: 'Удалить',
-                                          icon: Icons.delete_outline,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .error),
-                                    ];
-                                  });
-                            } else {
-                              return const SizedBox();
-                            }
-                          }()
-                        ],
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/profile-page',
+                              arguments: review.user);
+                        },
+                        child: Row(
+                          children: [
+                            ProfileAvatarSmall(
+                              user: review.user,
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  review.user.getFullName(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(review.getDate(),
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
+                              ],
+                            ),
+                            const Spacer(),
+                            () {
+                              if (isProfileReview) {
+                                return PopupMenuButton(
+                                    onSelected: (value) => _onSelected(
+                                        context: context,
+                                        review: review,
+                                        value: value),
+                                    icon: const Icon(Icons.more_horiz),
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8.0))),
+                                    itemBuilder: (context) {
+                                      return [
+                                        review.isArchived
+                                            ? PopupIconMenuItem(
+                                                title: 'Восстановить',
+                                                icon: Icons.unarchive_outlined)
+                                            : PopupIconMenuItem(
+                                                title: 'Архивировать',
+                                                icon: Icons.archive_outlined),
+                                        PopupIconMenuItem(
+                                            title: 'Удалить',
+                                            icon: Icons.delete_outline,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error),
+                                      ];
+                                    });
+                              } else {
+                                return const SizedBox();
+                              }
+                            }()
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 15),
                       bookInfoReview(context, review.book),

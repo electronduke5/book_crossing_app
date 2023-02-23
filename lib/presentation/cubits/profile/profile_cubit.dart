@@ -10,16 +10,16 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileState());
 
-  Future<void> loadProfile({int? isArchived}) async {
+  Future<void> loadProfile({int? isArchived, User? user}) async {
     final repository = AppModule.getProfileRepository();
     final reviewRepo = AppModule.getReviewRepository();
     emit(state.copyWith(status: LoadingStatus()));
     try {
-      final user = await repository.getProfile();
+      final loadedUser = await repository.getProfile(user: user);
       final userReviews =
-          await reviewRepo.getUsersReview(id: user.id, isArchive: isArchived);
+          await reviewRepo.getUsersReview(id: loadedUser.id, isArchive: isArchived);
       emit(state.copyWith(
-          status: LoadedStatus(user), userReviews: LoadedStatus(userReviews)));
+          status: LoadedStatus(loadedUser), userReviews: LoadedStatus(userReviews)));
     } catch (exception) {
       emit(state.copyWith(status: FailedStatus(exception.toString())));
     }

@@ -7,10 +7,14 @@ import '../utils/api_const_url.dart';
 
 class ProfileRepositoryImpl with ApiService<User> implements ProfileRepository {
   @override
-  Future<User> getProfile() async {
-    final user = AppModule.getProfileHolder().user;
+  Future<User> getProfile({User? user}) async {
+    final User receivedUser = user == null
+        ? AppModule.getProfileHolder().user
+        : await get(
+            fromJson: (Map<String, dynamic> json) => User.fromJson(json),
+            id: user.id);
     print('User from AppModule: ${AppModule.getProfileHolder().user}');
-    return user;
+    return receivedUser;
   }
 
   @override
