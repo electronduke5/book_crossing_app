@@ -136,11 +136,11 @@ class ProfilePage extends StatelessWidget {
                   endIndent: 10,
                 ),
                 itemInStatsRow(title: 'Лайков', value: countLikes),
-                const VerticalDivider(
-                  indent: 10,
-                  endIndent: 10,
-                ),
-                itemInStatsRow(title: 'Конфет', value: '29'),
+                // const VerticalDivider(
+                //   indent: 10,
+                //   endIndent: 10,
+                // ),
+                // itemInStatsRow(title: 'Конфет', value: '29'),
               ],
             ),
           ),

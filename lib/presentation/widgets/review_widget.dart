@@ -183,8 +183,8 @@ Future<Review?> _onSelected(
   return null;
 }
 
-Row bookInfoReview(BuildContext context, Book book) {
-  return Row(
+Widget bookInfoReview(BuildContext context, Book book) {
+  return Wrap(
     children: [
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,

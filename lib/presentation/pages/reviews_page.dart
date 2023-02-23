@@ -15,6 +15,13 @@ class ReviewsPage extends StatelessWidget {
   ReviewsPage({Key? key}) : super(key: key);
 
   List<Review> allReviews = [];
+  final _scrollController = ScrollController();
+  final _height = 80.0;
+  
+  void _scrollToIndex(index) {
+    _scrollController.animateTo(_height * index,
+        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,53 +29,56 @@ class ReviewsPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
-          AppBar(
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-              child: ProfileAvatarSmall(
-                  maxRadius: 15, user: AppModule.getProfileHolder().user),
-            ),
-            title: const Text(
-              'Главная',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  showSearch(
-                    context: context,
-                    delegate: CustomSearchDelegate(reviews: allReviews),
-                  );
-                },
-                icon: const Icon(Icons.search),
+          InkWell(
+            onTap: () => _scrollToIndex(0),
+            child: AppBar(
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                child: ProfileAvatarSmall(
+                    maxRadius: 15, user: AppModule.getProfileHolder().user),
               ),
-              PopupMenuButton<String>(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                icon: const Icon(Icons.filter_list),
-                onSelected: (value) async {
-                  allReviews = await _onSelected(
-                      context: context, allReviews: allReviews, value: value);
-                },
-                itemBuilder: (context) {
-                  return [
-                    PopupIconMenuItem(
-                        title: 'Сначала новые', icon: Icons.date_range),
-                    PopupIconMenuItem(
-                        title: 'Сначала старые', icon: Icons.date_range),
-                    PopupIconMenuItem(
-                        title: 'По кол-ву лайков',
-                        icon: Icons.favorite_outline),
-                    PopupIconMenuItem(
-                        title: 'По возрастанию оценки',
-                        icon: Icons.arrow_upward),
-                    PopupIconMenuItem(
-                        title: 'По убыванию оценки',
-                        icon: Icons.arrow_downward),
-                  ];
-                },
+              title: const Text(
+                'Главная',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ],
+              actions: [
+                IconButton(
+                  onPressed: () async {
+                    showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(reviews: allReviews),
+                    );
+                  },
+                  icon: const Icon(Icons.search),
+                ),
+                PopupMenuButton<String>(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                  icon: const Icon(Icons.filter_list),
+                  onSelected: (value) async {
+                    allReviews = await _onSelected(
+                        context: context, allReviews: allReviews, value: value);
+                  },
+                  itemBuilder: (context) {
+                    return [
+                      PopupIconMenuItem(
+                          title: 'Сначала новые', icon: Icons.date_range),
+                      PopupIconMenuItem(
+                          title: 'Сначала старые', icon: Icons.date_range),
+                      PopupIconMenuItem(
+                          title: 'По кол-ву лайков',
+                          icon: Icons.favorite_outline),
+                      PopupIconMenuItem(
+                          title: 'По возрастанию оценки',
+                          icon: Icons.arrow_upward),
+                      PopupIconMenuItem(
+                          title: 'По убыванию оценки',
+                          icon: Icons.arrow_downward),
+                    ];
+                  },
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 5),
           Expanded(
@@ -92,14 +102,21 @@ class ReviewsPage extends StatelessWidget {
                       allReviews.isEmpty
                           ? allReviews = state.reviews.item!
                           : () {};
-                      return ListView.builder(
-                          //TODO: clipBehavior: Clip.none,
-                          clipBehavior: Clip.antiAlias,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: allReviews.length,
-                          itemBuilder: (context, index) {
-                            return ReviewWidget(review: allReviews[index]);
-                          });
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                                controller: _scrollController,
+                                clipBehavior: Clip.antiAlias,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: allReviews.length,
+                                itemBuilder: (context, index) {
+                                  return ReviewWidget(review: allReviews[index]);
+                                }),
+                          ),
+                          const SizedBox(height: 65),
+                        ],
+                      );
                     default:
                       return const Center(child: CircularProgressIndicator());
                   }

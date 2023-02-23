@@ -108,14 +108,21 @@ class BooksPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               allBooks.isEmpty ? allBooks = state.booksStatus.item! : () {};
-              return ListView.builder(
-                controller: _scrollController,
-                clipBehavior: Clip.antiAlias,
-                physics: const BouncingScrollPhysics(),
-                itemCount: allBooks.length,
-                itemBuilder: (context, index) {
-                  return BookWidget(book: allBooks[index]);
-                },
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      clipBehavior: Clip.antiAlias,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: allBooks.length,
+                      itemBuilder: (context, index) {
+                        return BookWidget(book: allBooks[index]);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 65),
+                ],
               );
             default:
               return const Center(child: CircularProgressIndicator());
