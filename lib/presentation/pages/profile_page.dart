@@ -454,25 +454,23 @@ class ProfilePage extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child:
-                              // state.status.item?.image == null
-                              //     ? CircleAvatar(
-                              //         minRadius: 2,
-                              //         maxRadius: 60,
-                              //         child: Text(
-                              //           state.status.item!.getInitials(),
-                              //           style: const TextStyle(
-                              //               fontWeight: FontWeight.normal,
-                              //               fontSize: 36),
-                              //         ),
-                              //       )
-                              //     :
-                              CircleAvatar(
-                            minRadius: 2,
-                            maxRadius: 60,
-                            backgroundImage:
-                                NetworkImage(state.status.item!.image!),
-                          ),
+                          child: state.status.item?.image == null
+                              ? CircleAvatar(
+                                  minRadius: 2,
+                                  maxRadius: 60,
+                                  child: Text(
+                                    state.status.item!.getInitials(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 36),
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  minRadius: 2,
+                                  maxRadius: 60,
+                                  backgroundImage:
+                                      NetworkImage(state.status.item!.image!),
+                                ),
                         ),
                       );
                     }(),
