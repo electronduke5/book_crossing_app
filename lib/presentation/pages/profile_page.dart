@@ -1,7 +1,9 @@
+import 'package:book_crossing_app/data/utils/image_picker.dart';
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
+import 'package:book_crossing_app/presentation/pages/photo_view_page.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:book_crossing_app/presentation/widgets/profile_shimmer_card.dart';
 import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
@@ -62,7 +64,7 @@ class ProfilePage extends StatelessWidget {
                       statsWidget(
                           countReview: state.userReviews.item!.length,
                           countLikes: getLikes(state.userReviews.item!)),
-                      () {
+                          () {
                         if (user == null) {
                           return ProfileCategoryReviewWidget(
                             onFilterChanged: (value) => reviews = value,
@@ -188,7 +190,7 @@ class ProfilePage extends StatelessWidget {
         Align(
             alignment: Alignment.topCenter,
             child: Image.asset('assets/images/wallpaper.jpg')),
-        () {
+            () {
           if (user == null) {
             return popupProfileMenu(context);
           }
@@ -259,55 +261,55 @@ class ProfilePage extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  const Text(
-                    'Редактирование профиля',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: TextFormField(
-                      controller: nameController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Введите имя';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Имя',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: TextFormField(
-                      controller: surnameController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Введите фамилию';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Фамилия',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          final surname = surnameController.value.text;
+                          const Text(
+                            'Редактирование профиля',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          const Divider(),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: TextFormField(
+                              controller: nameController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Введите имя';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'Имя',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: TextFormField(
+                              controller: surnameController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Введите фамилию';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'Фамилия',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final surname = surnameController.value.text;
                           final name = nameController.value.text;
                           surnameController.clear();
                           nameController.clear();
@@ -318,16 +320,16 @@ class ProfilePage extends StatelessWidget {
                           Navigator.of(context).pop();
                           await context
                               .read<ProfileCubit>()
-                              .updateProfile(surname, name);
+                              .updateProfile(surname: surname, name: name);
                         }
-                      },
-                      child: const Text('Сохранить')),
-                ],
+                              },
+                              child: const Text('Сохранить')),
+                        ],
+                      ),
+                    ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -390,26 +392,90 @@ class ProfilePage extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: Theme.of(context).cardColor,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: state.status.item?.image == null
-                          ? CircleAvatar(
-                              minRadius: 2,
-                              maxRadius: 60,
-                              child: Text(
-                                state.status.item!.getInitials(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 36),
-                              ),
-                            )
-                          : CircleAvatar(
-                              minRadius: 2,
-                              maxRadius: 60,
-                              backgroundImage:
-                                  NetworkImage(state.status.item!.image!),
+                    child: () {
+                      if (state.status.item!.image == null && user != null) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            minRadius: 2,
+                            maxRadius: 60,
+                            child: Text(
+                              state.status.item!.getInitials(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.normal, fontSize: 36),
                             ),
-                    ),
+                          ),
+                        );
+                      }
+                      return PopupMenuButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        offset: const Offset(-30, 120),
+                        itemBuilder: (context) =>
+                            user == null ? buttonsProfile : buttonsGuest,
+                        onSelected: (value) async {
+                          switch (value) {
+                            case 'Открыть фото':
+                              if (state.status.item!.image == null) {
+                                SnackBarInfo.showTop(
+                                    context: context,
+                                    message: 'Фотографии еще нет',
+                                    isSuccess: false);
+                                break;
+                              }
+                              PhotoViewDialog(state.status.item!)
+                                  .dialogBuilder(context);
+                              break;
+                            case 'Изменить фото':
+                              await ImageHelper()
+                                  .getFromGallery()
+                                  .then((value) {
+                                if (value != null) {
+                                  context
+                                      .read<ProfileCubit>()
+                                      .updateProfile(image: value);
+                                }
+                                return null;
+                              });
+                              break;
+                            case 'Удалить фото':
+                              if (state.status.item!.image == null) {
+                                SnackBarInfo.showTop(
+                                    context: context,
+                                    message: 'Фотографии еще нет',
+                                    isSuccess: false);
+                                break;
+                              }
+                              await context
+                                  .read<ProfileCubit>()
+                                  .removeProfileImage();
+                              break;
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child:
+                              // state.status.item?.image == null
+                              //     ? CircleAvatar(
+                              //         minRadius: 2,
+                              //         maxRadius: 60,
+                              //         child: Text(
+                              //           state.status.item!.getInitials(),
+                              //           style: const TextStyle(
+                              //               fontWeight: FontWeight.normal,
+                              //               fontSize: 36),
+                              //         ),
+                              //       )
+                              //     :
+                              CircleAvatar(
+                            minRadius: 2,
+                            maxRadius: 60,
+                            backgroundImage:
+                                NetworkImage(state.status.item!.image!),
+                          ),
+                        ),
+                      );
+                    }(),
                   ),
                 ),
               ],
@@ -421,4 +487,16 @@ class ProfilePage extends StatelessWidget {
       },
     );
   }
+
+  List<PopupIconMenuItem> buttonsProfile = [
+    PopupIconMenuItem(
+        title: 'Открыть фото', icon: Icons.account_circle_outlined),
+    PopupIconMenuItem(title: 'Изменить фото', icon: Icons.edit_outlined),
+    PopupIconMenuItem(
+        color: Colors.red, title: 'Удалить фото', icon: Icons.delete_outlined),
+  ];
+  List<PopupIconMenuItem> buttonsGuest = [
+    PopupIconMenuItem(
+        title: 'Открыть фото', icon: Icons.account_circle_outlined),
+  ];
 }

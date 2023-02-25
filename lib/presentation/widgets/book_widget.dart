@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -16,7 +16,6 @@ class BookWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: InkWell(
         onTap: () async {
-          log('Book widget was tapped!');
           //context.read<ReviewCubit>().loadReviews(filter: 'book', value: book.id).then((value) {
           Navigator.of(context).pushNamed('/book-review', arguments: book);
 
@@ -45,6 +44,50 @@ class BookWidget extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 15),
+                () {
+                  if (book.image == null) {
+                    return Align(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              gradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomLeft,
+                                colors: [
+                                  Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                                  Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                                ],
+                              )
+                            ),
+                            height: 350,
+                            width: 250,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  book.title,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 20),
+                                ),
+                                Text(book.author.getInitials(),
+                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16)),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                  return Align(
+                    alignment: Alignment.center,
+                    child: Image.network(book.image!),
+                  );
+                }(),
                 const SizedBox(height: 15),
                 Text(
                   book.description ?? "Описание пустое",

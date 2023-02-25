@@ -131,8 +131,10 @@ class ReviewWidget extends StatelessWidget {
                                   .read<LikeCubit>()
                                   .likeReview(review))!;
                             },
-                            icon: Icon(review.likedUser?.contains(
-                                        AppModule.getProfileHolder().user) ??
+                            icon: Icon(review.likedUser
+                                        ?.map((user) => user.id)
+                                        .contains(AppModule.getProfileHolder()
+                                            .user.id) ??
                                     false
                                 ? Icons.favorite
                                 : Icons.favorite_outline),
