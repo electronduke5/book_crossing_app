@@ -36,7 +36,7 @@ class ProfileRepositoryImpl with ApiService<User> implements ProfileRepository {
         'surname': surname,
         'name': name,
         'email': email,
-        'image': await MultipartFile.fromFile(image?.path ?? ''),
+        'image': image == null ? null : await MultipartFile.fromFile(image.path),
       },
       id: AppModule.getProfileHolder().user.id,
     );

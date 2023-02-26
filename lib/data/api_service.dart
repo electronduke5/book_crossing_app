@@ -70,6 +70,7 @@ mixin ApiService<T extends Object> {
     required Map<String, dynamic> data,
   }) async {
     print('data: ${data}');
+    FormData formData = FormData.fromMap(data);
     final dio = Dio(
       BaseOptions(
         headers: {"Accept": "application/json"},
@@ -81,7 +82,7 @@ mixin ApiService<T extends Object> {
     try {
       final response = await dio.post(
         '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
-        data: data,
+        data: formData,
       );
       log('response.statusCode: ${response.statusCode}');
       if (response.statusCode != HttpStatus.ok &&
