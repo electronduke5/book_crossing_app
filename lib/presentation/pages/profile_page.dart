@@ -38,7 +38,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    user = ModalRoute.of(context)!.settings.arguments as User?;
+    user = ModalRoute.of(context)?.settings.arguments as User?;
     if (user != null) {
       context.read<ProfileCubit>().loadProfile(user: user);
     }
@@ -191,10 +191,12 @@ class ProfilePage extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: Image.asset('assets/images/wallpaper.jpg')),
             () {
-          if (user == null) {
+              if (user == null) {
             return popupProfileMenu(context);
           }
-          return const SizedBox();
+          return AppBar(
+            backgroundColor: Colors.transparent,
+          );
         }(),
         Padding(
           padding: const EdgeInsets.only(top: 60.0),

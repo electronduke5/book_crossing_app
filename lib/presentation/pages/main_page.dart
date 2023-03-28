@@ -10,14 +10,17 @@ import 'add_review_page.dart';
 import 'books_page.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  MainPage({Key? key, this.selectedIndex}) : super(key: key);
+
+  int? selectedIndex = 0;
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex = widget.selectedIndex ?? 0;
+
 
   static final List<Widget> _widgetOptions = <Widget>[
     ReviewsPage(),

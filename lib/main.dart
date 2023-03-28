@@ -171,7 +171,7 @@ class _MyAppState extends State<MyApp> {
                         BlocProvider<ReviewCubit>(
                             create: (context) => ReviewCubit()..loadReviews()),
                       ],
-                      child: const MainPage(),
+                      child: MainPage(selectedIndex: ModalRoute.of(context)!.settings.arguments as int?),
                     ),
               },
               initialRoute: user.data == null ? '/sign-in' : '/main',

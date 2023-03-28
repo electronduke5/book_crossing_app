@@ -18,15 +18,16 @@ class AddReviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ReviewCubit, ReviewState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         switch (state.createReviewStatus.runtimeType) {
           case LoadedStatus<Review>:
             SnackBarInfo.show(
                 context: context,
                 message: 'Рецензия создана!',
                 isSuccess: true);
+            Navigator.of(context).pushNamed('/main', arguments: 0);
             break;
-          case FailedStatus:
+          case FailedStatus<Review>:
             SnackBarInfo.show(
                 context: context,
                 message: 'Ошибка при создании рецензии!',
@@ -108,7 +109,7 @@ class AddReviewPage extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState?.validate() ?? false) {
-                            await context.read<ReviewCubit>().createReview();
+                            context.read<ReviewCubit>().createReview();
                           }
                         },
                         child: const Text('Добавить'),
