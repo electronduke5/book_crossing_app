@@ -9,6 +9,7 @@ abstract class ProfileRepository {
     String? surname,
     String? name,
     String? email,
+    String? phoneNumber,
     File? image,
   });
 

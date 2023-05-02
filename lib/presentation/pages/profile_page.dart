@@ -11,6 +11,7 @@ import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
@@ -22,8 +23,9 @@ class ProfilePage extends StatelessWidget {
 
   final double _horizontalPadding = 0.0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController surnameController = TextEditingController();
+  TextEditingController nameController = TextEditingController(text: AppModule.getProfileHolder().user.name);
+  TextEditingController surnameController = TextEditingController(text:AppModule.getProfileHolder().user.surname);
+  TextEditingController phoneController = TextEditingController(text:AppModule.getProfileHolder().user.phoneNumber);
 
   int getLikes(List<Review> reviews) {
     int likes = 0;
@@ -32,6 +34,12 @@ class ProfilePage extends StatelessWidget {
     }
     return likes;
   }
+
+  final _phoneMask = MaskTextInputFormatter(
+      mask: '+7 (###) ###-##-##',
+      filter: { "#": RegExp(r'[0-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
 
   List<Review> reviews = [];
   User? user;
@@ -256,7 +264,7 @@ class ProfilePage extends StatelessWidget {
       context: context,
       builder: (context) => SafeArea(
         child: SizedBox(
-          height: 300,
+          height: 350,
           child: BlocBuilder<ProfileCubit, ProfileState>(
             builder: (context, state) => Form(
               key: _formKey,
@@ -298,20 +306,44 @@ class ProfilePage extends StatelessWidget {
                                   return 'Введите фамилию';
                                 }
                                 return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Фамилия',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  final surname = surnameController.value.text;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Фамилия',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextFormField(
+                      controller: phoneController,
+                      inputFormatters: [_phoneMask],
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Введите номер телефона';
+                        }
+                        return null;
+                      },
+                      maxLines: 1,
+                      maxLength: 18,
+                      decoration: InputDecoration(
+                        counterText: '',
+                        hintText: '+7 (000) 000-00-00',
+                        labelText: 'Номер телефона',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          final surname = surnameController.value.text;
                           final name = nameController.value.text;
                           surnameController.clear();
                           nameController.clear();

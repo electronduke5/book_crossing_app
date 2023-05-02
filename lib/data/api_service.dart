@@ -21,13 +21,16 @@ mixin ApiService<T extends Object> {
         queryParameters: params,
       ),
     );
-
+    Logger logger = Logger();
+    logger.i('${ApiConstUrl.baseUrl}$apiRoute');
     final response = await dio.get('${ApiConstUrl.baseUrl}$apiRoute');
+    logger.d('response $response');
     if (response.statusCode != HttpStatus.ok) {
       return [];
     }
     final jsonList = response.data as List<dynamic>;
     return jsonList.map((e) => fromJson(e)).toList();
+
   }
 
   Future<T> get(
@@ -42,7 +45,7 @@ mixin ApiService<T extends Object> {
     final response =
         await dio.get('${ApiConstUrl.baseUrl}$apiRoute/${id ?? ''}]');
     if (response.statusCode != HttpStatus.ok) {
-      throw Exception(['Error =_-']);
+      throw Exception(response.data);
     }
     final jsonList = response.data;
     return jsonList.runtimeType is List<T>? jsonList.map((e) => fromJson(e)) : fromJson(jsonList);
@@ -127,16 +130,17 @@ mixin ApiService<T extends Object> {
         data: formData,
       );
       log('response.statusCode: ${response.statusCode}');
+      log('response.data: ${response.data}');
       if (response.statusCode != HttpStatus.ok &&
           response.statusCode != HttpStatus.created) {
-        throw Exception(['Error =_-']);
+        throw Exception(response.data);
       }
       final json = response.data;
       print(json);
 
       return fromJson(json);
     } catch (error) {
-      print(error.toString());
+      print('--Error:${error}');
       throw Exception(error);
     }
   }

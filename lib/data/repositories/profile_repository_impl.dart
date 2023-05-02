@@ -28,6 +28,7 @@ class ProfileRepositoryImpl with ApiService<User> implements ProfileRepository {
     String? surname,
     String? name,
     String? email,
+    String? phoneNumber,
     File? image,
   }) async {
     return put(
@@ -36,6 +37,7 @@ class ProfileRepositoryImpl with ApiService<User> implements ProfileRepository {
         'surname': surname,
         'name': name,
         'email': email,
+        'phone_number': phoneNumber,
         'image': image == null ? null : await MultipartFile.fromFile(image.path),
       },
       id: AppModule.getProfileHolder().user.id,

@@ -1,7 +1,7 @@
 class ApiConstUrl {
   static int? id;
 
-  static const String baseUrl = 'http://194.58.109.191:8888/api/';
+  static const String baseUrl = 'https://f38d-178-35-129-96.ngrok-free.app/api/';
   static const String loginUrl = 'login';
   static const String userUrl = 'users';
   static const String bookUrl = 'books';
@@ -9,4 +9,7 @@ class ApiConstUrl {
   static const String authorUrl = 'authors';
   static const String genreUrl = 'genres';
   static const String likeUrl = 'like';
+  static const String pointUrl = 'points';
+  static const String transferUrl = 'transfers';
+  static const String statusUrl = 'statuses';
 }

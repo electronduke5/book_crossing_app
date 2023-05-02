@@ -1,8 +1,10 @@
 import 'package:book_crossing_app/data/repositories/auhor_repository_impl.dart';
 import 'package:book_crossing_app/data/repositories/book_repository_impl.dart';
 import 'package:book_crossing_app/data/repositories/genres_repository_impl.dart';
+import 'package:book_crossing_app/data/repositories/point_repository_impl.dart';
 import 'package:book_crossing_app/data/repositories/profile_repository_impl.dart';
 import 'package:book_crossing_app/data/repositories/review_repository_impl.dart';
+import 'package:book_crossing_app/data/repositories/status_repository_impl.dart';
 import 'package:book_crossing_app/domain/repositories/author_repository.dart';
 import 'package:book_crossing_app/domain/repositories/book_repository.dart';
 import 'package:book_crossing_app/domain/repositories/genre_repository.dart';
@@ -14,9 +16,13 @@ import 'package:get_it/get_it.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/repositories/liked_repository_impl.dart';
 import '../../data/repositories/prefs_respository_impl.dart';
+import '../../data/repositories/transfer_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/liked_repository.dart';
+import '../../domain/repositories/point_repository.dart';
 import '../../domain/repositories/preferenses_repository.dart';
+import '../../domain/repositories/status_repository.dart';
+import '../../domain/repositories/transfer_repository.dart';
 
 class AppModule {
   static bool _provided = false;
@@ -32,6 +38,9 @@ class AppModule {
     _provideAuthorRepository();
     _provideGenreRepository();
     _provideLikeRepository();
+    _provideStatusRepository();
+    _providePointRepository();
+    _provideTransferRepository();
 
     _provided = true;
   }
@@ -98,6 +107,30 @@ class AppModule {
 
   static AuthRepository getAuthRepository() {
     return GetIt.instance.get<AuthRepositoryImpl>();
+  }
+
+  void _provideStatusRepository() {
+    GetIt.instance.registerSingleton(StatusRepositoryImpl());
+  }
+
+  static StatusRepository getStatusRepository() {
+    return GetIt.instance.get<StatusRepositoryImpl>();
+  }
+
+  void _providePointRepository() {
+    GetIt.instance.registerSingleton(PointRepositoryImpl());
+  }
+
+  static PointRepository getPointRepository() {
+    return GetIt.instance.get<PointRepositoryImpl>();
+  }
+
+  void _provideTransferRepository() {
+    GetIt.instance.registerSingleton(TransferRepositoryImpl());
+  }
+
+  static TransferRepository getTransferRepository() {
+    return GetIt.instance.get<TransferRepositoryImpl>();
   }
 
   void _providePreferencesRepository() {
