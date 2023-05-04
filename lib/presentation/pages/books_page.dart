@@ -1,15 +1,15 @@
 import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
-import 'package:book_crossing_app/presentation/widgets/book_shimmer_card.dart';
+import 'package:book_crossing_app/presentation/widgets/book_widgets/book_shimmer_card.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/book.dart';
 import '../di/app_module.dart';
-import '../widgets/book_widget.dart';
+import '../widgets/book_widgets/book_widget.dart';
 import '../widgets/custom_search_delegate.dart';
-import '../widgets/profile_image_small.dart';
+import '../widgets/profile_widgets/profile_image_small.dart';
 
 class BooksPage extends StatelessWidget {
   BooksPage({Key? key}) : super(key: key);

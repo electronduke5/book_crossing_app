@@ -24,6 +24,15 @@ class ProfileRepositoryImpl with ApiService<User> implements ProfileRepository {
   }
 
   @override
+  Future<User> getProfileFromAPI({ required User user}) async {
+    final User receivedUser =  await get(
+        fromJson: (Map<String, dynamic> json) => User.fromJson(json),
+        id: user.id);
+    print('User from API: ${receivedUser}');
+    return receivedUser;
+  }
+
+  @override
   Future<User> updateProfile({
     String? surname,
     String? name,

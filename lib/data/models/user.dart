@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'book.dart';
 import 'status.dart';
 
 part '../../domain/models/user/user.freezed.dart';
@@ -14,6 +15,8 @@ class User with _$User {
     String? image,
     Status? status,
     String? phoneNumber,
+    List<Book>? ownerBooks,
+    List<Book>? readerBooks,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

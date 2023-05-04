@@ -1,15 +1,15 @@
 import 'package:book_crossing_app/presentation/cubits/like/like_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
-import 'package:book_crossing_app/presentation/widgets/profile_image_small.dart';
+import 'package:book_crossing_app/presentation/widgets/profile_widgets/profile_image_small.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import '../../data/models/book.dart';
-import '../../data/models/review.dart';
-import '../cubits/review/review_cubit.dart';
+import '../../../data/models/book.dart';
+import '../../../data/models/review.dart';
+import '../../cubits/review/review_cubit.dart';
 
 class ReviewWidget extends StatelessWidget {
   ReviewWidget({

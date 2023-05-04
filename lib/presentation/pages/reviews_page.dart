@@ -1,15 +1,15 @@
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
-import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widgets/review_shimmer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/review.dart';
 import '../widgets/custom_search_delegate.dart';
 import '../widgets/popup_icon_item.dart';
-import '../widgets/profile_image_small.dart';
-import '../widgets/review_widget.dart';
+import '../widgets/profile_widgets/profile_image_small.dart';
+import '../widgets/review_widgets/review_widget.dart';
 
 class ReviewsPage extends StatelessWidget {
   ReviewsPage({Key? key}) : super(key: key);

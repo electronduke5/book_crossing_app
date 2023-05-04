@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubits/review/review_cubit.dart';
+import '../../cubits/review/review_cubit.dart';
 
 class ReviewText extends StatelessWidget {
   const ReviewText({Key? key}) : super(key: key);

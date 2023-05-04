@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import '../../data/models/book.dart';
+import '../../../data/models/book.dart';
 
 class BookWidget extends StatelessWidget {
   const BookWidget({Key? key, required this.book}) : super(key: key);
@@ -124,6 +124,20 @@ class BookWidget extends StatelessWidget {
                   children: [
                     const Icon(Icons.library_books_outlined),
                     Text('Количество ревью: ${book.reviewsCount}'),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(Icons.person_2_outlined),
+                    Text('Владелец: ${book.owner.getFullName()}'),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(Icons.person_outlined),
+                    Text('Читатель: ${book.reader.getFullName()}'),
                   ],
                 ),
               ],

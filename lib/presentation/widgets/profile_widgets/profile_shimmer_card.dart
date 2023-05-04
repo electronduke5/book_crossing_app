@@ -1,4 +1,4 @@
-import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widgets/review_shimmer_card.dart';
 import 'package:book_crossing_app/presentation/widgets/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -50,8 +50,8 @@ class ProfileShimmerCard extends StatelessWidget {
               children: [
                 Column(
                   children: const [
-                    ShimmerContainer(width: 50, height: 30),
-                    ShimmerContainer(width: 100, height: 20)
+                    ShimmerContainer(width: 40, height: 25),
+                    ShimmerContainer(width: 90, height: 18)
                   ],
                 ),
                 const VerticalDivider(
@@ -60,8 +60,18 @@ class ProfileShimmerCard extends StatelessWidget {
                 ),
                 Column(
                   children: const [
-                    ShimmerContainer(width: 50, height: 30),
-                    ShimmerContainer(width: 100, height: 18)
+                    ShimmerContainer(width: 40, height: 25),
+                    ShimmerContainer(width: 90, height: 18)
+                  ],
+                ),
+                const VerticalDivider(
+                  indent: 10,
+                  endIndent: 10,
+                ),
+                Column(
+                  children: const [
+                    ShimmerContainer(width: 40, height: 25),
+                    ShimmerContainer(width: 90, height: 18)
                   ],
                 ),
               ],

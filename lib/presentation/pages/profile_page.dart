@@ -5,18 +5,19 @@ import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/photo_view_page.dart';
 import 'package:book_crossing_app/presentation/widgets/popup_icon_item.dart';
-import 'package:book_crossing_app/presentation/widgets/profile_shimmer_card.dart';
-import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
-import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
+import 'package:book_crossing_app/presentation/widgets/profile_widgets/profile_shimmer_card.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widgets/review_shimmer_card.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widgets/review_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+import '../../data/models/book.dart';
 import '../../data/models/review.dart';
 import '../../data/models/user.dart';
 import '../cubits/theme/theme_cubit.dart';
-import '../widgets/profile_category_review.dart';
+import '../widgets/profile_widgets/profile_category_review.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -55,7 +56,7 @@ class ProfilePage extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<ProfileCubit>().loadProfile(user: user);
+        await context.read<ProfileCubit>().loadProfile(user: user, isUpdateInfo: true);
       },
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -70,9 +71,12 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       profileCard(context),
                       statsWidget(
-                          countReview: state.userReviews.item!.length,
-                          countLikes: getLikes(state.userReviews.item!)),
-                          () {
+                        context: context,
+                        countReview: state.userReviews.item!.length,
+                        countLikes: getLikes(state.userReviews.item!),
+                        books: state.status.item?.ownerBooks,
+                      ),
+                      () {
                         if (user == null) {
                           return ProfileCategoryReviewWidget(
                             onFilterChanged: (value) => reviews = value,
@@ -118,8 +122,13 @@ class ProfilePage extends StatelessWidget {
                   ),
                 );
               case LoadingStatus<User>:
+                return SizedBox(height: deviceHeight, child: const ProfileShimmerCard());
+              case FailedStatus<User>:
                 return SizedBox(
-                    height: deviceHeight, child: const ProfileShimmerCard());
+                    height: deviceHeight,
+                    child: Center(
+                        child: Text(
+                            'Произошла ошибка при получении данных: ${state.status.message}')));
               default:
                 print(state.status.runtimeType);
                 return SizedBox(
@@ -137,14 +146,17 @@ class ProfilePage extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       child: Column(
         children: reviews
-            .map((review) =>
-                ReviewWidget(review: review, isProfileReview: user == null))
+            .map((review) => ReviewWidget(review: review, isProfileReview: user == null))
             .toList(),
       ),
     );
   }
 
-  Widget statsWidget({required int countReview, required countLikes}) {
+  Widget statsWidget(
+      {required int countReview,
+      required countLikes,
+      required List<Book>? books,
+      required BuildContext context}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: _horizontalPadding,
@@ -164,11 +176,18 @@ class ProfilePage extends StatelessWidget {
                   endIndent: 10,
                 ),
                 itemInStatsRow(title: 'Лайков', value: countLikes),
-                // const VerticalDivider(
-                //   indent: 10,
-                //   endIndent: 10,
-                // ),
-                // itemInStatsRow(title: 'Конфет', value: '29'),
+                const VerticalDivider(
+                  indent: 10,
+                  endIndent: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    if (books != null) {
+                      Navigator.of(context).pushNamed('/book-profile', arguments: books);
+                    }
+                  },
+                  child: itemInStatsRow(title: 'Книг', value: books?.length ?? 0),
+                ),
               ],
             ),
           ),

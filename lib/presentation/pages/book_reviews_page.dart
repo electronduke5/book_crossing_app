@@ -1,5 +1,5 @@
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
-import 'package:book_crossing_app/presentation/widgets/review_shimmer_card.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widgets/review_shimmer_card.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,10 +10,10 @@ import '../../data/models/book.dart';
 import '../../data/models/review.dart';
 import '../cubits/models_status.dart';
 import '../di/app_module.dart';
-import '../widgets/profile_image_small.dart';
-import '../widgets/review_text.dart';
-import '../widgets/review_title_widget.dart';
-import '../widgets/review_widget.dart';
+import '../widgets/profile_widgets/profile_image_small.dart';
+import '../widgets/review_widgets/review_text.dart';
+import '../widgets/review_widgets/review_title_widget.dart';
+import '../widgets/review_widgets/review_widget.dart';
 
 class BookReviewPage extends StatelessWidget {
   BookReviewPage({Key? key}) : super(key: key);

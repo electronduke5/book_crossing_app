@@ -1,6 +1,6 @@
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
-import 'package:book_crossing_app/presentation/widgets/review_title_widget.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widgets/review_title_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/search_book_widget.dart';
 import 'package:book_crossing_app/presentation/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../data/models/review.dart';
-import '../widgets/review_text.dart';
+import '../widgets/review_widgets/review_text.dart';
 
 class AddReviewPage extends StatelessWidget {
   AddReviewPage({Key? key}) : super(key: key);

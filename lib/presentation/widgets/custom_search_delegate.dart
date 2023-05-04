@@ -1,5 +1,5 @@
-import 'package:book_crossing_app/presentation/widgets/book_widget.dart';
-import 'package:book_crossing_app/presentation/widgets/review_widget.dart';
+import 'package:book_crossing_app/presentation/widgets/book_widgets/book_widget.dart';
+import 'package:book_crossing_app/presentation/widgets/review_widgets/review_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/models/book.dart';

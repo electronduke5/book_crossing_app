@@ -21,21 +21,16 @@ User _$UserFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$User {
   int get id => throw _privateConstructorUsedError;
-
   String get surname => throw _privateConstructorUsedError;
-
   String get name => throw _privateConstructorUsedError;
-
   String get email => throw _privateConstructorUsedError;
-
   String? get image => throw _privateConstructorUsedError;
-
   Status? get status => throw _privateConstructorUsedError;
-
   String? get phoneNumber => throw _privateConstructorUsedError;
+  List<Book>? get ownerBooks => throw _privateConstructorUsedError;
+  List<Book>? get readerBooks => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
 }
@@ -44,7 +39,6 @@ mixin _$User {
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
-
   @useResult
   $Res call(
       {int id,
@@ -53,18 +47,20 @@ abstract class $UserCopyWith<$Res> {
       String email,
       String? image,
       Status? status,
-      String? phoneNumber});
+      String? phoneNumber,
+      List<Book>? ownerBooks,
+      List<Book>? readerBooks});
 
   $StatusCopyWith<$Res>? get status;
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res, $Val extends User> implements $UserCopyWith<$Res> {
+class _$UserCopyWithImpl<$Res, $Val extends User>
+    implements $UserCopyWith<$Res> {
   _$UserCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -78,6 +74,8 @@ class _$UserCopyWithImpl<$Res, $Val extends User> implements $UserCopyWith<$Res>
     Object? image = freezed,
     Object? status = freezed,
     Object? phoneNumber = freezed,
+    Object? ownerBooks = freezed,
+    Object? readerBooks = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -108,6 +106,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User> implements $UserCopyWith<$Res>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      ownerBooks: freezed == ownerBooks
+          ? _value.ownerBooks
+          : ownerBooks // ignore: cast_nullable_to_non_nullable
+              as List<Book>?,
+      readerBooks: freezed == readerBooks
+          ? _value.readerBooks
+          : readerBooks // ignore: cast_nullable_to_non_nullable
+              as List<Book>?,
     ) as $Val);
   }
 
@@ -128,7 +134,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User> implements $UserCopyWith<$Res>
 abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$$_UserCopyWith(_$_User value, $Res Function(_$_User) then) =
       __$$_UserCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -138,7 +143,9 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String email,
       String? image,
       Status? status,
-      String? phoneNumber});
+      String? phoneNumber,
+      List<Book>? ownerBooks,
+      List<Book>? readerBooks});
 
   @override
   $StatusCopyWith<$Res>? get status;
@@ -160,6 +167,8 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     Object? image = freezed,
     Object? status = freezed,
     Object? phoneNumber = freezed,
+    Object? ownerBooks = freezed,
+    Object? readerBooks = freezed,
   }) {
     return _then(_$_User(
       id: null == id
@@ -190,6 +199,14 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      ownerBooks: freezed == ownerBooks
+          ? _value._ownerBooks
+          : ownerBooks // ignore: cast_nullable_to_non_nullable
+              as List<Book>?,
+      readerBooks: freezed == readerBooks
+          ? _value._readerBooks
+          : readerBooks // ignore: cast_nullable_to_non_nullable
+              as List<Book>?,
     ));
   }
 }
@@ -204,7 +221,11 @@ class _$_User implements _User {
       required this.email,
       this.image,
       this.status,
-      this.phoneNumber});
+      this.phoneNumber,
+      final List<Book>? ownerBooks,
+      final List<Book>? readerBooks})
+      : _ownerBooks = ownerBooks,
+        _readerBooks = readerBooks;
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -222,10 +243,29 @@ class _$_User implements _User {
   final Status? status;
   @override
   final String? phoneNumber;
+  final List<Book>? _ownerBooks;
+  @override
+  List<Book>? get ownerBooks {
+    final value = _ownerBooks;
+    if (value == null) return null;
+    if (_ownerBooks is EqualUnmodifiableListView) return _ownerBooks;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<Book>? _readerBooks;
+  @override
+  List<Book>? get readerBooks {
+    final value = _readerBooks;
+    if (value == null) return null;
+    if (_readerBooks is EqualUnmodifiableListView) return _readerBooks;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'User(id: $id, surname: $surname, name: $name, email: $email, image: $image, status: $status, phoneNumber: $phoneNumber)';
+    return 'User(id: $id, surname: $surname, name: $name, email: $email, image: $image, status: $status, phoneNumber: $phoneNumber, ownerBooks: $ownerBooks, readerBooks: $readerBooks)';
   }
 
   @override
@@ -240,13 +280,26 @@ class _$_User implements _User {
             (identical(other.image, image) || other.image == image) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber));
+                other.phoneNumber == phoneNumber) &&
+            const DeepCollectionEquality()
+                .equals(other._ownerBooks, _ownerBooks) &&
+            const DeepCollectionEquality()
+                .equals(other._readerBooks, _readerBooks));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, surname, name, email, image, status, phoneNumber);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      surname,
+      name,
+      email,
+      image,
+      status,
+      phoneNumber,
+      const DeepCollectionEquality().hash(_ownerBooks),
+      const DeepCollectionEquality().hash(_readerBooks));
 
   @JsonKey(ignore: true)
   @override
@@ -280,31 +333,30 @@ abstract class _User implements User {
       required final String email,
       final String? image,
       final Status? status,
-      final String? phoneNumber}) = _$_User;
+      final String? phoneNumber,
+      final List<Book>? ownerBooks,
+      final List<Book>? readerBooks}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
   @override
   int get id;
-
   @override
   String get surname;
-
   @override
   String get name;
-
   @override
   String get email;
-
   @override
   String? get image;
-
   @override
   Status? get status;
-
   @override
   String? get phoneNumber;
-
+  @override
+  List<Book>? get ownerBooks;
+  @override
+  List<Book>? get readerBooks;
   @override
   @JsonKey(ignore: true)
   _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;
