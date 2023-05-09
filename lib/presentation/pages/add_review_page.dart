@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../data/models/review.dart';
+import '../di/app_module.dart';
+import '../widgets/profile_widgets/profile_image_small.dart';
 import '../widgets/review_widgets/review_text.dart';
 
 class AddReviewPage extends StatelessWidget {
@@ -41,29 +43,31 @@ class AddReviewPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            AppBar(
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                child: ProfileAvatarSmall(
+                    maxRadius: 15, user: AppModule.getProfileHolder().user),
+              ),
+              title: const Text(
+                'Добавление рецензии',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 10),
             Card(
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(20),
-                  top: Radius.circular(0),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               margin: EdgeInsets.zero,
               child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 13.0, right: 13.0, top: 5, bottom: 7),
+                padding:
+                    const EdgeInsets.only(left: 13.0, right: 13.0, top: 5, bottom: 7),
                 child: Form(
                   key: formKey,
                   child: Column(
                     children: [
-                      const Text(
-                        'Добавление рецензии',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 5),
                       const ReviewTitle(),
                       const SizedBox(height: 10),
                       const ReviewText(),
@@ -119,7 +123,7 @@ class AddReviewPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 45),
+            const SizedBox(height: 65),
           ],
         ),
       ),

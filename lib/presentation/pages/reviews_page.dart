@@ -114,11 +114,17 @@ class ReviewsPage extends StatelessWidget {
                                 physics: const BouncingScrollPhysics(),
                                 itemCount: allReviews.length,
                                 itemBuilder: (context, index) {
-                                  return ReviewWidget(
-                                      review: allReviews[index]);
+                                  if (index == allReviews.length - 1) {
+                                    return Column(
+                                      children: [
+                                        ReviewWidget(review: allReviews[index]),
+                                        const SizedBox(height: 65),
+                                      ],
+                                    );
+                                  }
+                                  return ReviewWidget(review: allReviews[index]);
                                 }),
                           ),
-                          const SizedBox(height: 65),
                         ],
                       );
                     default:

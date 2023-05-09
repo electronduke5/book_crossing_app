@@ -78,8 +78,25 @@ class ProfilePage extends StatelessWidget {
                       ),
                       () {
                         if (user == null) {
-                          return ProfileCategoryReviewWidget(
-                            onFilterChanged: (value) => reviews = value,
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Card(
+                                    margin: EdgeInsets.zero,
+                                    child: TextButton(
+                                      onPressed: () {},
+                                      child: const Text("Отдать книгу"),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              ProfileCategoryReviewWidget(
+                                onFilterChanged: (value) => reviews = value,
+                              ),
+                            ],
                           );
                         }
                         return const SizedBox();
@@ -182,7 +199,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    if (books != null) {
+                    if (books != null && books.isNotEmpty) {
                       Navigator.of(context).pushNamed('/book-profile', arguments: books);
                     }
                   },

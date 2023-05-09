@@ -73,7 +73,7 @@ class BookProfilePage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
-                              child: Text('Книги пользователя ${owner?.getFullName()}')),
+                              child: Text('Книги пользователя ${owner?.getFullName() ?? ''}')),
                         ),
                       ),
                     ),
