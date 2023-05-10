@@ -5,14 +5,19 @@ import 'package:book_crossing_app/presentation/cubits/author/author_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/book/book_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/genre/genre_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/like/like_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/point/point_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/review/review_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/status/status_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/theme/theme_cubit.dart';
+import 'package:book_crossing_app/presentation/cubits/transfer/transfer_cubit.dart';
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/add_author_page.dart';
 import 'package:book_crossing_app/presentation/pages/add_book_page.dart';
+import 'package:book_crossing_app/presentation/pages/add_point_page.dart';
 import 'package:book_crossing_app/presentation/pages/book_reviews_page.dart';
 import 'package:book_crossing_app/presentation/pages/books_profile_page.dart';
+import 'package:book_crossing_app/presentation/pages/create_transfer_page.dart';
 import 'package:book_crossing_app/presentation/pages/main_page.dart';
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_in_page.dart';
@@ -126,22 +131,37 @@ class _MyAppState extends State<MyApp> {
                     ),
                 '/book-review': (context) => MultiBlocProvider(
                       providers: [
-                        BlocProvider<LikeCubit>(
-                            create: (context) => LikeCubit()),
-                        BlocProvider<ReviewCubit>(
-                            create: (context) => ReviewCubit()),
+                        BlocProvider<LikeCubit>(create: (context) => LikeCubit()),
+                        BlocProvider<ReviewCubit>(create: (context) => ReviewCubit()),
                       ],
                       child: BookReviewPage(),
                     ),
+                // child: MainPage(
+                //       bodyWidget: BookReviewPage(),
+                //     ),
+                //   ),
                 '/book-profile': (context) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider<LikeCubit>(
-                        create: (context) => LikeCubit()),
-                    BlocProvider<ReviewCubit>(
-                        create: (context) => ReviewCubit()),
-                  ],
-                  child: BookProfilePage(),
-                ),
+                      providers: [
+                        BlocProvider<LikeCubit>(create: (context) => LikeCubit()),
+                        BlocProvider<ReviewCubit>(create: (context) => ReviewCubit()),
+                        BlocProvider<ProfileCubit>(
+                            create: (context) => ProfileCubit()..loadProfile()),
+                        BlocProvider<BookCubit>(
+                            create: (context) => BookCubit()..loadBooks()),
+                      ],
+                      child: BookProfilePage(),
+                    ),
+                '/create-transfer': (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider<TransferCubit>(create: (context) => TransferCubit()),
+                        BlocProvider<BookCubit>(create: (context) => BookCubit()),
+                        BlocProvider<PointCubit>(
+                            create: (context) => PointCubit()
+                              ..loadUsersPoints(AppModule.getProfileHolder().user)),
+                        BlocProvider<StatusCubit>(create: (context) => StatusCubit()),
+                      ],
+                      child: CreateTransferPage(),
+                    ),
                 '/add-book': (context) => MultiBlocProvider(
                       providers: [
                         BlocProvider<AuthorCubit>(
@@ -153,6 +173,12 @@ class _MyAppState extends State<MyApp> {
                       ],
                       child: AddBookPage(),
                     ),
+                '/add-point': (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider<PointCubit>(create: (context) => PointCubit()),
+                  ],
+                  child: AddPointPage(),
+                ),
                 '/profile-page': (context) => MultiBlocProvider(
                       providers: [
                         BlocProvider<LikeCubit>(

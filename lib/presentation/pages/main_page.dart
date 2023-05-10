@@ -4,15 +4,17 @@ import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 import '../../data/models/book.dart';
 import 'add_review_page.dart';
 import 'books_page.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key? key, this.selectedIndex}) : super(key: key);
+  MainPage({Key? key, this.selectedIndex, this.bodyWidget}) : super(key: key);
 
   int? selectedIndex = 0;
+  Widget? bodyWidget;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -20,7 +22,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late int _selectedIndex = widget.selectedIndex ?? 0;
-
 
   static final List<Widget> _widgetOptions = <Widget>[
     ReviewsPage(),
@@ -35,9 +36,17 @@ class _MainPageState extends State<MainPage> {
 
   void _onItemTapped(int index) async {
     setState(() {
+      Logger logger = Logger();
+      logger.i('index: $index \n_selectedIndex: $_selectedIndex\nwidget.bodyWidget: ${widget.bodyWidget}');
+      if(widget.bodyWidget  != null){
+        widget.bodyWidget = null;
+        _selectedIndex = index;
+        Navigator.of(context).pushNamed('/main');
+      }
       _selectedIndex = index;
     });
   }
+  final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +54,13 @@ class _MainPageState extends State<MainPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            _widgetOptions.elementAt(_selectedIndex),
+            () {
+              if (widget.bodyWidget != null) {
+                return widget.bodyWidget!;
+              }
+              return _widgetOptions.elementAt(_selectedIndex);
+            }(),
+            //_widgetOptions.elementAt(_selectedIndex),
             Align(
               alignment: Alignment.bottomCenter,
               child: buildBottomNavBar(context),

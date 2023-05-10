@@ -87,7 +87,9 @@ class ProfilePage extends StatelessWidget {
                                   child: Card(
                                     margin: EdgeInsets.zero,
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context).pushNamed('/create-transfer');
+                                      },
                                       child: const Text("Отдать книгу"),
                                     ),
                                   ),

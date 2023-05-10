@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/author.dart';
 import '../../data/models/genre.dart';
 import '../cubits/author/author_cubit.dart';
+import '../di/app_module.dart';
 import '../widgets/loading_widget.dart';
+import '../widgets/profile_widgets/profile_image_small.dart';
 import '../widgets/search_author_widget.dart';
 
 class AddBookPage extends StatelessWidget {
@@ -40,65 +42,81 @@ class AddBookPage extends StatelessWidget {
                             child: Text(author.getInitials()),
                           ))
                       .toList();
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                              'Для начала нужно добавить автора новой книги:'),
-                          const SizedBox(height: 10),
-                          SearchAuthorField(
-                              authorItems: menuItemsAuthor,
-                              bookCubit: context.read<BookCubit>()),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            onChanged: (value) =>
-                                context.read<BookCubit>().titleChanged(value),
-                            validator: (value) {
-                              if (value?.trim().isNotEmpty == true) {
-                                return null;
-                              }
-                              return "Это обязательное поле";
-                            },
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              labelText: 'Название книги',
-                              prefixIcon: const Icon(Icons.book_outlined),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              hintText: 'Война и мир',
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          genresDropdown(context),
-                          TextButton(
-                            onPressed: () async {
-                              if (_formKey.currentState?.validate() ?? false) {
-                                await context
-                                    .read<BookCubit>()
-                                    .addBook()
-                                    .then((value) {
-                                  if (value != null) {
-                                    Navigator.pop(context, value);
-                                  }
-                                });
-                              }
-                            },
-                            child: const Text("Далее"),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context, null);
-                            },
-                            child: const Text("Назад"),
-                          ),
-                        ],
+                  return Column(
+                    children: [
+                      AppBar(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                          child: ProfileAvatarSmall(
+                              maxRadius: 15, user: AppModule.getProfileHolder().user),
+                        ),
+                        title: const Text(
+                          'Добавление книги',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                  'Для начала нужно добавить автора новой книги:'),
+                              const SizedBox(height: 10),
+                              SearchAuthorField(
+                                  authorItems: menuItemsAuthor,
+                                  bookCubit: context.read<BookCubit>()),
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                onChanged: (value) =>
+                                    context.read<BookCubit>().titleChanged(value),
+                                validator: (value) {
+                                  if (value?.trim().isNotEmpty == true) {
+                                    return null;
+                                  }
+                                  return "Это обязательное поле";
+                                },
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(horizontal: 10.0),
+                                  labelText: 'Название книги',
+                                  prefixIcon: const Icon(Icons.book_outlined),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  hintText: 'Война и мир',
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              genresDropdown(context),
+                              TextButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState?.validate() ?? false) {
+                                    await context
+                                        .read<BookCubit>()
+                                        .addBook()
+                                        .then((value) {
+                                      if (value != null) {
+                                        Navigator.pop(context, value);
+                                      }
+                                    });
+                                  }
+                                },
+                                child: const Text("Далее"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, null);
+                                },
+                                child: const Text("Назад"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 default:
                   return const Center(child: CircularProgressIndicator());

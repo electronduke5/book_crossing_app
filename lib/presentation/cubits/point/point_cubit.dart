@@ -53,7 +53,7 @@ class PointCubit extends Cubit<PointState> {
     }
   }
 
-  Future<void> createPoint({
+  Future<PickUpPoint?> createPoint({
     required String city,
     String? street,
     String? house,
@@ -73,10 +73,12 @@ class PointCubit extends Cubit<PointState> {
         user: user,
       );
       emit(state.copyWith(createPointStatus: LoadedStatus<PickUpPoint>(point)));
+      return point;
     } catch (exception) {
       emit(state.copyWith(
           createPointStatus:
               FailedStatus(state.createPointStatus.message ?? exception.toString())));
+      return null;
     }
   }
 

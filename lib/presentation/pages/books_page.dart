@@ -120,11 +120,18 @@ class BooksPage extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       itemCount: allBooks.length,
                       itemBuilder: (context, index) {
+                        if (index == allBooks.length - 1) {
+                          return Column(
+                            children: [
+                              BookWidget(book: allBooks[index]),
+                              const SizedBox(height: 65),
+                            ],
+                          );
+                        }
                         return BookWidget(book: allBooks[index]);
                       },
                     ),
                   ),
-                  const SizedBox(height: 65),
                 ],
               );
             default:

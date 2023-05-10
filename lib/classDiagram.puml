@@ -1,0 +1,53 @@
+@startuml
+set namespaceSeparator ::
+abstract class "book_crossing_app::AuthorRepository" {
+  +Future<List<Author>> getAllAuthors()
+  +Future<Author> createAuthor()
+}
+
+abstract class "book_crossing_app::AuthRepository" {
+  +Future<User> signIn()
+  +Future<User> signUp()
+}
+
+abstract class "book_crossing_app::BookRepository" {
+  +Future<List<Book>> getAllBooks()
+  +Future<Book> createBook()
+}
+
+abstract class "book_crossing_app::GenreRepository" {
+  +Future<List<Genre>> getAllGenres()
+}
+
+abstract class "book_crossing_app::LikeRepository" {
+  +Future<Review> likeReview()
+}
+
+abstract class "book_crossing_app::PreferencesRepository" {
+  +Future<String?> getUser()
+  +Future<void> saveProfile()
+  +Future<void> saveTheme()
+  +Future<ThemeMode> loadThemeMode()
+  +Future<void> removeSavedProfile()
+}
+
+abstract class "book_crossing_app::ProfileRepository" {
+  +Future<User> getProfile()
+  +Future<User> updateProfile()
+  +Future<User> removeImage()
+}
+
+abstract class "book_crossing_app::ReviewRepository" {
+  +Future<List<Review>> getUsersReview()
+  +Future<List<Review>> getAllReviews()
+  +Future<Review> addReview()
+  +Future<Review> archiveReview()
+  +Future<Review> unzipReview()
+  +Future<void> deleteReview()
+}
+
+class "book_crossing_app::main.dart::MyApp" {
+  +Widget build()
+}
+
+@enduml

@@ -102,8 +102,7 @@ class BookReviewPage extends StatelessWidget {
                                     },
                                   );
                           default:
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return const Center(child: CircularProgressIndicator());
                         }
                       },
                     ),
