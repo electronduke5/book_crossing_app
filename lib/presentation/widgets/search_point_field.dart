@@ -5,8 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_choices/search_choices.dart';
 
+import '../di/app_module.dart';
+
 class SearchPointField extends StatefulWidget {
-  const SearchPointField({Key? key}) : super(key: key);
+  SearchPointField({Key? key, required this.onChanged, this.userPoints}) : super(key: key);
+
+  List<PickUpPoint>? userPoints;
+
+  final ValueChanged<PickUpPoint?> onChanged;
 
   @override
   State<SearchPointField> createState() => _SearchPointFieldState();
@@ -18,6 +24,20 @@ class _SearchPointFieldState extends State<SearchPointField> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PointCubit, PointState>(builder: (context, state) {
+          () {
+        print(widget.userPoints);
+        if (widget.userPoints != null) {
+          List<PickUpPoint> pointItems = widget.userPoints!;
+          List<DropdownMenuItem<PickUpPoint>> menuItems = pointItems
+              .map((point) => DropdownMenuItem<PickUpPoint>(
+            value: point,
+            child: Text(
+                '${point.city}, ${point.street},д. ${point.house}, кв. ${point.flat}'),
+          ))
+              .toList();
+          return buildSearchPointWidget(menuItems, context);
+        }
+      }();
       print('state.userPoints.runtimeType: ${state.userPoints.runtimeType}');
       switch (state.userPoints.runtimeType) {
         case LoadingStatus<List<PickUpPoint>>:
@@ -50,16 +70,47 @@ class _SearchPointFieldState extends State<SearchPointField> {
         if (value == null) {
           return 'Это обязательное поле';
         }
+        return null;
       },
       items: menuItems,
       value: _selectedItem,
       hint: 'Место',
-      searchHint: 'Выберите точку или добавьте новую',
-      dialogBox: true,
+      searchHint: 'Выберите точку',
+      dialogBox: false,
       isExpanded: true,
-      //menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
-      doneButton: TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text("Назад"),),
-      closeButton: () {},
+      menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
+      doneButton: TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text("Назад"),
+      ),
+      closeButton:
+          (PickUpPoint? value, BuildContext closeContext, Function updateParent) {
+        return TextButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed('/add-point').then((value) async {
+              if (value != null) {
+                menuItems.add(DropdownMenuItem<PickUpPoint>(
+                  value: value as PickUpPoint,
+                  child: Text(
+                      '${value.city},ул. ${value.street}, д. ${value.house}, кв. ${value
+                          .flat}'),
+                ));
+                if (menuItems.indexWhere((element) => element.value == value) != -1) {
+                  context
+                      .read<PointCubit>()
+                      .loadUsersPoints(AppModule
+                      .getProfileHolder()
+                      .user);
+                  updateParent(value, true);
+                }
+              }
+            });
+          },
+          child: const Text('Добавить новую точку'),
+        );
+      },
       disabledHint: (Function updateParent) {
         return (TextButton(
           onPressed: () {
@@ -67,7 +118,8 @@ class _SearchPointFieldState extends State<SearchPointField> {
               updateParent(value);
             });
           },
-          child: Text("У вас ещё нет мест, где вы можете отдать книгу, ее можно создать здесь"),
+          child: const Text(
+              "У вас ещё нет мест, где вы можете отдать книгу, ее можно создать здесь"),
         ));
       },
       displayItem: (DropdownMenuItem item, selected, Function updateParent) {
@@ -83,11 +135,12 @@ class _SearchPointFieldState extends State<SearchPointField> {
         );
       },
       autofocus: false,
-      onChanged: (PickUpPoint? value, Function? pop) {
-        //context.read<ReviewCubit>().bookChanged(value!);
+      onChanged: (PickUpPoint? value, Function? pop) async {
+        //await context.read<TransferCubit>().pointChanged(value!);
         setState(() {
           if (value is! NotGiven) {
             _selectedItem = value;
+            widget.onChanged(value);
           }
           if (pop != null && value is! NotGiven && value != null) {
             pop();

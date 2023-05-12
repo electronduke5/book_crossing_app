@@ -5,16 +5,13 @@ import 'package:search_choices/search_choices.dart';
 import '../../data/models/book.dart';
 import '../cubits/book/book_cubit.dart';
 import '../cubits/models_status.dart';
-import '../cubits/review/review_cubit.dart';
 
 class SearchBookField extends StatefulWidget {
-  //SearchBookField({Key? key, required this.formKey}) : super(key: key);
-  SearchBookField({Key? key, this.userBooks}) : super(key: key);
+  SearchBookField({Key? key, this.userBooks, required this.onChanged}) : super(key: key);
 
   List<Book>? userBooks;
 
-  //List<DropdownMenuItem<Book>> bookItems;
-  //GlobalKey<FormState> formKey;
+  final ValueChanged<Book?> onChanged;
 
   @override
   State<SearchBookField> createState() => _SearchBookFieldState();
@@ -63,9 +60,9 @@ class _SearchBookFieldState extends State<SearchBookField> {
             List<Book> bookItems = widget.userBooks!;
             List<DropdownMenuItem<Book>> menuItems = bookItems
                 .map((book) => DropdownMenuItem<Book>(
-                      value: book,
+              value: book,
                       child: Text(
-                          '${book.title}  - ${book.author.name} ${book.author.surname}'),
+                          '${book.id}) ${book.title}  - ${book.author.name} ${book.author.surname}'),
                     ))
                 .toList();
             return buildSearchBookWidget(menuItems, context);
@@ -87,10 +84,15 @@ class _SearchBookFieldState extends State<SearchBookField> {
       value: _selectedItem,
       hint: 'Книга',
       searchHint: 'Выберите книгу',
-      dialogBox: true,
+      dialogBox: false,
       isExpanded: true,
-      doneButton: TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text("Назад"),),
-      //menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
+      doneButton: TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text("Назад"),
+      ),
+      menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
       closeButton: (Book? value, BuildContext closeContext, Function updateParent) {
         return (menuItems.length >= 100
             ? "Закрыть"
@@ -121,7 +123,7 @@ class _SearchBookFieldState extends State<SearchBookField> {
               updateParent(value);
             });
           },
-          child: Text("No choice, click to add one"),
+          child: const Text("No choice, click to add one"),
         ));
       },
       displayItem: (DropdownMenuItem item, selected, Function updateParent) {
@@ -138,10 +140,11 @@ class _SearchBookFieldState extends State<SearchBookField> {
       },
       autofocus: false,
       onChanged: (Book? value, Function? pop) {
-        context.read<ReviewCubit>().bookChanged(value!);
+        //context.read<ReviewCubit>().bookChanged(value!);
         setState(() {
           if (value is! NotGiven) {
             _selectedItem = value;
+            widget.onChanged(value);
           }
           if (pop != null && value is! NotGiven && value != null) {
             pop();

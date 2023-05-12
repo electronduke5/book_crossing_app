@@ -154,7 +154,10 @@ class _MyAppState extends State<MyApp> {
                 '/create-transfer': (context) => MultiBlocProvider(
                       providers: [
                         BlocProvider<TransferCubit>(create: (context) => TransferCubit()),
-                        BlocProvider<BookCubit>(create: (context) => BookCubit()),
+                        BlocProvider<BookCubit>(
+                            create: (context) => BookCubit()
+                              ..loadBooksForTransfer(
+                                  user: AppModule.getProfileHolder().user)),
                         BlocProvider<PointCubit>(
                             create: (context) => PointCubit()
                               ..loadUsersPoints(AppModule.getProfileHolder().user)),

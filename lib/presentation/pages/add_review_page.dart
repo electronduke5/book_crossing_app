@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../data/models/book.dart';
 import '../../data/models/review.dart';
 import '../di/app_module.dart';
 import '../widgets/profile_widgets/profile_image_small.dart';
@@ -77,7 +78,11 @@ class AddReviewPage extends StatelessWidget {
                         style: TextStyle(fontSize: 18),
                       ),
                       //SearchBookField(formKey: formKey),
-                      SearchBookField(),
+                      SearchBookField(
+                        onChanged: (Book? value)async {
+                          await context.read<ReviewCubit>().bookChanged(value!);
+                        },
+                      ),
                       const SizedBox(height: 10),
                       const Align(
                         alignment: Alignment.centerLeft,

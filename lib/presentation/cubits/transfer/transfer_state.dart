@@ -6,11 +6,16 @@ class TransferState {
   final ApiStatus<List<Transfer>> bookTransfersStatus;
   final ApiStatus<Transfer> createTransferStatus;
 
+  final PickUpPoint? point;
+  final Book? book;
+
   TransferState({
     this.transfersStatus = const IdleStatus(),
     this.userTransfersStatus = const IdleStatus(),
     this.bookTransfersStatus = const IdleStatus(),
     this.createTransferStatus = const IdleStatus(),
+    this.point,
+    this.book,
   });
 
   TransferState copyWith({
@@ -18,12 +23,16 @@ class TransferState {
     ApiStatus<List<Transfer>>? userTransfersStatus,
     ApiStatus<List<Transfer>>? bookTransfersStatus,
     ApiStatus<Transfer>? createTransferStatus,
+    PickUpPoint? point,
+    Book? book,
   }) {
     return TransferState(
       bookTransfersStatus: bookTransfersStatus ?? this.bookTransfersStatus,
       createTransferStatus: createTransferStatus ?? this.createTransferStatus,
       userTransfersStatus: userTransfersStatus ?? this.userTransfersStatus,
       transfersStatus: transfersStatus ?? this.transfersStatus,
+      point: point ?? this.point,
+      book: book ?? this.book,
     );
   }
 }

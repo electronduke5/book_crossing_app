@@ -14,6 +14,14 @@ class TransferCubit extends Cubit<TransferState> {
 
   final _repository = AppModule.getTransferRepository();
 
+  Future<void> pointChanged(PickUpPoint? point) async {
+    emit(state.copyWith(point: point));
+  }
+
+  Future<void> bookChanged(Book? book) async {
+    emit(state.copyWith(book: book));
+  }
+
   Future<void> loadAllTransfers() async {
     emit(state.copyWith(transfersStatus: LoadingStatus()));
     try {
@@ -59,7 +67,7 @@ class TransferCubit extends Cubit<TransferState> {
         book: book,
         pickUpPoint: point,
       );
-      emit(state.copyWith(createTransferStatus: LoadedStatus(transfer)));
+      emit(state.copyWith(createTransferStatus: LoadedStatus<Transfer>(transfer)));
     } catch (exception) {
       emit(state.copyWith(
           createTransferStatus:

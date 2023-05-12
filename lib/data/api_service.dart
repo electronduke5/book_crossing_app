@@ -12,7 +12,7 @@ mixin ApiService<T extends Object> {
   Future<List<T>> getAll({
     required T Function(Map<String, dynamic>) fromJson,
     Map<String, dynamic>? params,
-    int? id,
+    dynamic id,
   }) async {
     final dio = Dio(
       BaseOptions(
@@ -22,8 +22,8 @@ mixin ApiService<T extends Object> {
       ),
     );
     Logger logger = Logger();
-    logger.i('${ApiConstUrl.baseUrl}$apiRoute');
-    final response = await dio.get('${ApiConstUrl.baseUrl}$apiRoute');
+    logger.i('${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
+    final response = await dio.get('${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
     logger.d('response $response');
     if (response.statusCode != HttpStatus.ok) {
       return [];
@@ -88,6 +88,7 @@ mixin ApiService<T extends Object> {
         data: formData,
       );
       log('response.statusCode: ${response.statusCode}');
+      log('response.data: ${response.data}');
       if (response.statusCode != HttpStatus.ok &&
           response.statusCode != HttpStatus.created) {
         Logger().e(response.statusCode);

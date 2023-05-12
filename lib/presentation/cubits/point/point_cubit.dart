@@ -31,7 +31,8 @@ class PointCubit extends Cubit<PointState> {
       emit(state.copyWith(userPoints: LoadedStatus(points)));
       return points;
     } catch (exception) {
-      emit(state.copyWith(userPoints: FailedStatus(exception.toString())));
+      emit(state.copyWith(userPoints: FailedStatus(state.userPoints.message ?? exception.toString())));
+      print('FAILED GET POINT: ${state.userPoints.message ?? exception.toString()}');
       return null;
     }
   }
@@ -64,6 +65,7 @@ class PointCubit extends Cubit<PointState> {
     final repository = AppModule.getPointRepository();
     emit(state.copyWith(createPointStatus: LoadingStatus<PickUpPoint>()));
     try {
+      print('city: $city \nstreet: $street \nhouse: $house \nflat:$flat comment: $comment');
       final point = await repository.createPoint(
         city: city,
         street: street,

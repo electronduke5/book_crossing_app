@@ -12,25 +12,43 @@ part 'book_state.dart';
 class BookCubit extends Cubit<BookState> {
   BookCubit() : super(BookState());
 
+  final _repository = AppModule.getBookRepository();
+
   Future<List<Book>?> loadBooks() async {
-    final repository = AppModule.getBookRepository();
     emit(state.copyWith(booksStatus: LoadingStatus()));
     try {
-      final List<Book> books = await repository.getAllBooks();
+      final List<Book> books = await _repository.getAllBooks();
       emit(state.copyWith(booksStatus: LoadedStatus(books)));
       return books;
     } catch (exception) {
+      emit(state.copyWith(booksStatus: FailedStatus(state.booksStatus.message)));
+      return null;
+    }
+  }
+
+  Future<List<Book>?> loadBooksForTransfer({required User user}) async {
+    emit(state.copyWith(booksForTransferStatus: LoadingStatus()));
+    try {
+      final List<Book>? books =
+          await _repository.getUserBooksForTransfer(userId: user.id);
+      emit(state.copyWith(booksForTransferStatus: LoadedStatus(books)));
+      return books;
+    } catch (exception) {
       emit(
-          state.copyWith(booksStatus: FailedStatus(state.booksStatus.message)));
+        state.copyWith(
+          booksForTransferStatus: FailedStatus(
+            state.booksForTransferStatus?.message ?? exception.toString(),
+          ),
+        ),
+      );
       return null;
     }
   }
 
   Future<Book?> addBook() async {
-    final repository = AppModule.getBookRepository();
     emit(state.copyWith(addBookStatus: LoadingStatus<Book>()));
     try {
-      final book = await repository.createBook(
+      final book = await _repository.createBook(
         state.title,
         state.description,
         state.image,

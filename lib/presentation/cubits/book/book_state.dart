@@ -3,6 +3,7 @@ part of 'book_cubit.dart';
 class BookState {
   final ApiStatus<List<Book>> booksStatus;
   final ApiStatus<Book> addBookStatus;
+  final ApiStatus<List<Book>>? booksForTransferStatus;
   final String title;
   final String description;
   final String image;
@@ -15,6 +16,7 @@ class BookState {
   BookState({
     this.booksStatus = const IdleStatus(),
     this.addBookStatus = const IdleStatus(),
+    this.booksForTransferStatus = const IdleStatus(),
     this.genre,
     this.author,
     this.title = '',
@@ -25,6 +27,7 @@ class BookState {
 
   BookState copyWith({
     ApiStatus<List<Book>>? booksStatus,
+    ApiStatus<List<Book>>? booksForTransferStatus,
     ApiStatus<Book>? addBookStatus,
     String? title,
     String? description,
@@ -35,6 +38,7 @@ class BookState {
   }) =>
       BookState(
         booksStatus: booksStatus ?? this.booksStatus,
+        booksForTransferStatus: booksForTransferStatus ?? this.booksForTransferStatus,
         addBookStatus: addBookStatus ?? this.addBookStatus,
         title: title ?? this.title,
         image: image ?? this.image,

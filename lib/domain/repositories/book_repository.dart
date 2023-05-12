@@ -6,6 +6,7 @@ import '../../data/models/user.dart';
 
 abstract class BookRepository {
   Future<List<Book>> getAllBooks();
+  Future<List<Book>?> getUserBooksForTransfer({required int userId});
 
   // Future<List<Book>> getReaderBooks(User user);
   //

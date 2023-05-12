@@ -28,77 +28,91 @@ class _ProfileCategoryReviewWidgetState
         margin: EdgeInsets.zero,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Column(
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    if (isAllReview) return;
-                    setState(() {
-                      isAllReview = true;
-                    });
-                    await context.read<ReviewCubit>().loadUserReview().then(
-                      (value) {
-                        widget.onFilterChanged(value!);
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (isAllReview) return;
+                        setState(() {
+                          isAllReview = true;
+                        });
+                        await context.read<ReviewCubit>().loadUserReview().then(
+                          (value) {
+                            widget.onFilterChanged(value!);
+                          },
+                        );
                       },
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                        backgroundColor: isAllReview
+                            ? Theme.of(context).colorScheme.inversePrimary
+                            : Colors.transparent,
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
+                      ),
+                      child: Text(
+                        'Мои ревью',
+                        style: TextStyle(
+                          fontWeight: isAllReview ? FontWeight.bold : FontWeight.normal,
+                          color: isAllReview
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                     ),
-                    elevation: 0,
-                    backgroundColor: isAllReview
-                        ? Theme.of(context).colorScheme.inversePrimary
-                        : Colors.transparent,
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
-                  ),
-                  child: Text(
-                    'Мои ревью',
-                    style: TextStyle(
-                      fontWeight: isAllReview ? FontWeight.bold : FontWeight.normal,
-                      color: isAllReview
-                          ? Theme.of(context).colorScheme.onPrimary
-                          : Theme.of(context).colorScheme.primary,
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (!isAllReview) return;
+                        setState(() {
+                          isAllReview = false;
+                        });
+                        await context
+                            .read<ReviewCubit>()
+                            .loadUserReview(isArchived: 1)
+                            .then((value) {
+                          widget.onFilterChanged(value!);
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                        backgroundColor: isAllReview
+                            ? Colors.transparent
+                            : Theme.of(context).colorScheme.inversePrimary,
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
+                      ),
+                      child: Text(
+                        'Архив ревью',
+                        style: TextStyle(
+                          fontWeight: isAllReview ? FontWeight.normal : FontWeight.bold,
+                          color: isAllReview
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (!isAllReview) return;
-                    setState(() {
-                      isAllReview = false;
-                    });
-                    await context
-                        .read<ReviewCubit>()
-                        .loadUserReview(isArchived: 1)
-                        .then((value) {
-                      widget.onFilterChanged(value!);
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 0,
-                    backgroundColor: isAllReview
-                        ? Colors.transparent
-                        : Theme.of(context).colorScheme.inversePrimary,
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
-                  ),
-                  child: Text(
-                    'Архив ревью',
-                    style: TextStyle(
-                      fontWeight: isAllReview ? FontWeight.normal : FontWeight.bold,
-                      color: isAllReview
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onPrimary,
-                    ),
-              ),
+                () {
+                  if (!isAllReview) {
+                    return const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                          'В архиве хранятся ревью, которые вы решили скрыть. Вы всегда можете восстановить их либо же полностью удалить. Записи из архива доступны только вам.'),
+                    );
+                  }
+                  return const SizedBox();
+                }(),
+              ],
             ),
-          ],
-        ),
-      )),
+          )),
     );
   }
 }
