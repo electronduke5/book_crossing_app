@@ -42,15 +42,19 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<User?> updateProfile(
-      {String? surname, String? name, File? image}) async {
+      {String? surname, String? name, File? image, String? phoneNumber}) async {
     final repository = AppModule.getProfileRepository();
     final reviewRepo = AppModule.getReviewRepository();
     emit(state.copyWith(status: LoadingStatus()));
     try {
       final updatedUser = await repository.updateProfile(
-          surname: surname, name: name, image: image);
+          surname: surname, name: name, image: image, phoneNumber: phoneNumber);
       final userReviews = await reviewRepo.getUsersReview(id: updatedUser.id);
+
+      print('oldUser: ${AppModule.getProfileHolder().user}');
       AppModule.getProfileHolder().user = updatedUser;
+
+      print('updatedUser: ${updatedUser}');
       emit(state.copyWith(
         status: LoadedStatus(updatedUser),
         userReviews: LoadedStatus(userReviews),

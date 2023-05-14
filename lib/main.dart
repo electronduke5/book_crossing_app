@@ -162,6 +162,7 @@ class _MyAppState extends State<MyApp> {
                             create: (context) => PointCubit()
                               ..loadUsersPoints(AppModule.getProfileHolder().user)),
                         BlocProvider<StatusCubit>(create: (context) => StatusCubit()),
+                        BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
                       ],
                       child: CreateTransferPage(),
                     ),

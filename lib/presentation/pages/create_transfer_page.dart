@@ -1,14 +1,17 @@
 import 'dart:developer';
 
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
+import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/transfer/transfer_cubit.dart';
 import 'package:book_crossing_app/presentation/widgets/search_book_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../data/models/book.dart';
 import '../../data/models/pick_up_point.dart';
 import '../../data/models/transfer.dart';
+import '../../data/models/user.dart';
 import '../cubits/book/book_cubit.dart';
 import '../cubits/point/point_cubit.dart';
 import '../di/app_module.dart';
@@ -21,8 +24,14 @@ class CreateTransferPage extends StatelessWidget {
   CreateTransferPage({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> phoneNumberFormKey = GlobalKey<FormState>();
   List<Book>? userBooks;
   List<PickUpPoint>? userPoints;
+  final _phoneMask = MaskTextInputFormatter(
+      mask: '+7 (###) ###-##-##',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
+  TextEditingController phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -112,16 +121,20 @@ class CreateTransferPage extends StatelessWidget {
                   const SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: () async {
-                      print(
-                          'book: ${context.read<TransferCubit>().state.book ?? 'Пусто'}');
-                      print(
-                          'point: ${context.read<TransferCubit>().state.point ?? 'Пусто'}');
-                      if (formKey.currentState?.validate() ?? false) {
-                        await context.read<TransferCubit>().createTransfer(
-                              user: AppModule.getProfileHolder().user,
-                              book: context.read<TransferCubit>().state.book!,
-                              point: context.read<TransferCubit>().state.point!,
-                            );
+                      if (AppModule.getProfileHolder().user.phoneNumber == null) {
+                        addPhoneNumberSheet(context);
+                      } else {
+                        print(
+                            'book: ${context.read<TransferCubit>().state.book ?? 'Пусто'}');
+                        print(
+                            'point: ${context.read<TransferCubit>().state.point ?? 'Пусто'}');
+                        if (formKey.currentState?.validate() ?? false) {
+                          await context.read<TransferCubit>().createTransfer(
+                                user: AppModule.getProfileHolder().user,
+                                book: context.read<TransferCubit>().state.book!,
+                                point: context.read<TransferCubit>().state.point!,
+                              );
+                        }
                       }
                     },
                     child: const Text('Создать'),
@@ -132,6 +145,97 @@ class CreateTransferPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  PersistentBottomSheetController<dynamic> addPhoneNumberSheet(BuildContext context) {
+    return showBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (context, state) {
+              return Form(
+                key: phoneNumberFormKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        'Чтобы отдать книгу нужно добавить номер телефона.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Divider(),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: TextFormField(
+                          controller: phoneController,
+                          inputFormatters: [_phoneMask],
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Введите номер телефона';
+                            }
+                            return null;
+                          },
+                          maxLines: 1,
+                          maxLength: 18,
+                          decoration: InputDecoration(
+                            counterText: '',
+                            hintText: '+7 (000) 000-00-00',
+                            labelText: 'Номер телефона',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (phoneNumberFormKey.currentState!.validate()) {
+                            final phoneNumber = phoneController.value.text;
+                            phoneController.clear();
+                            await context
+                                .read<ProfileCubit>()
+                                .updateProfile(phoneNumber: phoneNumber)
+                                .then((value) {
+                                  if(value != null){
+                                    AppModule.getProfileHolder().user = value;
+                                  }
+                              SnackBarInfo.show(
+                                  context: context,
+                                  message: 'Номер телефона обновлен',
+                                  isSuccess: true);
+                              Navigator.of(context).pop();
+                            });
+                          }
+                        },
+                        child: () {
+                          if (state.status is LoadingStatus<User>) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return const Text('Сохранить');
+                        }(),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

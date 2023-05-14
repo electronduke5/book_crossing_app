@@ -16,6 +16,7 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
           ? null
           : Status.fromJson(json['status'] as Map<String, dynamic>),
       phoneNumber: json['phoneNumber'] as String?,
+      transfersCount: json['transfersCount'] as int?,
       ownerBooks: (json['ownerBooks'] as List<dynamic>?)
           ?.map((e) => Book.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -32,6 +33,7 @@ Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
       'image': instance.image,
       'status': instance.status,
       'phoneNumber': instance.phoneNumber,
+      'transfersCount': instance.transfersCount,
       'ownerBooks': instance.ownerBooks,
       'readerBooks': instance.readerBooks,
     };

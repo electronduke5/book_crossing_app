@@ -73,7 +73,7 @@ class ProfilePage extends StatelessWidget {
                       statsWidget(
                         context: context,
                         countReview: state.userReviews.item!.length,
-                        countLikes: getLikes(state.userReviews.item!),
+                        countTransfers: state.status.item!.transfersCount,
                         books: state.status.item?.ownerBooks,
                       ),
                       () {
@@ -173,7 +173,7 @@ class ProfilePage extends StatelessWidget {
 
   Widget statsWidget(
       {required int countReview,
-      required countLikes,
+      required countTransfers,
       required List<Book>? books,
       required BuildContext context}) {
     return Padding(
@@ -194,7 +194,7 @@ class ProfilePage extends StatelessWidget {
                   indent: 10,
                   endIndent: 10,
                 ),
-                itemInStatsRow(title: 'Лайков', value: countLikes),
+                itemInStatsRow(title: 'Объявлений', value: countTransfers),
                 const VerticalDivider(
                   indent: 10,
                   endIndent: 10,
@@ -301,12 +301,12 @@ class ProfilePage extends StatelessWidget {
     return showBottomSheet(
       context: context,
       builder: (context) => SafeArea(
-        child: SizedBox(
-          height: 350,
-          child: BlocBuilder<ProfileCubit, ProfileState>(
-            builder: (context, state) => Form(
-              key: _formKey,
+        child: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) => Form(
+            key: _formKey,
+            child: SingleChildScrollView(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 10),
                           const Text(
@@ -359,6 +359,7 @@ class ProfilePage extends StatelessWidget {
                     child: TextFormField(
                       controller: phoneController,
                       inputFormatters: [_phoneMask],
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Введите номер телефона';
@@ -382,25 +383,32 @@ class ProfilePage extends StatelessWidget {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           final surname = surnameController.value.text;
-                          final name = nameController.value.text;
-                          surnameController.clear();
-                          nameController.clear();
+                        final name = nameController.value.text;
+                        final phoneNumber = phoneController.value.text;
+                        phoneController.clear();
+                        surnameController.clear();
+                        nameController.clear();
+
+                        await context
+                            .read<ProfileCubit>()
+                            .updateProfile(
+                                surname: surname, name: name, phoneNumber: phoneNumber)
+                            .then((value) {
                           SnackBarInfo.show(
                               context: context,
                               message: 'Данные обновлены',
                               isSuccess: true);
                           Navigator.of(context).pop();
-                          await context
-                              .read<ProfileCubit>()
-                              .updateProfile(surname: surname, name: name);
-                        }
-                              },
-                              child: const Text('Сохранить')),
-                        ],
-                      ),
-                    ),
+                        });
+                      }
+                    },
+                    child: const Text('Сохранить'),
+                  ),
+                ],
               ),
             ),
+          ),
+        ),
           ),
     );
   }

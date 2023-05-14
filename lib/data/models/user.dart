@@ -15,6 +15,7 @@ class User with _$User {
     String? image,
     Status? status,
     String? phoneNumber,
+    int? transfersCount,
     List<Book>? ownerBooks,
     List<Book>? readerBooks,
   }) = _User;

@@ -27,6 +27,7 @@ mixin _$User {
   String? get image => throw _privateConstructorUsedError;
   Status? get status => throw _privateConstructorUsedError;
   String? get phoneNumber => throw _privateConstructorUsedError;
+  int? get transfersCount => throw _privateConstructorUsedError;
   List<Book>? get ownerBooks => throw _privateConstructorUsedError;
   List<Book>? get readerBooks => throw _privateConstructorUsedError;
 
@@ -48,6 +49,7 @@ abstract class $UserCopyWith<$Res> {
       String? image,
       Status? status,
       String? phoneNumber,
+      int? transfersCount,
       List<Book>? ownerBooks,
       List<Book>? readerBooks});
 
@@ -74,6 +76,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? image = freezed,
     Object? status = freezed,
     Object? phoneNumber = freezed,
+    Object? transfersCount = freezed,
     Object? ownerBooks = freezed,
     Object? readerBooks = freezed,
   }) {
@@ -106,6 +109,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      transfersCount: freezed == transfersCount
+          ? _value.transfersCount
+          : transfersCount // ignore: cast_nullable_to_non_nullable
+              as int?,
       ownerBooks: freezed == ownerBooks
           ? _value.ownerBooks
           : ownerBooks // ignore: cast_nullable_to_non_nullable
@@ -144,6 +151,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String? image,
       Status? status,
       String? phoneNumber,
+      int? transfersCount,
       List<Book>? ownerBooks,
       List<Book>? readerBooks});
 
@@ -167,6 +175,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     Object? image = freezed,
     Object? status = freezed,
     Object? phoneNumber = freezed,
+    Object? transfersCount = freezed,
     Object? ownerBooks = freezed,
     Object? readerBooks = freezed,
   }) {
@@ -199,6 +208,10 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      transfersCount: freezed == transfersCount
+          ? _value.transfersCount
+          : transfersCount // ignore: cast_nullable_to_non_nullable
+              as int?,
       ownerBooks: freezed == ownerBooks
           ? _value._ownerBooks
           : ownerBooks // ignore: cast_nullable_to_non_nullable
@@ -222,6 +235,7 @@ class _$_User implements _User {
       this.image,
       this.status,
       this.phoneNumber,
+      this.transfersCount,
       final List<Book>? ownerBooks,
       final List<Book>? readerBooks})
       : _ownerBooks = ownerBooks,
@@ -243,6 +257,8 @@ class _$_User implements _User {
   final Status? status;
   @override
   final String? phoneNumber;
+  @override
+  final int? transfersCount;
   final List<Book>? _ownerBooks;
   @override
   List<Book>? get ownerBooks {
@@ -265,7 +281,7 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, surname: $surname, name: $name, email: $email, image: $image, status: $status, phoneNumber: $phoneNumber, ownerBooks: $ownerBooks, readerBooks: $readerBooks)';
+    return 'User(id: $id, surname: $surname, name: $name, email: $email, image: $image, status: $status, phoneNumber: $phoneNumber, transfersCount: $transfersCount, ownerBooks: $ownerBooks, readerBooks: $readerBooks)';
   }
 
   @override
@@ -281,6 +297,8 @@ class _$_User implements _User {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
+            (identical(other.transfersCount, transfersCount) ||
+                other.transfersCount == transfersCount) &&
             const DeepCollectionEquality()
                 .equals(other._ownerBooks, _ownerBooks) &&
             const DeepCollectionEquality()
@@ -298,6 +316,7 @@ class _$_User implements _User {
       image,
       status,
       phoneNumber,
+      transfersCount,
       const DeepCollectionEquality().hash(_ownerBooks),
       const DeepCollectionEquality().hash(_readerBooks));
 
@@ -334,6 +353,7 @@ abstract class _User implements User {
       final String? image,
       final Status? status,
       final String? phoneNumber,
+      final int? transfersCount,
       final List<Book>? ownerBooks,
       final List<Book>? readerBooks}) = _$_User;
 
@@ -353,6 +373,8 @@ abstract class _User implements User {
   Status? get status;
   @override
   String? get phoneNumber;
+  @override
+  int? get transfersCount;
   @override
   List<Book>? get ownerBooks;
   @override
