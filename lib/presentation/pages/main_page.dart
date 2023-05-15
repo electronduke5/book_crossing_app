@@ -13,7 +13,7 @@ import 'books_page.dart';
 class MainPage extends StatefulWidget {
   MainPage({Key? key, this.selectedIndex, this.bodyWidget}) : super(key: key);
 
-  int? selectedIndex = 0;
+  int? selectedIndex = 3;
   Widget? bodyWidget;
 
   @override
@@ -21,7 +21,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late int _selectedIndex = widget.selectedIndex ?? 0;
+  late int _selectedIndex = widget.selectedIndex ?? 3;
 
   static final List<Widget> _widgetOptions = <Widget>[
     ReviewsPage(),

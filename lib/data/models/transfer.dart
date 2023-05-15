@@ -11,11 +11,13 @@ part '../../domain/models/transfer/transfer.g.dart';
 class Transfer with _$Transfer {
   const factory Transfer({
     required int id,
+    required bool isActive,
     required User user,
     required Book book,
     required PickUpPoint point,
+    required List<User> recipients,
+    required DateTime dateCreated,
   }) = _Transfer;
 
   factory Transfer.fromJson(Map<String, dynamic> json) => _$TransferFromJson(json);
-
 }

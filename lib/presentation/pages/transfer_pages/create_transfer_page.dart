@@ -8,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import '../../data/models/book.dart';
-import '../../data/models/pick_up_point.dart';
-import '../../data/models/transfer.dart';
-import '../../data/models/user.dart';
-import '../cubits/book/book_cubit.dart';
-import '../cubits/point/point_cubit.dart';
-import '../di/app_module.dart';
-import '../widgets/create_transfer_shimmer.dart';
-import '../widgets/profile_widgets/profile_image_small.dart';
-import '../widgets/search_point_field.dart';
-import '../widgets/snack_bar.dart';
+import '../../../data/models/book.dart';
+import '../../../data/models/pick_up_point.dart';
+import '../../../data/models/transfer.dart';
+import '../../../data/models/user.dart';
+import '../../cubits/book/book_cubit.dart';
+import '../../cubits/point/point_cubit.dart';
+import '../../di/app_module.dart';
+import '../../widgets/create_transfer_shimmer.dart';
+import '../../widgets/profile_widgets/profile_image_small.dart';
+import '../../widgets/search_point_field.dart';
+import '../../widgets/snack_bar.dart';
 
 class CreateTransferPage extends StatelessWidget {
   CreateTransferPage({Key? key}) : super(key: key);

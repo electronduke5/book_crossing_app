@@ -1,3 +1,4 @@
+import 'package:book_crossing_app/data/models/transfer.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'book.dart';
 import 'status.dart';
@@ -15,9 +16,11 @@ class User with _$User {
     String? image,
     Status? status,
     String? phoneNumber,
-    int? transfersCount,
+    int? activeTransfersCount,
+    int? inactiveTransfersCount,
     List<Book>? ownerBooks,
     List<Book>? readerBooks,
+    List<Transfer>? requests,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

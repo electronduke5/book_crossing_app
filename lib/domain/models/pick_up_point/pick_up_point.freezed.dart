@@ -253,6 +253,26 @@ class _$_PickUpPoint implements _PickUpPoint {
       this,
     );
   }
+
+  @override
+  String _getValue(String? value, {String? prefix, bool last = false}) {
+    if (value == null) {
+      return '';
+    }
+    if (prefix == null) return '$value${last? '' : ','}';
+    return '$prefix. $value${last? '' : ','}';
+  }
+
+  @override
+  String getPoint() {
+    return '${_getValue(city)} ${_getValue(street)} ${_getValue(
+        house, prefix: 'д')} ${_getValue(flat, prefix: 'кв', last: true)}';
+  }
+
+  @override
+  String getPointShort() {
+    return '${_getValue(city)} ${_getValue(street,last: true)}';
+  }
 }
 
 abstract class _PickUpPoint implements PickUpPoint {

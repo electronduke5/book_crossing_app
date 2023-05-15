@@ -73,7 +73,7 @@ class ProfilePage extends StatelessWidget {
                       statsWidget(
                         context: context,
                         countReview: state.userReviews.item!.length,
-                        countTransfers: state.status.item!.transfersCount,
+                        countTransfers: state.status.item!.activeTransfersCount,
                         books: state.status.item?.ownerBooks,
                       ),
                       () {
@@ -194,7 +194,14 @@ class ProfilePage extends StatelessWidget {
                   indent: 10,
                   endIndent: 10,
                 ),
-                itemInStatsRow(title: 'Объявлений', value: countTransfers),
+                InkWell(
+                  onTap: () {
+                    if (countTransfers != 0) {
+                      Navigator.of(context).pushNamed('/user-transfers');
+                    }
+                  },
+                  child: itemInStatsRow(title: 'Объявлений', value: countTransfers),
+                ),
                 const VerticalDivider(
                   indent: 10,
                   endIndent: 10,

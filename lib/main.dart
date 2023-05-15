@@ -17,12 +17,14 @@ import 'package:book_crossing_app/presentation/pages/add_book_page.dart';
 import 'package:book_crossing_app/presentation/pages/add_point_page.dart';
 import 'package:book_crossing_app/presentation/pages/book_reviews_page.dart';
 import 'package:book_crossing_app/presentation/pages/books_profile_page.dart';
-import 'package:book_crossing_app/presentation/pages/create_transfer_page.dart';
+import 'package:book_crossing_app/presentation/pages/transfer_pages/create_transfer_page.dart';
 import 'package:book_crossing_app/presentation/pages/main_page.dart';
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_in_page.dart';
 import 'package:book_crossing_app/presentation/pages/sign_up_page.dart';
 import 'package:book_crossing_app/presentation/pages/start_page.dart';
+import 'package:book_crossing_app/presentation/pages/transfer_pages/transfer_view_page.dart';
+import 'package:book_crossing_app/presentation/pages/transfer_pages/user_transfers_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -151,6 +153,24 @@ class _MyAppState extends State<MyApp> {
                       ],
                       child: BookProfilePage(),
                     ),
+                '/user-transfers': (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider<ProfileCubit>(
+                        create: (context) => ProfileCubit()..loadProfile()),
+                    BlocProvider<TransferCubit>(
+                        create: (context) => TransferCubit()..loadUserTransfers(AppModule.getProfileHolder().user)),
+                  ],
+                  child: UserTransfersPage(),
+                ),
+                '/transfer-view-page': (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider<ProfileCubit>(
+                        create: (context) => ProfileCubit()),
+                    BlocProvider<TransferCubit>(
+                        create: (context) => TransferCubit()),
+                  ],
+                  child: TransferViewPage(),
+                ),
                 '/create-transfer': (context) => MultiBlocProvider(
                       providers: [
                         BlocProvider<TransferCubit>(create: (context) => TransferCubit()),
