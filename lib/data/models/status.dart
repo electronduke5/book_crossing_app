@@ -7,8 +7,8 @@ part '../../domain/models/status/status.g.dart';
 class Status with _$Status {
   const factory Status({
     required int id,
-    required String surname,
-    required int name,
+    required String status,
+    required int count,
   }) = _Status;
 
   factory Status.fromJson(Map<String, dynamic> json) => _$StatusFromJson(json);

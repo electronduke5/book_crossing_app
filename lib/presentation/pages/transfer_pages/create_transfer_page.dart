@@ -122,7 +122,7 @@ class CreateTransferPage extends StatelessWidget {
                   OutlinedButton(
                     onPressed: () async {
                       if (AppModule.getProfileHolder().user.phoneNumber == null) {
-                        addPhoneNumberSheet(context);
+                        addPhoneNumberSheet(context, 'Чтобы отдать книгу нужно добавить номер телефона.');
                       } else {
                         print(
                             'book: ${context.read<TransferCubit>().state.book ?? 'Пусто'}');
@@ -148,7 +148,7 @@ class CreateTransferPage extends StatelessWidget {
     );
   }
 
-  PersistentBottomSheetController<dynamic> addPhoneNumberSheet(BuildContext context) {
+  PersistentBottomSheetController<dynamic> addPhoneNumberSheet(BuildContext context, String title) {
     return showBottomSheet(
       context: context,
       builder: (context) {
@@ -164,7 +164,7 @@ class CreateTransferPage extends StatelessWidget {
                     children: [
                       const SizedBox(height: 10),
                       Text(
-                        'Чтобы отдать книгу нужно добавить номер телефона.',
+                        title,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

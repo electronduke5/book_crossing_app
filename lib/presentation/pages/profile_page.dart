@@ -28,6 +28,7 @@ class ProfilePage extends StatelessWidget {
   TextEditingController surnameController = TextEditingController(text:AppModule.getProfileHolder().user.surname);
   TextEditingController phoneController = TextEditingController(text:AppModule.getProfileHolder().user.phoneNumber);
 
+  bool isMyProfile = false;
   int getLikes(List<Review> reviews) {
     int likes = 0;
     for (var element in reviews) {
@@ -65,6 +66,9 @@ class ProfilePage extends StatelessWidget {
           builder: (context, state) {
             switch (state.status.runtimeType) {
               case LoadedStatus<User>:
+                if(state.status.item!.id ==  AppModule.getProfileHolder().user.id){
+                  isMyProfile = true;
+                }
                 reviews = state.userReviews.item!;
                 return IntrinsicHeight(
                   child: Column(
@@ -72,9 +76,10 @@ class ProfilePage extends StatelessWidget {
                       profileCard(context),
                       statsWidget(
                         context: context,
+                        user: state.status.item!,
                         countReview: state.userReviews.item!.length,
                         countTransfers: state.status.item!.activeTransfersCount,
-                        books: state.status.item?.ownerBooks,
+                        books: state.status.item?.readerBooks,
                       ),
                       () {
                         if (user == null) {
@@ -149,7 +154,6 @@ class ProfilePage extends StatelessWidget {
                         child: Text(
                             'Произошла ошибка при получении данных: ${state.status.message}')));
               default:
-                print(state.status.runtimeType);
                 return SizedBox(
                     height: deviceHeight,
                     child: const Center(child: CircularProgressIndicator()));
@@ -172,7 +176,8 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget statsWidget(
-      {required int countReview,
+      {required User user,
+        required int countReview,
       required countTransfers,
       required List<Book>? books,
       required BuildContext context}) {
@@ -197,7 +202,7 @@ class ProfilePage extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     if (countTransfers != 0) {
-                      Navigator.of(context).pushNamed('/user-transfers');
+                      Navigator.of(context).pushNamed('/user-transfers', arguments: user);
                     }
                   },
                   child: itemInStatsRow(title: 'Объявлений', value: countTransfers),
@@ -433,7 +438,7 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Positioned(
                   child: SizedBox(
-                    height: 210,
+                    height: state.status.item!.status != null? 230 : 210,
                     width: double.infinity,
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -465,6 +470,12 @@ class ProfilePage extends StatelessWidget {
                                 Text(state.status.item!.email),
                               ],
                             ),
+                            () {
+                              if (state.status.item!.status != null) {
+                                return statusRow(state);
+                              }
+                              return const SizedBox();
+                            }(),
                             const SizedBox(height: 20),
                           ],
                         ),
@@ -573,15 +584,26 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  Row statusRow(ProfileState state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'Статус: ',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text('${state.status.item!.status!.status}, (${state.status.item!.inactiveTransfersCount}/${state.status.item!.nextStatus!.count})'),
+      ],
+    );
+  }
+
   List<PopupIconMenuItem> buttonsProfile = [
-    PopupIconMenuItem(
-        title: 'Открыть фото', icon: Icons.account_circle_outlined),
+    PopupIconMenuItem(title: 'Открыть фото', icon: Icons.account_circle_outlined),
     PopupIconMenuItem(title: 'Изменить фото', icon: Icons.edit_outlined),
     PopupIconMenuItem(
         color: Colors.red, title: 'Удалить фото', icon: Icons.delete_outlined),
   ];
   List<PopupIconMenuItem> buttonsGuest = [
-    PopupIconMenuItem(
-        title: 'Открыть фото', icon: Icons.account_circle_outlined),
+    PopupIconMenuItem(title: 'Открыть фото', icon: Icons.account_circle_outlined),
   ];
 }

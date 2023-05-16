@@ -8,7 +8,13 @@ abstract class TransferRepository {
 
   Future<List<Transfer>> getAllTransfers();
 
-  Future<List<Transfer>> getUserTransfers(User user);
+  Future<Transfer> getTransfers(Transfer transfer);
+
+  Future<List<Transfer>> getUserTransfers(User user, {bool isActive = true});
+
+  Future<Transfer> makeRequest({required User user, required Transfer transfer});
+
+  Future<Transfer> makeTransfer({required User user, required Transfer transfer});
 
   Future<List<Transfer>> getBookTransfers(Book book);
 

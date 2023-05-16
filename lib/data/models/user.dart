@@ -15,6 +15,7 @@ class User with _$User {
     required String email,
     String? image,
     Status? status,
+    Status? nextStatus,
     String? phoneNumber,
     int? activeTransfersCount,
     int? inactiveTransfersCount,

@@ -158,7 +158,7 @@ class _MyAppState extends State<MyApp> {
                     BlocProvider<ProfileCubit>(
                         create: (context) => ProfileCubit()..loadProfile()),
                     BlocProvider<TransferCubit>(
-                        create: (context) => TransferCubit()..loadUserTransfers(AppModule.getProfileHolder().user)),
+                        create: (context) => TransferCubit()),
                   ],
                   child: UserTransfersPage(),
                 ),

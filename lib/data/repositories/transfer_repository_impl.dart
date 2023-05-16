@@ -35,10 +35,10 @@ class TransferRepositoryImpl with ApiService<Transfer> implements TransferReposi
   }
 
   @override
-  Future<List<Transfer>> getUserTransfers(User user) {
+  Future<List<Transfer>> getUserTransfers(User user, {bool isActive = true}) {
     return getAll(
       fromJson: (Map<String, dynamic> json) => Transfer.fromJson(json),
-      params: {'user': user.id},
+      params: {'user': user.id, 'active' : isActive ? 'true' : 'false' ,},
     );
   }
 
@@ -46,6 +46,38 @@ class TransferRepositoryImpl with ApiService<Transfer> implements TransferReposi
   Future<List<Transfer>> getAllTransfers() {
     return getAll(
       fromJson: (Map<String, dynamic> json) => Transfer.fromJson(json),
+    );
+  }
+
+  @override
+  Future<Transfer> makeRequest({required User user, required Transfer transfer}) {
+    return post(
+      fromJson: (Map<String, dynamic> json) => Transfer.fromJson(json),
+      data: {
+        'user_id': user.id,
+        'transfer_id': transfer.id,
+      },
+      id: 'makeRequest/',
+    );
+  }
+
+  @override
+  Future<Transfer> makeTransfer({required User user, required Transfer transfer}) {
+    return post(
+      fromJson: (Map<String, dynamic> json) => Transfer.fromJson(json),
+      data: {
+        'user_id': user.id,
+        'transfer_id': transfer.id,
+      },
+      id: 'makeTransfer/',
+    );
+  }
+
+  @override
+  Future<Transfer> getTransfers(Transfer transfer) {
+    return get(
+      fromJson: (Map<String, dynamic> json) => Transfer.fromJson(json),
+      id: transfer.id,
     );
   }
 }
