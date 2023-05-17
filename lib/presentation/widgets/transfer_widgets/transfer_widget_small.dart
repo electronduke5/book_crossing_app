@@ -53,6 +53,18 @@ class TransferWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            () {
+              if (isSelfTransfer) {
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Ваше объявление',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                );
+              }
+              return const SizedBox();
+            }(),
             Text(
               transfer.book.title,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

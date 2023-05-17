@@ -22,15 +22,17 @@ class TransferCubit extends Cubit<TransferState> {
     emit(state.copyWith(book: book));
   }
 
-  Future<void> loadAllTransfers() async {
+  Future<List<Transfer>?> loadAllTransfers() async {
     emit(state.copyWith(transfersStatus: LoadingStatus()));
     try {
       final transfers = await _repository.getAllTransfers();
       emit(state.copyWith(transfersStatus: LoadedStatus(transfers)));
+      return transfers;
     } catch (exception) {
       emit(state.copyWith(
           transfersStatus:
               FailedStatus(state.transfersStatus.message ?? exception.toString())));
+      return null;
     }
   }
 

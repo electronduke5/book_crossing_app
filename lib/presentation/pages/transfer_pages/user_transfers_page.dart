@@ -13,6 +13,7 @@ import 'package:lottie/lottie.dart';
 import '../../../data/models/transfer.dart';
 import '../../../data/models/user.dart';
 import '../../di/app_module.dart';
+import '../../widgets/transfer_widgets/transfer_shimmer_card.dart';
 import '../../widgets/transfer_widgets/transfer_widget_small.dart';
 
 class UserTransfersPage extends StatefulWidget {
@@ -94,10 +95,16 @@ class _UserTransfersPageState extends State<UserTransfersPage> {
                   default:
                     return SizedBox(
                       height: MediaQuery.of(context).size.height,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
+                          child: MasonryGridView.count(
+                            physics: const BouncingScrollPhysics(),
+                            clipBehavior: Clip.none,
+                            crossAxisCount: 2,
+                            itemCount: 6,
+                            itemBuilder: (context, index) {
+                              return const TransferShimmerCard();
+                            },
+                          ),
+                        );
                       }
                     }),
                 ),

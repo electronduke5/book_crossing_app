@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
-import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
+import 'package:book_crossing_app/presentation/pages/transfer_pages/transfers_page.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> {
   late int _selectedIndex = widget.selectedIndex ?? 3;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    ReviewsPage(),
+    TransfersPage(),
     AddReviewPage(),
     BooksPage(),
     ProfilePage(),

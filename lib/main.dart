@@ -226,6 +226,8 @@ class _MyAppState extends State<MyApp> {
                             create: (context) => LikeCubit()),
                         BlocProvider<ProfileCubit>(
                             create: (context) => ProfileCubit()..loadProfile()),
+                        BlocProvider<TransferCubit>(
+                            create: (context) => TransferCubit()..loadAllTransfers()),
                         BlocProvider<BookCubit>(
                             create: (context) => BookCubit()..loadBooks()),
                         BlocProvider<ReviewCubit>(
