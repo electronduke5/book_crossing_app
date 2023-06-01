@@ -35,38 +35,41 @@ class CreateTransferPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-          child:
-              ProfileAvatarSmall(maxRadius: 15, user: AppModule.getProfileHolder().user),
-        ),
-        title: const Text(
-          'Добавление обмена',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: SafeArea(
-        child: BlocListener<TransferCubit, TransferState>(
-          listener: (context, state) {
-            log("state.createTransferStatus.runtimeType: ${state.createTransferStatus.runtimeType}");
-            if (state.createTransferStatus.runtimeType == LoadedStatus<Transfer>) {
-              SnackBarInfo.show(
-                  context: context, message: 'Книга добавлена в обмен!', isSuccess: true);
-              Navigator.of(context).pop();
-            }
-            if (state.createTransferStatus.runtimeType == FailedStatus<Transfer>) {
-              SnackBarInfo.show(
-                  context: context,
-                  message: 'Произошла ошибка при создании обмена!',
-                  isSuccess: false);
-            }
-          },
-          child: SingleChildScrollView(
-            child: BlocBuilder<PointCubit, PointState>(builder: (context, pointState) {
+    return BlocListener<TransferCubit, TransferState>(
+      listener: (context, state) {
+        log("state.createTransferStatus.runtimeType: ${state.createTransferStatus.runtimeType}");
+        if (state.createTransferStatus.runtimeType == LoadedStatus<Transfer>) {
+          SnackBarInfo.show(
+              context: context, message: 'Книга добавлена в обмен!', isSuccess: true);
+          Navigator.of(context).pop();
+        }
+        if (state.createTransferStatus.runtimeType == FailedStatus<Transfer>) {
+          SnackBarInfo.show(
+              context: context,
+              message: 'Произошла ошибка при создании обмена!',
+              isSuccess: false);
+        }
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AppBar(
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                child: ProfileAvatarSmall(
+                    maxRadius: 15, user: AppModule.getProfileHolder().user),
+              ),
+              title: const Text(
+                'Добавление обмена',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            BlocBuilder<PointCubit, PointState>(builder: (context, pointState) {
+              log("state.pointSTate.runtimeType: ${pointState.userPoints.runtimeType}");
               return BlocBuilder<BookCubit, BookState>(
                 builder: (context, bookState) {
+                  log("state.bookStatus.runtimeType: ${bookState.booksForTransferStatus.runtimeType}");
                   if ((bookState.booksForTransferStatus is LoadedStatus<List<Book>>) &&
                       (pointState.userPoints is LoadedStatus<List<PickUpPoint>>)) {
                     userBooks = bookState.booksForTransferStatus?.item;
@@ -77,7 +80,7 @@ class CreateTransferPage extends StatelessWidget {
                 },
               );
             }),
-          ),
+          ],
         ),
       ),
     );

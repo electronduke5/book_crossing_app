@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../data/models/transfer.dart';
 import '../../cubits/models_status.dart';
@@ -100,37 +101,64 @@ class TransfersPage extends StatelessWidget {
                       allTransfers.isEmpty
                           ? allTransfers = state.transfersStatus.item!
                           : () {};
-                      return Column(
-                        children: [
-                          Expanded(
-                            child: MasonryGridView.count(
-                              physics: const BouncingScrollPhysics(),
-                              clipBehavior: Clip.none,
-                              crossAxisCount: 2,
-                              itemCount: allTransfers.length,
-                              itemBuilder: (context, index) {
-                                if (index == allTransfers.length - 1) {
-                                  return Column(
-                                    children: [
-                                      TransferWidget(
-                                        transfer: allTransfers[index],
-                                        isSelfTransfer: allTransfers[index].user.id ==
-                                            AppModule.getProfileHolder().user.id,
-                                      ),
-                                      const SizedBox(height: 65),
-                                    ],
+
+                      return () {
+                        if (allTransfers.isEmpty) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Text(
+                                  'Похоже, еще никто не выложил ни одного объявления...',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Lottie.asset(
+                                alignment: Alignment.topCenter,
+                                'assets/lottie/plane.json',
+                                repeat: true,
+                              ),
+                            ],
+                          );
+                        }
+                        return Column(
+                          children: [
+                            Expanded(
+                              child: MasonryGridView.count(
+                                physics: const BouncingScrollPhysics(),
+                                crossAxisCount: 2,
+                                itemCount: allTransfers.length,
+                                itemBuilder: (context, index) {
+                                  if (index == allTransfers.length - 1) {
+                                    return Column(
+                                      children: [
+                                        TransferWidget(
+                                          transfer: allTransfers[index],
+                                          isSelfTransfer: allTransfers[index].user.id ==
+                                              AppModule.getProfileHolder().user.id,
+                                        ),
+                                        const SizedBox(height: 65),
+                                      ],
+                                    );
+                                  }
+                                  return TransferWidget(
+                                    transfer: allTransfers[index],
+                                    isSelfTransfer: allTransfers[index].user.id ==
+                                        AppModule.getProfileHolder().user.id,
                                   );
-                                }
-                                return TransferWidget(
-                                  transfer: allTransfers[index],
-                                  isSelfTransfer: allTransfers[index].user.id ==
-                                      AppModule.getProfileHolder().user.id,
-                                );
-                              },
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      );
+                          ],
+                        );
+                      }();
                     default:
                       return const Center(child: CircularProgressIndicator());
                   }

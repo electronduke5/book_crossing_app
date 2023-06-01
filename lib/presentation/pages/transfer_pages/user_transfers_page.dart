@@ -79,6 +79,7 @@ class _UserTransfersPageState extends State<UserTransfersPage> {
                           padding: EdgeInsets.all(15.0),
                           child: Text(
                             'Произошла ошибка при поиске объявлений пользователя',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -88,7 +89,7 @@ class _UserTransfersPageState extends State<UserTransfersPage> {
                         Lottie.asset(
                           alignment: Alignment.topCenter,
                           'assets/lottie/plane.json',
-                          repeat: false,
+                          repeat: true,
                         ),
                       ],
                     );

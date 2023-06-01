@@ -31,8 +31,7 @@ class _SearchPointFieldState extends State<SearchPointField> {
           List<DropdownMenuItem<PickUpPoint>> menuItems = pointItems
               .map((point) => DropdownMenuItem<PickUpPoint>(
             value: point,
-            child: Text(
-                '${point.city}, ${point.street},д. ${point.house}, кв. ${point.flat}'),
+            child: Text(point.getPoint()),
           ))
               .toList();
           return buildSearchPointWidget(menuItems, context);
@@ -52,7 +51,7 @@ class _SearchPointFieldState extends State<SearchPointField> {
               .map((point) => DropdownMenuItem<PickUpPoint>(
                     value: point,
                     child: Text(
-                        '${point.city}, ${point.street},д. ${point.house}, кв. ${point.flat}'),
+                        point.getPoint()),
                   ))
               .toList();
 
@@ -79,12 +78,12 @@ class _SearchPointFieldState extends State<SearchPointField> {
       dialogBox: false,
       isExpanded: true,
       menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
-      doneButton: TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text("Назад"),
-      ),
+      // doneButton: TextButton(
+      //   onPressed: () {
+      //     Navigator.of(context).pop();
+      //   },
+      //   child: const Text("Назад"),
+      // ),
       closeButton:
           (PickUpPoint? value, BuildContext closeContext, Function updateParent) {
         return TextButton(

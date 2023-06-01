@@ -2,18 +2,18 @@ import 'dart:ui';
 
 import 'package:book_crossing_app/presentation/di/app_module.dart';
 import 'package:book_crossing_app/presentation/pages/profile_page.dart';
+import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
 import 'package:book_crossing_app/presentation/pages/transfer_pages/transfers_page.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 import '../../data/models/book.dart';
-import 'add_review_page.dart';
 import 'books_page.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key, this.selectedIndex, this.bodyWidget}) : super(key: key);
 
-  int? selectedIndex = 3;
+  int? selectedIndex = 0;
   Widget? bodyWidget;
 
   @override
@@ -21,12 +21,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late int _selectedIndex = widget.selectedIndex ?? 3;
+  late int _selectedIndex = widget.selectedIndex ?? 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
     TransfersPage(),
-    AddReviewPage(),
+    // CreateTransferPage(),
     BooksPage(),
+    ReviewsPage(),
     ProfilePage(),
   ];
 
@@ -94,13 +95,17 @@ class _MainPageState extends State<MainPage> {
                   icon: Icon(Icons.home_outlined),
                   label: 'Главная',
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.add_circle_outline),
-                  label: 'Добавить',
-                ),
+                // BottomNavigationBarItem(
+                //   icon: Icon(Icons.add_circle_outline),
+                //   label: 'Добавить',
+                // ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.book_outlined),
                   label: 'Книги',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.rate_review_outlined),
+                  label: 'Отзывы',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person_pin_outlined),

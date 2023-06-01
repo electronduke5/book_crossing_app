@@ -86,12 +86,12 @@ class _SearchBookFieldState extends State<SearchBookField> {
       searchHint: 'Выберите книгу',
       dialogBox: false,
       isExpanded: true,
-      doneButton: TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text("Назад"),
-      ),
+      // doneButton: TextButton(
+      //   onPressed: () {
+      //     Navigator.of(context).pop();
+      //   },
+      //   child: const Text("Назад"),
+      // ),
       menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
       closeButton: (Book? value, BuildContext closeContext, Function updateParent) {
         return (menuItems.length >= 100
@@ -123,7 +123,7 @@ class _SearchBookFieldState extends State<SearchBookField> {
               updateParent(value);
             });
           },
-          child: const Text("No choice, click to add one"),
+          child: const Text("Вы ещё не добавили ни одной книги"),
         ));
       },
       displayItem: (DropdownMenuItem item, selected, Function updateParent) {
