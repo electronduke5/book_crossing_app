@@ -39,7 +39,7 @@ class ReviewsPage extends StatelessWidget {
                     maxRadius: 15, user: AppModule.getProfileHolder().user),
               ),
               title: const Text(
-                'Главная',
+                'Отзывы',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               actions: [
