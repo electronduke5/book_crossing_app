@@ -67,7 +67,6 @@ class _ImageViewerState extends State<ImageViewer> {
                 if (1 - details.progress * 2.4 >= 0) {
                   progress = 1 - details.progress * 2.4;
                 }
-                print(progress);
               });
             },
             key: Key(widget.user.image!),

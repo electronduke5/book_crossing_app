@@ -8,10 +8,6 @@ abstract class BookRepository {
   Future<List<Book>> getAllBooks();
   Future<List<Book>?> getUserBooksForTransfer({required int userId});
 
-  // Future<List<Book>> getReaderBooks(User user);
-  //
-  // Future<List<Book>> getOwnerBooks(User user);
-
   Future<Book> createBook(
     String title,
     String? description,

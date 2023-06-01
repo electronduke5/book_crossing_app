@@ -19,7 +19,6 @@ class SignInPage extends StatelessWidget {
       body: SafeArea(
         child: BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
-            print(state.apiStatus.runtimeType);
             switch (state.apiStatus.runtimeType) {
               case FailedStatus<User>:
                 SnackBarInfo.show(
@@ -146,8 +145,6 @@ class SignInPage extends StatelessWidget {
                                             .onPrimary,
                                       ),
                                       onPressed: () {
-                                        print(state.email);
-                                        print(state.password);
                                         if (_formKey.currentState!.validate()) {
                                           context.read<AuthCubit>().signIn();
                                         }

@@ -94,7 +94,6 @@ class BookWidgetSmall extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14),
                 ),
                 const SizedBox(height: 10),
-                //const Divider(indent: 10, endIndent: 10, thickness: 0.1),
                 () {
                   if (book.rating != 0.0) {
                     return RatingBarIndicator(

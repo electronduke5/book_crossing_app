@@ -6,6 +6,7 @@ import 'package:search_choices/search_choices.dart';
 
 import '../cubits/author/author_cubit.dart';
 
+// ignore: must_be_immutable
 class SearchAuthorField extends StatefulWidget {
   SearchAuthorField(
       {Key? key, required this.authorItems, required this.bookCubit})
@@ -32,7 +33,6 @@ class _SearchAuthorFieldState extends State<SearchAuthorField> {
         dialogBox: false,
         searchHint: 'Выберите автора или добавьте его сами',
         isExpanded: true,
-        //doneButton: 'Done',
         menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
         closeButton:
             (Author? value, BuildContext closeContext, Function updateParent) {
@@ -94,7 +94,7 @@ class _SearchAuthorFieldState extends State<SearchAuthorField> {
               if (value is! NotGiven) {
                 _selectedItem = value;
               }
-              if (pop != null && value is! NotGiven && value != null) {
+              if (pop != null && value is! NotGiven) {
                 pop();
               }
             },

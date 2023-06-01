@@ -24,8 +24,6 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
     final prefs = await SharedPreferences.getInstance();
     final login = prefs.getString('login');
     final password = prefs.getString('password');
-    print('login: $login');
-    print('password: $password');
 
     if(login != null && password != null){
       final auth = AppModule.getAuthRepository();
@@ -40,16 +38,12 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   Future<void> saveTheme(ThemeMode themeMode) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('theme', themeMode.index);
-    print('themeMode save: ${themeMode.name}');
-    print('theme in prefs ${ThemeMode.values[prefs.getInt('theme')!].name}');
   }
 
   @override
   Future<ThemeMode> loadThemeMode() async {
     final prefs = await SharedPreferences.getInstance();
-    print(prefs.containsKey('theme'));
     if(prefs.containsKey('theme')){
-      print(ThemeMode.values[prefs.getInt('theme')!].name);
       return ThemeMode.values[prefs.getInt('theme')!];
     }
     return ThemeMode.system;

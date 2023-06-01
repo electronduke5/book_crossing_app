@@ -88,11 +88,6 @@ class ReviewCubit extends Cubit<ReviewState> {
     final repository = AppModule.getReviewRepository();
     emit(state.copyWith(createReviewStatus: LoadingStatus<Review>()));
     try {
-      print(state.title);
-      print(state.text);
-      print(state.book);
-      print(state.rating);
-      print(AppModule.getProfileHolder().user);
       final review = await repository.addReview(
         state.title,
         state.text,
@@ -100,7 +95,6 @@ class ReviewCubit extends Cubit<ReviewState> {
         state.rating,
         AppModule.getProfileHolder().user,
       );
-      print('created review (review_cubit 36): $review');
       emit(state.copyWith(createReviewStatus: LoadedStatus(review)));
       emit(state.copyWith(createReviewStatus: const IdleStatus()));
     } catch (exception) {

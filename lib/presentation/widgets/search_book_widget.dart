@@ -6,6 +6,7 @@ import '../../data/models/book.dart';
 import '../cubits/book/book_cubit.dart';
 import '../cubits/models_status.dart';
 
+// ignore: must_be_immutable
 class SearchBookField extends StatefulWidget {
   SearchBookField({Key? key, this.userBooks, required this.onChanged}) : super(key: key);
 
@@ -24,7 +25,6 @@ class _SearchBookFieldState extends State<SearchBookField> {
   Widget build(BuildContext context) {
     return BlocBuilder<BookCubit, BookState>(builder: (context, state) {
       () {
-        print(widget.userBooks);
         if (widget.userBooks != null) {
           List<Book> bookItems = widget.userBooks!;
           List<DropdownMenuItem<Book>> menuItems = bookItems
@@ -37,7 +37,6 @@ class _SearchBookFieldState extends State<SearchBookField> {
           return buildSearchBookWidget(menuItems, context);
         }
       }();
-      print(state.booksStatus.runtimeType);
       switch (state.booksStatus.runtimeType) {
         case LoadingStatus<List<Book>>:
           return const Center(child: CircularProgressIndicator());
@@ -55,7 +54,6 @@ class _SearchBookFieldState extends State<SearchBookField> {
               .toList();
           return buildSearchBookWidget(menuItems, context);
         default:
-          print(widget.userBooks);
           if (widget.userBooks != null) {
             List<Book> bookItems = widget.userBooks!;
             List<DropdownMenuItem<Book>> menuItems = bookItems
@@ -79,6 +77,7 @@ class _SearchBookFieldState extends State<SearchBookField> {
         if (value == null) {
           return 'Это обязательное поле';
         }
+        return null;
       },
       items: menuItems,
       value: _selectedItem,
@@ -86,12 +85,6 @@ class _SearchBookFieldState extends State<SearchBookField> {
       searchHint: 'Выберите книгу',
       dialogBox: false,
       isExpanded: true,
-      // doneButton: TextButton(
-      //   onPressed: () {
-      //     Navigator.of(context).pop();
-      //   },
-      //   child: const Text("Назад"),
-      // ),
       menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
       closeButton: (Book? value, BuildContext closeContext, Function updateParent) {
         return (menuItems.length >= 100
@@ -140,7 +133,6 @@ class _SearchBookFieldState extends State<SearchBookField> {
       },
       autofocus: false,
       onChanged: (Book? value, Function? pop) {
-        //context.read<ReviewCubit>().bookChanged(value!);
         setState(() {
           if (value is! NotGiven) {
             _selectedItem = value;

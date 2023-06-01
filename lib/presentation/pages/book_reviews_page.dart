@@ -74,7 +74,6 @@ class BookReviewPage extends StatelessWidget {
                   Expanded(
                     child: BlocBuilder<ReviewCubit, ReviewState>(
                       builder: (context, state) {
-                        print(state.reviews.runtimeType);
                         switch (state.reviews.runtimeType) {
                           case (LoadingStatus<List<Review>>):
                             return ListView.builder(
@@ -92,7 +91,6 @@ class BookReviewPage extends StatelessWidget {
                                 ? buildEmptyReviewCard(context, book!)
                                 : ListView.builder(
                               controller: _scrollController,
-                                    //TODO: clipBehavior: Clip.none,
                                     clipBehavior: Clip.antiAlias,
                                     physics: const BouncingScrollPhysics(),
                                     itemCount: state.reviews.item!.length,
@@ -196,7 +194,6 @@ class BookReviewPage extends StatelessWidget {
                       maxRating: 10,
                       direction: Axis.horizontal,
                       itemCount: 10,
-                      //allowHalfRating: true,
                       glow: false,
                       updateOnDrag: true,
                       itemSize: MediaQuery.of(context).size.width / 11,

@@ -55,7 +55,7 @@ class _TransferCategoryWidgetState extends State<TransferCategoryWidget>
                               borderRadius: BorderRadius.circular(12),
                                 side: BorderSide(
                                     width: 1,
-                                    color: Theme.of(context).textTheme.bodyMedium!.color! // the color of the border
+                                    color: Theme.of(context).textTheme.bodyMedium!.color!
                                 )
                             ),
                             elevation: 0,
@@ -92,7 +92,7 @@ class _TransferCategoryWidgetState extends State<TransferCategoryWidget>
                               borderRadius: BorderRadius.circular(12),
                                 side: BorderSide(
                                     width: 1,
-                                    color: Theme.of(context).textTheme.bodyMedium!.color! // the color of the border
+                                    color: Theme.of(context).textTheme.bodyMedium!.color!
                                 )
                             ),
                             elevation: 0,

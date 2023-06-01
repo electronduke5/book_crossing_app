@@ -87,7 +87,6 @@ class _AddBookAuthorState extends State<AddAuthorPage> {
                           TextFormField(
                             onChanged: (value) =>
                                 context.read<AuthorCubit>().patronymicChanged(value),
-                            validator: (value) {},
                             decoration: InputDecoration(
                               contentPadding:
                                   const EdgeInsets.symmetric(horizontal: 10.0),
@@ -101,7 +100,6 @@ class _AddBookAuthorState extends State<AddAuthorPage> {
                           TextButton(
                             onPressed: () async {
                               if (_formKey.currentState?.validate() ?? false) {
-                                print('добавлено');
                                 await context
                                     .read<AuthorCubit>()
                                     .addAuthor()
@@ -112,13 +110,13 @@ class _AddBookAuthorState extends State<AddAuthorPage> {
                                 });
                               }
                             },
-                            child: Text("Далее"),
+                            child: const Text("Далее"),
                           ),
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context, null);
                             },
-                            child: Text("Назад"),
+                            child: const Text("Назад"),
                           ),
                         ],
                       ),

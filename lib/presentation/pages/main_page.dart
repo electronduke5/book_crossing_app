@@ -5,11 +5,11 @@ import 'package:book_crossing_app/presentation/pages/profile_page.dart';
 import 'package:book_crossing_app/presentation/pages/reviews_page.dart';
 import 'package:book_crossing_app/presentation/pages/transfer_pages/transfers_page.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 import '../../data/models/book.dart';
 import 'books_page.dart';
 
+// ignore: must_be_immutable
 class MainPage extends StatefulWidget {
   MainPage({Key? key, this.selectedIndex, this.bodyWidget}) : super(key: key);
 
@@ -37,8 +37,6 @@ class _MainPageState extends State<MainPage> {
 
   void _onItemTapped(int index) async {
     setState(() {
-      Logger logger = Logger();
-      logger.i('index: $index \n_selectedIndex: $_selectedIndex\nwidget.bodyWidget: ${widget.bodyWidget}');
       if(widget.bodyWidget  != null){
         widget.bodyWidget = null;
         _selectedIndex = index;
@@ -86,7 +84,6 @@ class _MainPageState extends State<MainPage> {
             opacity: 0.8,
             child: BottomNavigationBar(
               backgroundColor: Theme.of(context).secondaryHeaderColor,
-              //selectedItemColor: Theme.of(context).colorScheme.tertiary,
               type: BottomNavigationBarType.fixed,
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
               elevation: 0,

@@ -113,7 +113,6 @@ class AddReviewPage extends StatelessWidget {
                             maxRating: 10,
                             direction: Axis.horizontal,
                             itemCount: 10,
-                            //allowHalfRating: true,
                             glow: false,
                             updateOnDrag: true,
                             itemSize: MediaQuery.of(context).size.width / 11,

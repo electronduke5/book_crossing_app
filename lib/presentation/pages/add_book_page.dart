@@ -23,7 +23,6 @@ class AddBookPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: BlocBuilder<AuthorCubit, AuthorState>(
-            // bloc: authorCubit,
             builder: (context, state) {
               switch (state.getAuthorsState.runtimeType) {
                 case LoadingStatus<List<Author>>:
@@ -131,7 +130,6 @@ class AddBookPage extends StatelessWidget {
   Widget genresDropdown(BuildContext context) {
     return BlocBuilder<GenreCubit, GenreState>(
       builder: (context, state) {
-        print('getGenres state: ${state.getGenresStatus.runtimeType}');
         switch (state.getGenresStatus.runtimeType) {
           case LoadingStatus<List<Genre>>:
             return DropdownButtonFormField<String>(

@@ -58,7 +58,6 @@ class BookCubit extends Cubit<BookState> {
         AppModule.getProfileHolder().user,
         AppModule.getProfileHolder().user,
       );
-      print('created book (book_cubit 41): $book');
       emit(state.copyWith(addBookStatus: LoadedStatus(book)));
       return book;
     } catch (exception) {

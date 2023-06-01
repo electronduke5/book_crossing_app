@@ -48,11 +48,8 @@ class _UserTransfersPageState extends State<UserTransfersPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top:130),
                   child: BlocBuilder<TransferCubit, TransferState>(builder: (context, state) {
-                      print('userTransfersStatus: ${state.userTransfersStatus.runtimeType}');
                       switch (state.userTransfersStatus.runtimeType) {
                   case LoadedStatus<List<Transfer>>:
-                    userTransfers = state.userTransfersStatus.item!;
-                    //User? user = state.userTransfersStatus.item?.first.user;
                     return SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: MasonryGridView.count(

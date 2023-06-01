@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:book_crossing_app/presentation/cubits/point/point_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -186,8 +184,6 @@ class AddPointPage extends StatelessWidget {
                               const SizedBox(height: 15),
                               ElevatedButton(
                                 onPressed: () async {
-                                  print('button tapped');
-                                  print(_formKey.currentState?.validate());
                                   if (_formKey.currentState?.validate() ?? false) {
                                     final String city = cityController.value.text;
                                     final String street = streetController.value.text;
@@ -195,9 +191,6 @@ class AddPointPage extends StatelessWidget {
                                     final String flat = flatController.value.text;
                                     final String comment =
                                         commentController.value.text;
-
-                                    print(
-                                        'city: $city \nstreet: $street \nhouse: $house \nflat:$flat comment: $comment');
 
                                     await context
                                         .read<PointCubit>()
@@ -216,14 +209,14 @@ class AddPointPage extends StatelessWidget {
                                     });
                                   }
                                 },
-                                child: Text("Далее"),
+                                child: const Text("Далее"),
                               ),
                               const SizedBox(height: 5),
                               OutlinedButton(
                                 onPressed: () => Navigator.pop(context, null),
                                 child: const Text("Назад"),
                               ),
-                              //SvgPicture.asset('assets/images/location.svg'),
+
                             ],
                           ),
                         ),

@@ -7,6 +7,7 @@ import 'package:search_choices/search_choices.dart';
 
 import '../di/app_module.dart';
 
+// ignore: must_be_immutable
 class SearchPointField extends StatefulWidget {
   SearchPointField({Key? key, required this.onChanged, this.userPoints}) : super(key: key);
 
@@ -25,7 +26,6 @@ class _SearchPointFieldState extends State<SearchPointField> {
   Widget build(BuildContext context) {
     return BlocBuilder<PointCubit, PointState>(builder: (context, state) {
           () {
-        print(widget.userPoints);
         if (widget.userPoints != null) {
           List<PickUpPoint> pointItems = widget.userPoints!;
           List<DropdownMenuItem<PickUpPoint>> menuItems = pointItems
@@ -37,7 +37,6 @@ class _SearchPointFieldState extends State<SearchPointField> {
           return buildSearchPointWidget(menuItems, context);
         }
       }();
-      print('state.userPoints.runtimeType: ${state.userPoints.runtimeType}');
       switch (state.userPoints.runtimeType) {
         case LoadingStatus<List<PickUpPoint>>:
           return const Center(child: CircularProgressIndicator());
@@ -78,12 +77,6 @@ class _SearchPointFieldState extends State<SearchPointField> {
       dialogBox: false,
       isExpanded: true,
       menuConstraints: BoxConstraints.tight(const Size.fromHeight(350)),
-      // doneButton: TextButton(
-      //   onPressed: () {
-      //     Navigator.of(context).pop();
-      //   },
-      //   child: const Text("Назад"),
-      // ),
       closeButton:
           (PickUpPoint? value, BuildContext closeContext, Function updateParent) {
         return TextButton(
@@ -135,7 +128,6 @@ class _SearchPointFieldState extends State<SearchPointField> {
       },
       autofocus: false,
       onChanged: (PickUpPoint? value, Function? pop) async {
-        //await context.read<TransferCubit>().pointChanged(value!);
         setState(() {
           if (value is! NotGiven) {
             _selectedItem = value;

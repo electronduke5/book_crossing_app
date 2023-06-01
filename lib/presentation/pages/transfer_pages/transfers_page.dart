@@ -13,6 +13,7 @@ import '../../widgets/profile_widgets/profile_image_small.dart';
 import '../../widgets/transfer_widgets/transfer_shimmer_card.dart';
 import '../../widgets/transfer_widgets/transfer_widget_small.dart';
 
+// ignore: must_be_immutable
 class TransfersPage extends StatelessWidget {
   TransfersPage({Key? key}) : super(key: key);
 
@@ -82,7 +83,6 @@ class TransfersPage extends StatelessWidget {
               },
               child: BlocBuilder<TransferCubit, TransferState>(
                 builder: (context, state) {
-                  print(state.transfersStatus.runtimeType);
                   switch (state.transfersStatus.runtimeType) {
                     case (LoadingStatus<List<Transfer>>):
                       return MasonryGridView.count(

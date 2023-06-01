@@ -16,10 +16,7 @@ class BookWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: InkWell(
         onTap: () async {
-          //context.read<ReviewCubit>().loadReviews(filter: 'book', value: book.id).then((value) {
           Navigator.of(context).pushNamed('/book-review', arguments: book);
-
-          //});
         },
         child: Card(
           margin: EdgeInsets.zero,
@@ -102,7 +99,6 @@ class BookWidget extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 10),
-                //const Divider(indent: 10, endIndent: 10, thickness: 0.1),
                 () {
                   if (book.rating != 0.0) {
                     return RatingBarIndicator(

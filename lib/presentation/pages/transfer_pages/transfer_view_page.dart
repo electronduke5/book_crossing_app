@@ -11,6 +11,7 @@ import '../../di/app_module.dart';
 import '../../widgets/profile_widgets/profile_image_small.dart';
 import '../../widgets/snack_bar.dart';
 
+// ignore: must_be_immutable
 class TransferViewPage extends StatelessWidget {
   TransferViewPage({Key? key}) : super(key: key);
 
@@ -31,7 +32,6 @@ class TransferViewPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: BlocBuilder<TransferCubit, TransferState>(builder: (context, state) {
-                print(state.getTransferStatus.runtimeType);
                 switch (state.getTransferStatus.runtimeType) {
                   case LoadingStatus<Transfer>:
                     return const Center(child: CircularProgressIndicator());
@@ -64,7 +64,6 @@ class TransferViewPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           () {
-            print('transfer.user: ${transfer!.user}');
             if (transfer!.book.image == null) {
               return Align(
                 alignment: Alignment.center,

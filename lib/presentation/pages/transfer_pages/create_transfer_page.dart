@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/profile/profile_cubit.dart';
 import 'package:book_crossing_app/presentation/cubits/transfer/transfer_cubit.dart';
@@ -20,6 +18,7 @@ import '../../widgets/profile_widgets/profile_image_small.dart';
 import '../../widgets/search_point_field.dart';
 import '../../widgets/snack_bar.dart';
 
+// ignore: must_be_immutable
 class CreateTransferPage extends StatelessWidget {
   CreateTransferPage({Key? key}) : super(key: key);
 
@@ -37,7 +36,6 @@ class CreateTransferPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<TransferCubit, TransferState>(
       listener: (context, state) {
-        log("state.createTransferStatus.runtimeType: ${state.createTransferStatus.runtimeType}");
         if (state.createTransferStatus.runtimeType == LoadedStatus<Transfer>) {
           SnackBarInfo.show(
               context: context, message: 'Книга добавлена в обмен!', isSuccess: true);
@@ -66,10 +64,8 @@ class CreateTransferPage extends StatelessWidget {
               ),
             ),
             BlocBuilder<PointCubit, PointState>(builder: (context, pointState) {
-              log("state.pointSTate.runtimeType: ${pointState.userPoints.runtimeType}");
               return BlocBuilder<BookCubit, BookState>(
                 builder: (context, bookState) {
-                  log("state.bookStatus.runtimeType: ${bookState.booksForTransferStatus.runtimeType}");
                   if ((bookState.booksForTransferStatus is LoadedStatus<List<Book>>) &&
                       (pointState.userPoints is LoadedStatus<List<PickUpPoint>>)) {
                     userBooks = bookState.booksForTransferStatus?.item;
@@ -127,10 +123,6 @@ class CreateTransferPage extends StatelessWidget {
                       if (AppModule.getProfileHolder().user.phoneNumber == null) {
                         addPhoneNumberSheet(context, 'Чтобы отдать книгу нужно добавить номер телефона.');
                       } else {
-                        print(
-                            'book: ${context.read<TransferCubit>().state.book ?? 'Пусто'}');
-                        print(
-                            'point: ${context.read<TransferCubit>().state.point ?? 'Пусто'}');
                         if (formKey.currentState?.validate() ?? false) {
                           await context.read<TransferCubit>().createTransfer(
                                 user: AppModule.getProfileHolder().user,

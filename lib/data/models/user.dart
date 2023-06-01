@@ -1,5 +1,6 @@
 import 'package:book_crossing_app/data/models/transfer.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'book.dart';
 import 'status.dart';
 
@@ -30,9 +31,6 @@ class User with _$User {
     return '$surname $name';
   }
 
-  ///Метод получения инициалов пользователя в формате Фамилия Имя
-  ///
-  ///
   String getInitials(){
     return '${surname[0].toUpperCase()} ${name[0].toUpperCase()}';
   }

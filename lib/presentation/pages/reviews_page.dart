@@ -11,6 +11,7 @@ import '../widgets/popup_icon_item.dart';
 import '../widgets/profile_widgets/profile_image_small.dart';
 import '../widgets/review_widgets/review_widget.dart';
 
+// ignore: must_be_immutable
 class ReviewsPage extends StatelessWidget {
   ReviewsPage({Key? key}) : super(key: key);
 
@@ -91,7 +92,6 @@ class ReviewsPage extends StatelessWidget {
               },
               child: BlocBuilder<ReviewCubit, ReviewState>(
                 builder: (context, state) {
-                  print(state.reviews.runtimeType);
                   switch (state.reviews.runtimeType) {
                     case (LoadingStatus<List<Review>>):
                       return ListView.builder(

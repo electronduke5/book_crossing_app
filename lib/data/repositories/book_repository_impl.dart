@@ -41,18 +41,4 @@ class BookRepositoryImpl with ApiService<Book> implements BookRepository {
       id: 'forTransfer/$userId',
     );
   }
-
-  // @override
-  // Future<List<Book>> getOwnerBooks(User user) {
-  //   return getAll(fromJson: (Map<String, dynamic> json) => Book.fromJson(json),
-  //     params: {'owner' : user.id},
-  //   );
-  // }
-  //
-  // @override
-  // Future<List<Book>> getReaderBooks(User user) {
-  //   return getAll(fromJson: (Map<String, dynamic> json) => Book.fromJson(json),
-  //     params: {'reader' : user.id},
-  //   );
-  // }
 }

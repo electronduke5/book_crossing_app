@@ -16,7 +16,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       {int? isArchived, User? user, bool isUpdateInfo = false}) async {
     final repository = AppModule.getProfileRepository();
     final reviewRepo = AppModule.getReviewRepository();
-    //final bookRepo = AppModule.getBookRepository();
     emit(state.copyWith(status: LoadingStatus()));
     try {
       User loadedUser;
@@ -26,14 +25,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       loadedUser = await repository.getProfile(user: user);
       final userReviews =
           await reviewRepo.getUsersReview(id: loadedUser.id, isArchive: isArchived);
-      // final userOwnerBooks = await bookRepo.getOwnerBooks(user!);
-      // final userReaderBooks = await bookRepo.getOwnerBooks(user!);
       emit(
         state.copyWith(
           status: LoadedStatus(loadedUser),
           userReviews: LoadedStatus(userReviews),
-          // ownerBooks: LoadedStatus(userOwnerBooks),
-          // readerBooks: LoadedStatus(userReaderBooks),
         ),
       );
     } catch (exception) {
@@ -51,10 +46,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           surname: surname, name: name, image: image, phoneNumber: phoneNumber);
       final userReviews = await reviewRepo.getUsersReview(id: updatedUser.id);
 
-      print('oldUser: ${AppModule.getProfileHolder().user}');
       AppModule.getProfileHolder().user = updatedUser;
 
-      print('updatedUser: ${updatedUser}');
       emit(state.copyWith(
         status: LoadedStatus(updatedUser),
         userReviews: LoadedStatus(userReviews),

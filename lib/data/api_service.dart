@@ -1,10 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:book_crossing_app/data/utils/api_const_url.dart';
 import 'package:book_crossing_app/data/utils/http_exception.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 
 mixin ApiService<T extends Object> {
   abstract String apiRoute;
@@ -21,10 +19,7 @@ mixin ApiService<T extends Object> {
         queryParameters: params,
       ),
     );
-    Logger logger = Logger();
-    logger.i('${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
     final response = await dio.get('${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
-    logger.d('response $response');
     if (response.statusCode != HttpStatus.ok) {
       return [];
     }
@@ -58,9 +53,6 @@ mixin ApiService<T extends Object> {
         headers: {"Accept": "application/json"},
       ),
     );
-    Logger logger = Logger();
-    logger.i('${ApiConstUrl.baseUrl}$apiRoute/$id');
-
     final response = await dio.delete('${ApiConstUrl.baseUrl}$apiRoute/$id');
     if (response.statusCode != HttpStatus.noContent) {
       throw Exception(['Error =_-']);
@@ -72,7 +64,6 @@ mixin ApiService<T extends Object> {
     dynamic id,
     required Map<String, dynamic> data,
   }) async {
-    print('data: ${data}');
     FormData formData = FormData.fromMap(data);
     final dio = Dio(
       BaseOptions(
@@ -80,29 +71,19 @@ mixin ApiService<T extends Object> {
         validateStatus: (status) => true,
       ),
     );
-
-    print('url: ${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
     try {
       final response = await dio.post(
         '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
         data: formData,
       );
-      log('response.statusCode: ${response.statusCode}');
-      log('response.data: ${response.data}');
       if (response.statusCode != HttpStatus.ok &&
           response.statusCode != HttpStatus.created) {
-        Logger().e(response.statusCode);
-        Logger().e(response.statusMessage);
-        Logger().e(response.data);
-        Logger().e(response.data['message']);
         throw Exception(response.data['message']).getMessage;
       }
       final json = response.data;
-      print(json);
 
       return fromJson(json);
     } catch (error) {
-      print(error.toString());
       throw Exception(error);
     }
   }
@@ -112,7 +93,6 @@ mixin ApiService<T extends Object> {
     dynamic id,
     required Map<String, dynamic> data,
   }) async {
-    print('data: ${data}');
     data.addAll({
       '_method': 'PUT',
     });
@@ -124,24 +104,19 @@ mixin ApiService<T extends Object> {
       ),
     );
 
-    print('url: ${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}');
     try {
       final response = await dio.post(
         '${ApiConstUrl.baseUrl}$apiRoute${id == null ? '' : '/$id'}',
         data: formData,
       );
-      log('response.statusCode: ${response.statusCode}');
-      log('response.data: ${response.data}');
       if (response.statusCode != HttpStatus.ok &&
           response.statusCode != HttpStatus.created) {
         throw Exception(response.data);
       }
-      final json = response.data;
-      print(json);
 
+      final json = response.data;
       return fromJson(json);
     } catch (error) {
-      print('--Error:${error}');
       throw Exception(error);
     }
   }

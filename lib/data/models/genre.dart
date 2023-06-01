@@ -1,9 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part '../../domain/models/genre/genre.freezed.dart';
-//part '../../domain/model/user/user.freezed.dart';
-
-//part '../../domain/model/user/user.g.dart';
 part '../../domain/models/genre/genre.g.dart';
 
 @freezed

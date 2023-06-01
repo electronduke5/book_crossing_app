@@ -32,7 +32,6 @@ class _MenuBottomNavBarState extends State<MenuBottomNavBar> {
             opacity: 0.8,
             child: BottomNavigationBar(
               backgroundColor: Theme.of(context).secondaryHeaderColor,
-              //selectedItemColor: Theme.of(context).colorScheme.tertiary,
               type: BottomNavigationBarType.fixed,
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
               elevation: 0,
@@ -60,6 +59,6 @@ class _MenuBottomNavBarState extends State<MenuBottomNavBar> {
           ),
         ),
       ),
-    );;
+    );
   }
 }
