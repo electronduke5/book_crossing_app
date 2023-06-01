@@ -177,40 +177,42 @@ class SignUpPage extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: SizedBox(
                                   width: double.infinity,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      foregroundColor:
-                                          Theme.of(context).colorScheme.onPrimary,
-                                    ),
-                                    onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        String surname =
-                                            _surnameController.value.text;
-                                        String name = _nameController.value.text;
-                                        String email =
-                                            _loginController.value.text;
-                                        String password =
-                                            _passwordController.value.text;
-                                        _surnameController.clear();
-                                        _nameController.clear();
-                                        _loginController.clear();
-                                        _passwordController.clear();
-                                        context.read<AuthCubit>().signUp(
-                                            surname: surname,
-                                            name: name,
-                                            email: email,
-                                            password: password);
-                                      }
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(15.0),
-                                      child: Text(
-                                        'СОЗДАТЬ ПРОФИЛЬ',
+                                  child: BlocBuilder<AuthCubit, AuthState>(
+                                      builder: (context, state) {
+                                    return ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            Theme.of(context).colorScheme.primary,
+                                        foregroundColor:
+                                            Theme.of(context).colorScheme.onPrimary,
                                       ),
-                                    ),
-                                  ),
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          String surname = _surnameController.value.text;
+                                          String name = _nameController.value.text;
+                                          String email = _loginController.value.text;
+                                          String password =
+                                              _passwordController.value.text;
+                                          _surnameController.clear();
+                                          _nameController.clear();
+                                          _loginController.clear();
+                                          _passwordController.clear();
+                                          context.read<AuthCubit>().signUp(
+                                              surname: surname,
+                                              name: name,
+                                              email: email,
+                                              password: password);
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: state.apiStatus.runtimeType
+                                                is LoadedStatus<User>
+                                            ? const CircularProgressIndicator()
+                                            : const Text('СОЗДАТЬ ПРОФИЛЬ'),
+                                      ),
+                                    );
+                                  }),
                                 ),
                               ),
                               Align(
