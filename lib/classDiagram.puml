@@ -10,11 +10,32 @@ abstract class "book_crossing_app::AuthRepository" {
   +Future<User> signUp()
 }
 
+abstract class "book_crossing_app::PointRepository" {
+  +Future<List<PickUpPoint>> getAllPoints()
+  +Future<List<PickUpPoint>> getUserPoints(User user)
+  +Future<void> deletePoint(int id)
+  +Future<PickUpPoint> createPoint()
+  +Future<PickUpPoint> updatePoint()
+}
+
 abstract class "book_crossing_app::BookRepository" {
   +Future<List<Book>> getAllBooks()
   +Future<Book> createBook()
 }
 
+abstract class "book_crossing_app::StatusRepository" {
+  +Future<List<Status>> getAllStatuses()
+}
+
+abstract class "book_crossing_app::TransferRepository" {
+  +Future<List<Transfer>> getAllTransfers()
+  +Future<Transfer> getTransfers()
+  +Future<List<Transfer>> getUserTransfers()
+  +Future<Transfer> makeRequest()
+  +Future<Transfer> makeTransfer()
+  +Future<List<Transfer>> getBookTransfers()
+  +Future<Transfer> createTransfer()
+}
 abstract class "book_crossing_app::GenreRepository" {
   +Future<List<Genre>> getAllGenres()
 }

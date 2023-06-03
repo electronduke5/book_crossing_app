@@ -9,8 +9,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../data/models/book.dart';
 import '../../../data/models/review.dart';
+import '../../../data/utils/datetime_helpers.dart';
 import '../../cubits/review/review_cubit.dart';
 
+// ignore: must_be_immutable
 class ReviewWidget extends StatelessWidget {
   ReviewWidget({
     Key? key,
@@ -63,7 +65,7 @@ class ReviewWidget extends StatelessWidget {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(review.getDate(),
+                                Text(DateTimeHelper.dateMonth(review.dateCreated),
                                     style:
                                         Theme.of(context).textTheme.bodySmall),
                               ],

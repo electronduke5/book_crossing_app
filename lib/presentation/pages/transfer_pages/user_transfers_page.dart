@@ -5,7 +5,6 @@ import 'package:book_crossing_app/presentation/cubits/models_status.dart';
 import 'package:book_crossing_app/presentation/cubits/transfer/transfer_cubit.dart';
 import 'package:book_crossing_app/presentation/widgets/transfer_widgets/transfer_category_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:lottie/lottie.dart';
@@ -44,55 +43,56 @@ class _UserTransfersPageState extends State<UserTransfersPage> {
         child: IntrinsicHeight(
           child: Stack(
             children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top:130),
-                  child: BlocBuilder<TransferCubit, TransferState>(builder: (context, state) {
-                      switch (state.userTransfersStatus.runtimeType) {
-                  case LoadedStatus<List<Transfer>>:
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: MasonryGridView.count(
-                          physics: const BouncingScrollPhysics(),
-                          clipBehavior: Clip.none,
-                          itemCount: userTransfers.length,
-                          crossAxisCount: 2,
-                          itemBuilder: (context, index) {
-                            return TransferWidget(
-                              transfer: userTransfers[index],
-                              isSelfTransfer: userTransfers.first.user.id ==
-                                  AppModule.getProfileHolder().user.id,
-                            );
-                          }),
-                    );
-                  case FailedStatus<List<Transfer>>:
-                    log('get user transfers ERROR:${state.userTransfersStatus.message}');
-                    return Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            'Произошла ошибка при поиске объявлений пользователя',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(top: 130),
+                child: BlocBuilder<TransferCubit, TransferState>(
+                  builder: (context, state) {
+                    switch (state.userTransfersStatus.runtimeType) {
+                      case LoadedStatus<List<Transfer>>:
+                        userTransfers = state.userTransfersStatus.item ?? userTransfers;
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: MasonryGridView.count(
+                              physics: const BouncingScrollPhysics(),
+                              clipBehavior: Clip.none,
+                              itemCount: userTransfers.length,
+                              crossAxisCount: 2,
+                              itemBuilder: (context, index) {
+                                return TransferWidget(
+                                  transfer: userTransfers[index],
+                                  isSelfTransfer: userTransfers.first.user.id ==
+                                      AppModule.getProfileHolder().user.id,
+                                );
+                              }),
+                        );
+                      case FailedStatus<List<Transfer>>:
+                        log('get user transfers ERROR:${state.userTransfersStatus.message}');
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Text(
+                                'Произошла ошибка при поиске объявлений пользователя',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Lottie.asset(
-                          alignment: Alignment.topCenter,
-                          'assets/lottie/plane.json',
-                          repeat: true,
-                        ),
-                      ],
-                    );
-                  default:
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
+                            Lottie.asset(
+                              alignment: Alignment.topCenter,
+                              'assets/lottie/plane.json',
+                              repeat: true,
+                            ),
+                          ],
+                        );
+                      default:
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height,
                           child: MasonryGridView.count(
                             physics: const BouncingScrollPhysics(),
                             clipBehavior: Clip.none,
@@ -103,8 +103,8 @@ class _UserTransfersPageState extends State<UserTransfersPage> {
                             },
                           ),
                         );
-                      }
-                    }),
+                    }
+                  },
                 ),
               ),
               Column(

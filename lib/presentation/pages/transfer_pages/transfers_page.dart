@@ -133,6 +133,7 @@ class TransfersPage extends StatelessWidget {
                             Expanded(
                               child: MasonryGridView.count(
                                 physics: const BouncingScrollPhysics(),
+                                controller: _scrollController,
                                 crossAxisCount: 2,
                                 itemCount: allTransfers.length,
                                 itemBuilder: (context, index) {
